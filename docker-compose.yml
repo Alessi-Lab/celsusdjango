@@ -31,4 +31,4 @@ services:
     depends_on:
       - db
     volumes:
-      - ./data/db:/app/media
+      - ./data/media:/app/media
