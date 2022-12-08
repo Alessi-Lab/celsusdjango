@@ -5,3 +5,4 @@ WORKDIR /app
 COPY . /app/
 RUN ls
 RUN pip install -r requirements.txt
+CMD ["gunicorn", "celsusdjango.wsgi:application", "--bind", "0.0.0.0:8000"]
