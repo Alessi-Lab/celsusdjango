@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "celsusdjango"
+version = "0.1.0"
+description = ""
+authors = ["Toan Phung <toan.phungkhoiquoctoan@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.1.1"
+djangorestframework = "^3.14.0"
+Markdown = "^3.4.1"
+django-filter = "^22.1"
+djangorestframework-simplejwt = "^5.2.1"
+drf-url-filters = "^0.5.1"
+django-cors-headers = "^3.13.0"
+pandas = "^1.5.0"
+uniprotparser = "^1.0.8"
+drf-flex-fields = "^1.0.0"
+drf-spectacular = "^0.24.2"
+django-sendfile2 = "^0.7.0"
+psycopg2 = "^2.9.5"
+
+[tool.poetry.dev-dependencies]
+factory-boy = "^3.2.1"
+faker-biology = "^0.6.0"
+faker-web = "^0.3.1"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

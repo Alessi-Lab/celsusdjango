@@ -1,0 +1,29 @@
+# docker exec celsusdjango-web-1 python manage.py migrate
+# docker exec celsusdjango-web-1 python manage.py loaddata diseases.json
+# docker exec celsusdjango-web-1 python manage.py loaddata organisms.json
+version: "3.8"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8001:8000"
+    environment:
+      - WORKDB_PROFILE=production
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+    volumes:
+      - ./data/db:/app/media

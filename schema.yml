@@ -1,0 +1,5412 @@
+openapi: 3.0.3
+info:
+  title: Celsus Open API
+  version: 1.0.0
+  description: A project for open proteomics data communication
+paths:
+  /authors/:
+    get:
+      operationId: authors_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - authors
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuthorList'
+          description: ''
+    post:
+      operationId: authors_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - authors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+  /authors/{id}/:
+    get:
+      operationId: authors_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this author.
+        required: true
+      tags:
+      - authors
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+    put:
+      operationId: authors_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this author.
+        required: true
+      tags:
+      - authors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+    patch:
+      operationId: authors_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this author.
+        required: true
+      tags:
+      - authors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAuthor'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+    delete:
+      operationId: authors_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this author.
+        required: true
+      tags:
+      - authors
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /cell_types/:
+    get:
+      operationId: cell_types_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - cell_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCellTypeList'
+          description: ''
+    post:
+      operationId: cell_types_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - cell_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CellType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CellType'
+          description: ''
+  /cell_types/{id}/:
+    get:
+      operationId: cell_types_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cell type.
+        required: true
+      tags:
+      - cell_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CellType'
+          description: ''
+    put:
+      operationId: cell_types_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cell type.
+        required: true
+      tags:
+      - cell_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CellType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CellType'
+          description: ''
+    patch:
+      operationId: cell_types_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cell type.
+        required: true
+      tags:
+      - cell_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCellType'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CellType'
+          description: ''
+    delete:
+      operationId: cell_types_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cell type.
+        required: true
+      tags:
+      - cell_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /comparisons/:
+    get:
+      operationId: comparisons_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - comparisons
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedComparisonList'
+          description: ''
+    post:
+      operationId: comparisons_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - comparisons
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comparison'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comparison'
+          description: ''
+  /comparisons/{id}/:
+    get:
+      operationId: comparisons_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comparison.
+        required: true
+      tags:
+      - comparisons
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comparison'
+          description: ''
+    put:
+      operationId: comparisons_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comparison.
+        required: true
+      tags:
+      - comparisons
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comparison'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comparison'
+          description: ''
+    patch:
+      operationId: comparisons_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comparison.
+        required: true
+      tags:
+      - comparisons
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedComparison'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comparison'
+          description: ''
+    delete:
+      operationId: comparisons_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comparison.
+        required: true
+      tags:
+      - comparisons
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /csrf/:
+    get:
+      operationId: csrf_retrieve
+      tags:
+      - csrf
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /curtain/:
+    get:
+      operationId: curtain_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - curtain
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCurtainList'
+          description: ''
+    post:
+      operationId: curtain_create
+      tags:
+      - curtain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curtain'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curtain'
+          description: ''
+  /curtain/{id}/:
+    get:
+      operationId: curtain_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curtain.
+        required: true
+      tags:
+      - curtain
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curtain'
+          description: ''
+    put:
+      operationId: curtain_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curtain.
+        required: true
+      tags:
+      - curtain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curtain'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curtain'
+          description: ''
+    patch:
+      operationId: curtain_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curtain.
+        required: true
+      tags:
+      - curtain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCurtain'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curtain'
+          description: ''
+    delete:
+      operationId: curtain_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this curtain.
+        required: true
+      tags:
+      - curtain
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /differential_data/:
+    get:
+      operationId: differential_data_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - differential_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDifferentialAnalysisDataList'
+          description: ''
+    post:
+      operationId: differential_data_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - differential_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifferentialAnalysisData'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialAnalysisData'
+          description: ''
+  /differential_data/{id}/:
+    get:
+      operationId: differential_data_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential analysis
+          data.
+        required: true
+      tags:
+      - differential_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialAnalysisData'
+          description: ''
+    put:
+      operationId: differential_data_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential analysis
+          data.
+        required: true
+      tags:
+      - differential_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifferentialAnalysisData'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialAnalysisData'
+          description: ''
+    patch:
+      operationId: differential_data_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential analysis
+          data.
+        required: true
+      tags:
+      - differential_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDifferentialAnalysisData'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialAnalysisData'
+          description: ''
+    delete:
+      operationId: differential_data_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential analysis
+          data.
+        required: true
+      tags:
+      - differential_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /differential_data/search_gene/:
+    post:
+      operationId: differential_data_search_gene_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - differential_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifferentialAnalysisData'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialAnalysisData'
+          description: ''
+  /differential_sample_column/:
+    get:
+      operationId: differential_sample_column_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - differential_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDifferentialSampleColumnList'
+          description: ''
+    post:
+      operationId: differential_sample_column_create
+      tags:
+      - differential_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifferentialSampleColumn'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialSampleColumn'
+          description: ''
+  /differential_sample_column/{id}/:
+    get:
+      operationId: differential_sample_column_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential sample column.
+        required: true
+      tags:
+      - differential_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialSampleColumn'
+          description: ''
+    put:
+      operationId: differential_sample_column_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential sample column.
+        required: true
+      tags:
+      - differential_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifferentialSampleColumn'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialSampleColumn'
+          description: ''
+    patch:
+      operationId: differential_sample_column_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential sample column.
+        required: true
+      tags:
+      - differential_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDifferentialSampleColumn'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifferentialSampleColumn'
+          description: ''
+    delete:
+      operationId: differential_sample_column_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this differential sample column.
+        required: true
+      tags:
+      - differential_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /diseases/:
+    get:
+      operationId: diseases_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - diseases
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDiseaseList'
+          description: ''
+    post:
+      operationId: diseases_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - diseases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Disease'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disease'
+          description: ''
+  /diseases/{id}/:
+    get:
+      operationId: diseases_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disease.
+        required: true
+      tags:
+      - diseases
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disease'
+          description: ''
+    put:
+      operationId: diseases_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disease.
+        required: true
+      tags:
+      - diseases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Disease'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disease'
+          description: ''
+    patch:
+      operationId: diseases_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disease.
+        required: true
+      tags:
+      - diseases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDisease'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disease'
+          description: ''
+    delete:
+      operationId: diseases_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disease.
+        required: true
+      tags:
+      - diseases
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /experiment_types/:
+    get:
+      operationId: experiment_types_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - experiment_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExperimentTypeList'
+          description: ''
+    post:
+      operationId: experiment_types_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - experiment_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperimentType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentType'
+          description: ''
+  /experiment_types/{id}/:
+    get:
+      operationId: experiment_types_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this experiment type.
+        required: true
+      tags:
+      - experiment_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentType'
+          description: ''
+    put:
+      operationId: experiment_types_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this experiment type.
+        required: true
+      tags:
+      - experiment_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperimentType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentType'
+          description: ''
+    patch:
+      operationId: experiment_types_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this experiment type.
+        required: true
+      tags:
+      - experiment_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedExperimentType'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExperimentType'
+          description: ''
+    delete:
+      operationId: experiment_types_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this experiment type.
+        required: true
+      tags:
+      - experiment_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /files/:
+    get:
+      operationId: files_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - files
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFileList'
+          description: ''
+    post:
+      operationId: files_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - files
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /files/{id}/:
+    get:
+      operationId: files_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+    put:
+      operationId: files_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+    patch:
+      operationId: files_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFile'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+    delete:
+      operationId: files_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /files/{id}/add_differential_analysis_data/:
+    post:
+      operationId: files_add_differential_analysis_data_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /files/{id}/add_raw_data/:
+    post:
+      operationId: files_add_raw_data_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /files/{id}/get_columns/:
+    get:
+      operationId: files_get_columns_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /files/{id}/get_project/:
+    get:
+      operationId: files_get_project_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /files/{id}/set_project/:
+    post:
+      operationId: files_set_project_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this file.
+        required: true
+      tags:
+      - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /genemap-refresh/:
+    post:
+      operationId: genemap_refresh_create
+      tags:
+      - genemap-refresh
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /genenamemap/:
+    get:
+      operationId: genenamemap_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - genenamemap
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGeneNameMapList'
+          description: ''
+    post:
+      operationId: genenamemap_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - genenamemap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneNameMap'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneNameMap'
+          description: ''
+  /genenamemap/{id}/:
+    get:
+      operationId: genenamemap_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this gene name map.
+        required: true
+      tags:
+      - genenamemap
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneNameMap'
+          description: ''
+    put:
+      operationId: genenamemap_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this gene name map.
+        required: true
+      tags:
+      - genenamemap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneNameMap'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneNameMap'
+          description: ''
+    patch:
+      operationId: genenamemap_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this gene name map.
+        required: true
+      tags:
+      - genenamemap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGeneNameMap'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneNameMap'
+          description: ''
+    delete:
+      operationId: genenamemap_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this gene name map.
+        required: true
+      tags:
+      - genenamemap
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /instruments/:
+    get:
+      operationId: instruments_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - instruments
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInstrumentList'
+          description: ''
+    post:
+      operationId: instruments_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - instruments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Instrument'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instrument'
+          description: ''
+  /instruments/{id}/:
+    get:
+      operationId: instruments_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this instrument.
+        required: true
+      tags:
+      - instruments
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instrument'
+          description: ''
+    put:
+      operationId: instruments_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this instrument.
+        required: true
+      tags:
+      - instruments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Instrument'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instrument'
+          description: ''
+    patch:
+      operationId: instruments_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this instrument.
+        required: true
+      tags:
+      - instruments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInstrument'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instrument'
+          description: ''
+    delete:
+      operationId: instruments_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this instrument.
+        required: true
+      tags:
+      - instruments
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /keywords/:
+    get:
+      operationId: keywords_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - keywords
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedKeywordList'
+          description: ''
+    post:
+      operationId: keywords_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - keywords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Keyword'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyword'
+          description: ''
+  /keywords/{id}/:
+    get:
+      operationId: keywords_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this keyword.
+        required: true
+      tags:
+      - keywords
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyword'
+          description: ''
+    put:
+      operationId: keywords_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this keyword.
+        required: true
+      tags:
+      - keywords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Keyword'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyword'
+          description: ''
+    patch:
+      operationId: keywords_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this keyword.
+        required: true
+      tags:
+      - keywords
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedKeyword'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyword'
+          description: ''
+    delete:
+      operationId: keywords_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this keyword.
+        required: true
+      tags:
+      - keywords
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /lab_groups/:
+    get:
+      operationId: lab_groups_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - lab_groups
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLabGroupList'
+          description: ''
+    post:
+      operationId: lab_groups_create
+      tags:
+      - lab_groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabGroup'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabGroup'
+          description: ''
+  /lab_groups/{id}/:
+    get:
+      operationId: lab_groups_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lab group.
+        required: true
+      tags:
+      - lab_groups
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabGroup'
+          description: ''
+    put:
+      operationId: lab_groups_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lab group.
+        required: true
+      tags:
+      - lab_groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabGroup'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabGroup'
+          description: ''
+    patch:
+      operationId: lab_groups_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lab group.
+        required: true
+      tags:
+      - lab_groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLabGroup'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabGroup'
+          description: ''
+    delete:
+      operationId: lab_groups_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lab group.
+        required: true
+      tags:
+      - lab_groups
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /logout/:
+    post:
+      operationId: logout_create
+      tags:
+      - logout
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /organism_parts/:
+    get:
+      operationId: organism_parts_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - organism_parts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganismPartList'
+          description: ''
+    post:
+      operationId: organism_parts_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - organism_parts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganismPart'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganismPart'
+          description: ''
+  /organism_parts/{id}/:
+    get:
+      operationId: organism_parts_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism part.
+        required: true
+      tags:
+      - organism_parts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganismPart'
+          description: ''
+    put:
+      operationId: organism_parts_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism part.
+        required: true
+      tags:
+      - organism_parts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganismPart'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganismPart'
+          description: ''
+    patch:
+      operationId: organism_parts_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism part.
+        required: true
+      tags:
+      - organism_parts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganismPart'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganismPart'
+          description: ''
+    delete:
+      operationId: organism_parts_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism part.
+        required: true
+      tags:
+      - organism_parts
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /organisms/:
+    get:
+      operationId: organisms_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - organisms
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganismList'
+          description: ''
+    post:
+      operationId: organisms_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - organisms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organism'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organism'
+          description: ''
+  /organisms/{id}/:
+    get:
+      operationId: organisms_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism.
+        required: true
+      tags:
+      - organisms
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organism'
+          description: ''
+    put:
+      operationId: organisms_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism.
+        required: true
+      tags:
+      - organisms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organism'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organism'
+          description: ''
+    patch:
+      operationId: organisms_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism.
+        required: true
+      tags:
+      - organisms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganism'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organism'
+          description: ''
+    delete:
+      operationId: organisms_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this organism.
+        required: true
+      tags:
+      - organisms
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /overview/:
+    get:
+      operationId: overview_retrieve
+      tags:
+      - overview
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /projects/:
+    get:
+      operationId: projects_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - projects
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectList'
+          description: ''
+    post:
+      operationId: projects_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/{id}/:
+    get:
+      operationId: projects_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project.
+        required: true
+      tags:
+      - projects
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    put:
+      operationId: projects_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project.
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    patch:
+      operationId: projects_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project.
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    delete:
+      operationId: projects_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project.
+        required: true
+      tags:
+      - projects
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /projects/{id}/set_file/:
+    post:
+      operationId: projects_set_file_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project.
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /quantification_methods/:
+    get:
+      operationId: quantification_methods_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - quantification_methods
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedQuantificationMethodList'
+          description: ''
+    post:
+      operationId: quantification_methods_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - quantification_methods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuantificationMethod'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantificationMethod'
+          description: ''
+  /quantification_methods/{id}/:
+    get:
+      operationId: quantification_methods_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this quantification method.
+        required: true
+      tags:
+      - quantification_methods
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantificationMethod'
+          description: ''
+    put:
+      operationId: quantification_methods_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this quantification method.
+        required: true
+      tags:
+      - quantification_methods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuantificationMethod'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantificationMethod'
+          description: ''
+    patch:
+      operationId: quantification_methods_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this quantification method.
+        required: true
+      tags:
+      - quantification_methods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedQuantificationMethod'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantificationMethod'
+          description: ''
+    delete:
+      operationId: quantification_methods_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this quantification method.
+        required: true
+      tags:
+      - quantification_methods
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /quantification_methods/{id}/get_projects/:
+    get:
+      operationId: quantification_methods_get_projects_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this quantification method.
+        required: true
+      tags:
+      - quantification_methods
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantificationMethod'
+          description: ''
+  /raw_data/:
+    get:
+      operationId: raw_data_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - raw_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRawDataList'
+          description: ''
+    post:
+      operationId: raw_data_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - raw_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawData'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawData'
+          description: ''
+  /raw_data/{id}/:
+    get:
+      operationId: raw_data_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw data.
+        required: true
+      tags:
+      - raw_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawData'
+          description: ''
+    put:
+      operationId: raw_data_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw data.
+        required: true
+      tags:
+      - raw_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawData'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawData'
+          description: ''
+    patch:
+      operationId: raw_data_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw data.
+        required: true
+      tags:
+      - raw_data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRawData'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawData'
+          description: ''
+    delete:
+      operationId: raw_data_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw data.
+        required: true
+      tags:
+      - raw_data
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /raw_sample_column/:
+    get:
+      operationId: raw_sample_column_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - raw_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRawSampleColumnList'
+          description: ''
+    post:
+      operationId: raw_sample_column_create
+      tags:
+      - raw_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawSampleColumn'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawSampleColumn'
+          description: ''
+  /raw_sample_column/{id}/:
+    get:
+      operationId: raw_sample_column_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw sample column.
+        required: true
+      tags:
+      - raw_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawSampleColumn'
+          description: ''
+    put:
+      operationId: raw_sample_column_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw sample column.
+        required: true
+      tags:
+      - raw_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawSampleColumn'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawSampleColumn'
+          description: ''
+    patch:
+      operationId: raw_sample_column_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw sample column.
+        required: true
+      tags:
+      - raw_sample_column
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRawSampleColumn'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawSampleColumn'
+          description: ''
+    delete:
+      operationId: raw_sample_column_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw sample column.
+        required: true
+      tags:
+      - raw_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /raw_sample_column/{id}/get_boxplot_parameters/:
+    get:
+      operationId: raw_sample_column_get_boxplot_parameters_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this raw sample column.
+        required: true
+      tags:
+      - raw_sample_column
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawSampleColumn'
+          description: ''
+  /tissue_types/:
+    get:
+      operationId: tissue_types_list
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - tissue_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTissueTypeList'
+          description: ''
+    post:
+      operationId: tissue_types_create
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      tags:
+      - tissue_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TissueType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TissueType'
+          description: ''
+  /tissue_types/{id}/:
+    get:
+      operationId: tissue_types_retrieve
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tissue type.
+        required: true
+      tags:
+      - tissue_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TissueType'
+          description: ''
+    put:
+      operationId: tissue_types_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tissue type.
+        required: true
+      tags:
+      - tissue_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TissueType'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TissueType'
+          description: ''
+    patch:
+      operationId: tissue_types_partial_update
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tissue type.
+        required: true
+      tags:
+      - tissue_types
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTissueType'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TissueType'
+          description: ''
+    delete:
+      operationId: tissue_types_destroy
+      description: |-
+        This viewset provides dynamically generated
+        filters by applying defined filters on generic
+        queryset.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tissue type.
+        required: true
+      tags:
+      - tissue_types
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /token:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /user/:
+    post:
+      operationId: user_create
+      tags:
+      - user
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /users/:
+    get:
+      operationId: users_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - users
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/{id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - created
+      - email
+      - id
+      - name
+    CellType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    ColumnTypeEnum:
+      enum:
+      - P
+      - FC
+      - PS
+      - SW
+      - PE
+      - PP
+      - PI
+      type: string
+    Comparison:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        file:
+          type: integer
+          readOnly: true
+      required:
+      - created
+      - file
+      - id
+      - name
+    Curtain:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        link_id:
+          type: string
+      required:
+      - created
+      - id
+      - link_id
+    DifferentialAnalysisData:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        primary_id:
+          type: string
+        gene_names:
+          $ref: '#/components/schemas/GeneNameMap'
+        fold_change:
+          type: number
+          format: double
+        significant:
+          type: number
+          format: double
+        probability_score:
+          type: number
+          format: double
+          nullable: true
+        sequence_window:
+          type: string
+          nullable: true
+        peptide_sequence:
+          type: string
+          nullable: true
+        ptm_position:
+          type: integer
+          nullable: true
+        ptm_position_in_peptide:
+          type: integer
+          nullable: true
+        ptm_data:
+          type: boolean
+        comparison:
+          type: integer
+          readOnly: true
+      required:
+      - comparison
+      - created
+      - fold_change
+      - gene_names
+      - id
+      - primary_id
+      - significant
+    DifferentialSampleColumn:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        column_type:
+          $ref: '#/components/schemas/ColumnTypeEnum'
+        comparison:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - created
+      - name
+      - url
+    Disease:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    ExperimentType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    File:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        file_type:
+          $ref: '#/components/schemas/FileTypeEnum'
+        comparisons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comparison'
+          readOnly: true
+        raw_sample_columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawSampleColumn'
+          readOnly: true
+        project:
+          type: integer
+          nullable: true
+      required:
+      - comparisons
+      - created
+      - file
+      - id
+      - raw_sample_columns
+    FileTypeEnum:
+      enum:
+      - DA
+      - R
+      - O
+      type: string
+    GeneNameMap:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        accession_id:
+          type: string
+        gene_names:
+          type: string
+        entry:
+          type: string
+      required:
+      - accession_id
+      - created
+      - entry
+      - gene_names
+      - id
+    Instrument:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    Keyword:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    LabGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    Organism:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        project_count:
+          type: string
+          readOnly: true
+      required:
+      - created
+      - id
+      - name
+      - project_count
+    OrganismPart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    PaginatedAuthorList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+    PaginatedCellTypeList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellType'
+    PaginatedComparisonList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comparison'
+    PaginatedCurtainList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Curtain'
+    PaginatedDifferentialAnalysisDataList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DifferentialAnalysisData'
+    PaginatedDifferentialSampleColumnList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DifferentialSampleColumn'
+    PaginatedDiseaseList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disease'
+    PaginatedExperimentTypeList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentType'
+    PaginatedFileList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    PaginatedGeneNameMapList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneNameMap'
+    PaginatedInstrumentList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instrument'
+    PaginatedKeywordList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Keyword'
+    PaginatedLabGroupList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabGroup'
+    PaginatedOrganismList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organism'
+    PaginatedOrganismPartList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganismPart'
+    PaginatedProjectList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+    PaginatedQuantificationMethodList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantificationMethod'
+    PaginatedRawDataList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawData'
+    PaginatedRawSampleColumnList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawSampleColumn'
+    PaginatedTissueTypeList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TissueType'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedAuthor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          maxLength: 254
+    PatchedCellType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedComparison:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        file:
+          type: integer
+          readOnly: true
+    PatchedCurtain:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        link_id:
+          type: string
+    PatchedDifferentialAnalysisData:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        primary_id:
+          type: string
+        gene_names:
+          $ref: '#/components/schemas/GeneNameMap'
+        fold_change:
+          type: number
+          format: double
+        significant:
+          type: number
+          format: double
+        probability_score:
+          type: number
+          format: double
+          nullable: true
+        sequence_window:
+          type: string
+          nullable: true
+        peptide_sequence:
+          type: string
+          nullable: true
+        ptm_position:
+          type: integer
+          nullable: true
+        ptm_position_in_peptide:
+          type: integer
+          nullable: true
+        ptm_data:
+          type: boolean
+        comparison:
+          type: integer
+          readOnly: true
+    PatchedDifferentialSampleColumn:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        column_type:
+          $ref: '#/components/schemas/ColumnTypeEnum'
+        comparison:
+          type: string
+          format: uri
+          nullable: true
+    PatchedDisease:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedExperimentType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedFile:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        file_type:
+          $ref: '#/components/schemas/FileTypeEnum'
+        comparisons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comparison'
+          readOnly: true
+        raw_sample_columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawSampleColumn'
+          readOnly: true
+        project:
+          type: integer
+          nullable: true
+    PatchedGeneNameMap:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        accession_id:
+          type: string
+        gene_names:
+          type: string
+        entry:
+          type: string
+    PatchedInstrument:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedKeyword:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedLabGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedOrganism:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        project_count:
+          type: string
+          readOnly: true
+    PatchedOrganismPart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedProject:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        description:
+          type: string
+        sample_processing_protocol:
+          type: string
+        data_processing_protocol:
+          type: string
+        associated_authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          readOnly: true
+        first_authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          readOnly: true
+        database_version:
+          type: string
+        date:
+          type: string
+          format: date-time
+        enable:
+          type: boolean
+        tissue_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/TissueType'
+          readOnly: true
+        quantification_method:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantificationMethod'
+          readOnly: true
+        cell_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellType'
+          readOnly: true
+        disease:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disease'
+          readOnly: true
+        instrument:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instrument'
+          readOnly: true
+        keyword:
+          type: array
+          items:
+            $ref: '#/components/schemas/Keyword'
+          readOnly: true
+        organism:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organism'
+          readOnly: true
+        organism_part:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganismPart'
+          readOnly: true
+        curtain:
+          type: array
+          items:
+            $ref: '#/components/schemas/Curtain'
+          readOnly: true
+        experiment_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentType'
+          readOnly: true
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+          readOnly: true
+        ptm_data:
+          type: boolean
+        lab_group:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabGroup'
+          readOnly: true
+        project_type:
+          $ref: '#/components/schemas/ProjectTypeEnum'
+    PatchedQuantificationMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedRawData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        primary_id:
+          type: string
+        value:
+          type: number
+          format: double
+        raw_sample_column:
+          $ref: '#/components/schemas/RawSampleColumn'
+        gene_names:
+          $ref: '#/components/schemas/GeneNameMap'
+        file:
+          type: integer
+          nullable: true
+    PatchedRawSampleColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        file:
+          type: integer
+          nullable: true
+    PatchedTissueType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+    PatchedUser:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_authenticated:
+          type: string
+          readOnly: true
+    Project:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        description:
+          type: string
+        sample_processing_protocol:
+          type: string
+        data_processing_protocol:
+          type: string
+        associated_authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          readOnly: true
+        first_authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          readOnly: true
+        database_version:
+          type: string
+        date:
+          type: string
+          format: date-time
+        enable:
+          type: boolean
+        tissue_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/TissueType'
+          readOnly: true
+        quantification_method:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantificationMethod'
+          readOnly: true
+        cell_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellType'
+          readOnly: true
+        disease:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disease'
+          readOnly: true
+        instrument:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instrument'
+          readOnly: true
+        keyword:
+          type: array
+          items:
+            $ref: '#/components/schemas/Keyword'
+          readOnly: true
+        organism:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organism'
+          readOnly: true
+        organism_part:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganismPart'
+          readOnly: true
+        curtain:
+          type: array
+          items:
+            $ref: '#/components/schemas/Curtain'
+          readOnly: true
+        experiment_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentType'
+          readOnly: true
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+          readOnly: true
+        ptm_data:
+          type: boolean
+        lab_group:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabGroup'
+          readOnly: true
+        project_type:
+          $ref: '#/components/schemas/ProjectTypeEnum'
+      required:
+      - associated_authors
+      - cell_type
+      - curtain
+      - data_processing_protocol
+      - database_version
+      - description
+      - disease
+      - experiment_type
+      - files
+      - first_authors
+      - id
+      - instrument
+      - keyword
+      - lab_group
+      - organism
+      - organism_part
+      - quantification_method
+      - sample_processing_protocol
+      - tissue_type
+      - title
+    ProjectTypeEnum:
+      enum:
+      - TP
+      - PTM
+      type: string
+    QuantificationMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    RawData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        primary_id:
+          type: string
+        value:
+          type: number
+          format: double
+        raw_sample_column:
+          $ref: '#/components/schemas/RawSampleColumn'
+        gene_names:
+          $ref: '#/components/schemas/GeneNameMap'
+        file:
+          type: integer
+          nullable: true
+      required:
+      - created
+      - gene_names
+      - id
+      - primary_id
+      - raw_sample_column
+      - value
+    RawSampleColumn:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        file:
+          type: integer
+          nullable: true
+      required:
+      - created
+      - id
+      - name
+    TissueType:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+      required:
+      - created
+      - id
+      - name
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_authenticated:
+          type: string
+          readOnly: true
+      required:
+      - is_authenticated
+      - username
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
