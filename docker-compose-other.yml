@@ -10,10 +10,8 @@ services:
     image: postgres
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - celsus.env
   web:
     build:
       context: .
@@ -21,13 +19,9 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8001:8000"
-    environment:
-      - WORKDB_PROFILE=production
-      - SECRET_KEY=django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
+    env_file:
+      - celsus.env
+
     depends_on:
       - db
     volumes:

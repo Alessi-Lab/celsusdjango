@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -89,18 +89,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-if os.environ.get("WORKDB_PROFILE") == "production":
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_NAME'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': 'db',
-            'PORT': 5432,
-        }
-    }
 
 
 # Password validation
@@ -206,3 +194,24 @@ SPECTACULAR_SETTINGS = {
 
 SENDFILE_BACKEND = "django_sendfile.backends.simple"
 SENDFILE_ROOT = "D:/PycharmProjects/celsusdjango/media"
+
+if os.environ.get("WORKDB_PROFILE") == "production":
+    DEBUG = False
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+            'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
+        }
+    }
+
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
+                "rest_framework.renderers.JSONRenderer",
+            )
+    ALLOWED_HOSTS = [
+        "http://127.0.0.1:8001"
+    ]
