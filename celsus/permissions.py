@@ -20,6 +20,8 @@ class IsFileOwnerOrPublic(BasePermission):
 
 class IsCurtainOwnerOrPublic(BasePermission):
     def has_object_permission(self, request, view, obj):
+        if obj.enable:
+            return True
         if obj.project:
             if obj.project.enable:
                 return True
