@@ -28,6 +28,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST=db
+      - DJANGO_CORS_WHITELIST=http://curtain.proteo.info,http://curtainptm.proteo.info,http://localhost,http://celsus.proteo.info
+      - DJANGO_ALLOWED_HOSTS=http://localhost,http://celsus.muttsu.xyz,http://127.0.0.1
     depends_on:
       - db
     volumes:

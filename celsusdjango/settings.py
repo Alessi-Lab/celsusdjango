@@ -212,6 +212,5 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
                 "rest_framework.renderers.JSONRenderer",
             )
-    ALLOWED_HOSTS = [
-        "http://127.0.0.1:8001"
-    ]
+    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "http://localhost,http://127.0.0.1").split(",")
+    CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
