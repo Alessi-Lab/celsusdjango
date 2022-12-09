@@ -127,7 +127,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 MEDIA_URL = ''
-MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", BASE_DIR) / "media/"
+MEDIA_ROOT = BASE_DIR / "media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -214,3 +214,4 @@ if os.environ.get("WORKDB_PROFILE") == "production":
             )
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "http://localhost,http://127.0.0.1").split(",")
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
+    MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT") + "/media/"
