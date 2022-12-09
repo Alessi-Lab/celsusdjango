@@ -193,7 +193,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 SENDFILE_BACKEND = "django_sendfile.backends.simple"
-SENDFILE_ROOT = "D:/PycharmProjects/celsusdjango/media"
+SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
 
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False
