@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.core.files.base import File as djangoFile
 from django.contrib.auth.models import User
 from django.db.models import Q, Count
 from django.utils.decorators import method_decorator
@@ -858,8 +859,15 @@ class CurtainViewSet(viewsets.ModelViewSet):
         a = AccessToken()
         ca = CurtainAccessToken(token=str(a), curtain=file)
         ca.save()
+
         return Response(data={"link_id": file.link_id, "token": ca.token})
 
+    def create(self, request):
+        c = Curtain()
+        c.file.save(str(c.link_id)+".json", djangoFile(self.request.data["file"]))
+        c.save()
+        curtain_json = CurtainSerializer(c, many=False, context={"request": request})
+        return Response(data=curtain_json.data)
 
 def update_section(section, data_array, model):
     section.clear()
