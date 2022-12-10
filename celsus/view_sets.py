@@ -849,9 +849,9 @@ class CurtainViewSet(viewsets.ModelViewSet):
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
     ])
     def download(self, request, pk=None, link_id=None, token=None):
-        file = self.get_object()
-        _, file_name = os.path.split(file.file.name)
-        return sendfile(request, file.file.name, attachment_filename=file_name)
+        c = self.get_object()
+        _, file_name = os.path.split(c.file.name)
+        return sendfile(request, c.file.name, attachment_filename=file_name)
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
