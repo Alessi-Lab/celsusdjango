@@ -862,11 +862,12 @@ class CurtainViewSet(viewsets.ModelViewSet):
 
         return Response(data={"link_id": file.link_id, "token": ca.token})
 
-    def create(self, request):
+    def create(self, request, **kwargs):
         c = Curtain()
         c.file.save(str(c.link_id)+".json", djangoFile(self.request.data["file"]))
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
+        print(c.file.path)
         return Response(data=curtain_json.data)
 
 def update_section(section, data_array, model):
