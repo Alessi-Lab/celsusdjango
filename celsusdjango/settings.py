@@ -214,4 +214,4 @@ if os.environ.get("WORKDB_PROFILE") == "production":
             )
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "http://localhost,http://127.0.0.1").split(",")
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
-    MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT") + "/media/"
+    MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
