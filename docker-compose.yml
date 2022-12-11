@@ -14,7 +14,11 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    container_name: db
+    networks:
+      - celsus-net
   web:
+    container_name: web
     build:
       context: .
       dockerfile: ./docker/Dockerfile
@@ -22,7 +26,7 @@ services:
     ports:
       - "8001:8000"
     environment:
-      - WORKDB_PROFILE=production
+      - WORKDB_PROFILE=dev
       - SECRET_KEY=django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -35,3 +39,14 @@ services:
       - db
     volumes:
       - ./data/media:/app/media
+    networks:
+      - celsus-net
+  netphos:
+    build:
+      context: D:/PycharmProjects/netphos-web
+      dockerfile: D:/PycharmProjects/netphos-web/Dockerfile
+    container_name: netphos
+    networks:
+      - celsus-net
+networks:
+  celsus-net:

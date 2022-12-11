@@ -28,7 +28,7 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
     GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet
 from django.conf import settings
 
-from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView
+from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -64,5 +64,6 @@ urlpatterns = [
     path('csrf/', CSRFTokenView.as_view(), name="csrf_token"),
     path('overview/', GetOverview.as_view(), name="overview"),
     path('user/', UserView.as_view(), name="user"),
+    path('netphos/', NetPhosView.as_view(), name="netphos"),
     path('genemap-refresh/', UniprotRefreshView.as_view(), name="genemap_refresh"),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

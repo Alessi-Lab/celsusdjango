@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_sendfile import sendfile
 from uniprotparser.betaparser import UniprotParser
-
+import requests as req
 from celsus.models import Project, GeneNameMap, UniprotRecord
 
 
@@ -159,3 +159,9 @@ class UniprotRefreshView(APIView):
             #             accession_map[row["From"]].gene_names = row["Entry"]
             #         accession_map[row["From"]].save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class NetPhosView(APIView):
+    permission_classes = (AllowAny,)
+    def post(self, request):
+        da = req.post("http://netphos:8000/api/netphos/predict", json={"id": self.request.data["id"], "fasta": self.request.data["fasta"]})
+        return Response(da.json())
