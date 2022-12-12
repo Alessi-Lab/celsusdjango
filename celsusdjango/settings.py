@@ -195,6 +195,8 @@ SPECTACULAR_SETTINGS = {
 SENDFILE_BACKEND = "django_sendfile.backends.simple"
 SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
 
+NETPHOS_WEB_URL = os.environ.get("NETPHOS_WEB_URL", "http://netphos:8000/api/netphos/predict")
+
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False
 
