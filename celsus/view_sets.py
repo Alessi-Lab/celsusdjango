@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import timedelta
 
 from django.core.files.base import File as djangoFile
 from django.contrib.auth.models import User
@@ -855,12 +856,13 @@ class CurtainViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
-        file = self.get_object()
+        c = self.get_object()
         a = AccessToken()
-        ca = CurtainAccessToken(token=str(a), curtain=file)
+        a.set_exp(timedelta(days=1))
+        ca = CurtainAccessToken(token=str(a), curtain=c)
         ca.save()
 
-        return Response(data={"link_id": file.link_id, "token": ca.token})
+        return Response(data={"link_id": c.link_id, "token": ca.token})
 
     def create(self, request, **kwargs):
         c = Curtain()
