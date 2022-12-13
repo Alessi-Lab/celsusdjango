@@ -20,7 +20,6 @@ class IsFileOwnerOrPublic(BasePermission):
 
 class IsCurtainOwnerOrPublic(BasePermission):
     def has_object_permission(self, request, view, obj):
-        print(view)
         if obj.enable:
             return True
         if obj.project:
@@ -36,9 +35,7 @@ class IsCurtainOwnerOrPublic(BasePermission):
 
 class HasCurtainToken(BasePermission):
     def has_object_permission(self, request, view, obj):
-
         token = view.kwargs.get("token", "")
-        print(token)
         if token != "":
             t = CurtainAccessToken.objects.filter(token=token).first()
             if t:
@@ -54,7 +51,6 @@ class HasCurtainToken(BasePermission):
 
 class IsCurtainOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
-        print(view)
         if bool(request.user and request.user.is_authenticated):
             return bool(request.user in obj.owners.all())
         return False
