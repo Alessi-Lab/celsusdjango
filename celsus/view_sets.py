@@ -846,7 +846,7 @@ class CurtainViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
     lookup_field = 'link_id'
 
-    @action(methods=["get"], url_path="download/?token=(?P<token>[^/.]*)", detail=True, permission_classes=[
+    @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
     ])
     def download(self, request, pk=None, link_id=None, token=None):
