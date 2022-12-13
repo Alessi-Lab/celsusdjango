@@ -6,7 +6,7 @@ from django.core.files.base import File as djangoFile
 from django.contrib.auth.models import User
 from django.db.models import Q, Count
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
 from django_sendfile import sendfile
 from filters.mixins import FiltersMixin
 from rest_flex_fields import is_expanded
@@ -842,13 +842,14 @@ class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
 class CurtainViewSet(viewsets.ModelViewSet):
     queryset = Curtain.objects.all()
     serializer_class = CurtainSerializer
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [permissions.AllowAny,]
     lookup_field = 'link_id'
 
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
     ])
+    @method_decorator(cache_page(0))
     def download(self, request, pk=None, link_id=None, token=None):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
@@ -870,6 +871,15 @@ class CurtainViewSet(viewsets.ModelViewSet):
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         print(c.file.path)
+        return Response(data=curtain_json.data)
+
+    def update(self, request, *args, **kwargs):
+        c = self.get_object()
+        print(self.request.data)
+        if "enable" in self.request.data:
+            c.enable = self.request.data["enable"]
+            c.save()
+        curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
 
 def update_section(section, data_array, model):
