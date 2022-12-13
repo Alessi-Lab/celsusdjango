@@ -56,7 +56,7 @@ router.register(r'uniprot_record', UniprotRecordViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
