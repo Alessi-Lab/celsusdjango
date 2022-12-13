@@ -858,7 +858,7 @@ class CurtainViewSet(viewsets.ModelViewSet):
     def generate_token(self, request, pk=None, link_id=None):
         c = self.get_object()
         a = AccessToken()
-        a.set_exp(timedelta(days=1))
+        a.set_exp(lifetime=timedelta(days=1))
         ca = CurtainAccessToken(token=str(a), curtain=c)
         ca.save()
 
