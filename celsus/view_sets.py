@@ -859,7 +859,7 @@ class CurtainViewSet(viewsets.ModelViewSet):
     def generate_token(self, request, pk=None, link_id=None):
         c = self.get_object()
         a = AccessToken()
-        a.set_exp(lifetime=timedelta(days=1))
+        a.set_exp(lifetime=timedelta(days=self.request.data["lifetime"]))
         ca = CurtainAccessToken(token=str(a), curtain=c)
         ca.save()
 
@@ -878,6 +878,9 @@ class CurtainViewSet(viewsets.ModelViewSet):
         print(self.request.data)
         if "enable" in self.request.data:
             c.enable = self.request.data["enable"]
+            c.save()
+        if "file" in self.request.data:
+            c.file.save(str(c.link_id) + ".json", djangoFile(self.request.data["file"]))
             c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
