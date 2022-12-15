@@ -871,6 +871,7 @@ class CurtainViewSet(viewsets.ModelViewSet):
         if self.request.user:
             c.owners.add(self.request.user)
         c.save()
+        print(c.owners.all())
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
 
@@ -882,10 +883,11 @@ class CurtainViewSet(viewsets.ModelViewSet):
                 c.enable = True
             else:
                 c.enable = False
-            c.save()
+
         if "file" in self.request.data:
             c.file.save(str(c.link_id) + ".json", djangoFile(self.request.data["file"]))
-            c.save()
+
+        c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
 
@@ -897,6 +899,33 @@ class CurtainViewSet(viewsets.ModelViewSet):
         if self.request.user in c.owners.all():
             return Response(data={"link_id": c.link_id, "ownership": True})
         return Response(data={"link_id": c.link_id, "ownership": False})
+
+    @action(methods=["get"], detail=True, permission_classes=[
+        permissions.IsAdminUser | HasCurtainToken | IsCurtainOwner
+    ])
+    def get_owners(self, request, pk=None, link_id=None):
+        c = self.get_object()
+        owners = []
+        for i in c.owners.all():
+            owners.append({"id": i.id, "username": i.username})
+        return Response(data={"link_id": link_id, "owners": owners})
+
+    @action(methods=["patch"], detail=True, permission_classes=[
+        permissions.IsAdminUser | IsCurtainOwner
+    ])
+    def add_owner(self, request, pk=None, link_id=None):
+        c = self.get_object()
+        if "username" in self.request.data:
+            user = User.objects.filter(username=self.request.data["username"]).first()
+            if user:
+                if user not in c.owners.all():
+                    c.owners.add(user)
+                    c.save()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def update_section(section, data_array, model):
     section.clear()
