@@ -30,8 +30,7 @@ class IsCurtainOwnerOrPublic(BasePermission):
         else:
             if bool(request.user and request.user.is_authenticated):
                 return bool(request.user in obj.owners.all())
-        if request.method in SAFE_METHODS:
-            return True
+
         return False
 
 
