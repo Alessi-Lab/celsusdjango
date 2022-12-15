@@ -843,7 +843,7 @@ class CurtainViewSet(viewsets.ModelViewSet):
     queryset = Curtain.objects.all()
     serializer_class = CurtainSerializer
     parser_classes = [MultiPartParser, JSONParser]
-    permission_classes = [permissions.AllowAny,]
+    permission_classes = [(permissions.IsAdminUser|IsCurtainOwnerOrPublic),]
     lookup_field = 'link_id'
 
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
@@ -868,22 +868,35 @@ class CurtainViewSet(viewsets.ModelViewSet):
     def create(self, request, **kwargs):
         c = Curtain()
         c.file.save(str(c.link_id)+".json", djangoFile(self.request.data["file"]))
+        if self.request.user:
+            c.owners.add(self.request.user)
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
-        print(c.file.path)
         return Response(data=curtain_json.data)
 
     def update(self, request, *args, **kwargs):
         c = self.get_object()
-        print(self.request.data)
+
         if "enable" in self.request.data:
-            c.enable = self.request.data["enable"]
+            if self.request.data["enable"] == "True":
+                c.enable = True
+            else:
+                c.enable = False
             c.save()
         if "file" in self.request.data:
             c.file.save(str(c.link_id) + ".json", djangoFile(self.request.data["file"]))
             c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
+
+    @action(methods=["get"], detail=True, permission_classes=[
+        permissions.IsAdminUser | IsCurtainOwner
+    ])
+    def get_ownership(self, request, pk=None, link_id=None):
+        c = self.get_object()
+        if self.request.user in c.owners.all():
+            return Response(data={"link_id": c.link_id, "ownership": True})
+        return Response(data={"link_id": c.link_id, "ownership": False})
 
 def update_section(section, data_array, model):
     section.clear()
