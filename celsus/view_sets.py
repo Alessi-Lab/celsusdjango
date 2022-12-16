@@ -839,12 +839,19 @@ class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
         return self.queryset.filter(rawdata__file__project__in=project_limit).distinct()
 
 
-class CurtainViewSet(viewsets.ModelViewSet):
+class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = Curtain.objects.all()
     serializer_class = CurtainSerializer
+    filter_backends = [filters.OrderingFilter]
     parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [(permissions.IsAdminUser|IsCurtainOwnerOrPublic),]
     lookup_field = 'link_id'
+    ordering_fields = ("id", "created")
+    ordering = ("created", "id")
+    filter_mappings = {
+        "id": "id",
+        "username": "owners__username"
+    }
 
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
@@ -868,10 +875,11 @@ class CurtainViewSet(viewsets.ModelViewSet):
     def create(self, request, **kwargs):
         c = Curtain()
         c.file.save(str(c.link_id)+".json", djangoFile(self.request.data["file"]))
+        if "description" in self.request.data:
+            c.description = self.request.data["description"]
         if self.request.user:
             c.owners.add(self.request.user)
         c.save()
-        print(c.owners.all())
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
 
