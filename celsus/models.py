@@ -182,6 +182,7 @@ class Curtain(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     link_id = models.TextField(unique=True, default=uuid.uuid4, null=False)
     file = models.FileField(upload_to="media/files/curtain_upload/")
+    description = models.TextField()
     owners = models.ManyToManyField(User, related_name="curtain")
     enable = models.BooleanField(default=True)
     project = models.ForeignKey(

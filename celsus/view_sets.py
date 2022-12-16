@@ -927,6 +927,12 @@ class CurtainViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(methods=["get"], detail=False, permission_classes=[permissions.IsAuthenticated])
+    def get_curtain_list(self, request, pk=None, link_id=None):
+        cs = self.request.user.curtain.all()
+        cs_json = CurtainSerializer(cs, many=True, context={"request": request})
+        return Response(data=cs_json.data)
+
 def update_section(section, data_array, model):
     section.clear()
     for ct in data_array:
