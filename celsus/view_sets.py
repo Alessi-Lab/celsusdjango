@@ -879,6 +879,11 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
             c.description = self.request.data["description"]
         if self.request.user:
             c.owners.add(self.request.user)
+        if "enable" in self.request.data:
+            if self.request.data["enable"] == "True":
+                c.enable = True
+            else:
+                c.enable = False
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
