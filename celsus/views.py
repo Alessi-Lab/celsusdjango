@@ -218,7 +218,7 @@ class ORCIDOAUTHView(APIView):
                 "Content-Type": "application/x-www-form-urlencoded"
             }
             response = req.post("https://orcid.org/oauth/token", payload, headers=headers)
-            data = response.json()
+            data = json.loads(response.content.decode())
             try:
                 user = User.objects.filter(username=data["orcid"]).first()
                 if user:
