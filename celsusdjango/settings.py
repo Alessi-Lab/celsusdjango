@@ -16,8 +16,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu')
@@ -43,7 +45,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'drf_spectacular',
-    'django_sendfile'
+    'django_sendfile',
+
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
 ]
 
 MIDDLEWARE = [
@@ -196,6 +205,29 @@ SENDFILE_BACKEND = "django_sendfile.backends.simple"
 SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
 
 NETPHOS_WEB_URL = os.environ.get("NETPHOS_WEB_URL", "http://netphos:8000/api/netphos/predict")
+
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_OAUTH_CLIENT_ID', 'resorc'),
+            'secret': os.environ.get('GOOGLE_OAUTH_SECRET', 'resorc'),
+        }
+    }
+}
+
+
+ORCID = {
+    'client_id': os.environ.get('ORCID_OAUTH_CLIENT_ID', 'resorc'),
+    'secret': os.environ.get('ORCID_OAUTH_SECRET', 'resorc'),
+}
+
 
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False

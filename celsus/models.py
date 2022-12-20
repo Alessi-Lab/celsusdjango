@@ -8,6 +8,8 @@ from django.utils import timezone
 # Create your models here.
 
 
+
+
 class Author(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     name = models.TextField()
@@ -252,6 +254,10 @@ class File(models.Model):
         return self.file.name + "(" + self.file_type + ")"
 
 
+class SocialPlatform(models.Model):
+    name = models.TextField()
+    user = models.ManyToManyField(User, related_name="social_platform")
+
 class ExperimentType(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     name = models.TextField()
@@ -266,6 +272,7 @@ class Collaborator(models.Model):
         blank=True,
         null=True
     )
+
 
 
 class Project(models.Model):

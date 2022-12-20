@@ -28,7 +28,8 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
     GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet
 from django.conf import settings
 
-from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView
+from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
+    GoogleLogin2, ORCIDOAUTHView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -65,5 +66,9 @@ urlpatterns = [
     path('overview/', GetOverview.as_view(), name="overview"),
     path('user/', UserView.as_view(), name="user"),
     path('netphos/', NetPhosView.as_view(), name="netphos"),
+    #path('accounts/', include('allauth.urls')),
     path('genemap-refresh/', UniprotRefreshView.as_view(), name="genemap_refresh"),
+    path('rest-auth/google/', GoogleLogin2.as_view(), name='google_login'),
+    path('rest-auth/orcid/', ORCIDOAUTHView.as_view(), name='orcid_login'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
