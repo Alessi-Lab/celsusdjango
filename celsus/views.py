@@ -25,7 +25,6 @@ from celsusdjango import settings
 from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -206,4 +205,17 @@ class ORCIDOAUTHView(APIView):
     permission_classes = (AllowAny,)
     def post(self, request):
         print(self.request.data)
+        payload = {
+            "client_id": settings.ORCID["client_id"],
+            "client_secret": settings.ORCID["secret"],
+            "grant_type": "authorization_code",
+            "code": self.request.data["auth_token"],
+            "redirect_uri": self.request.data["redirect_uri"]
+        }
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+        response = req.post("https://orcid.org/oauth/token", payload, headers=headers)
+        print(response.content)
         return Response(status=status.HTTP_204_NO_CONTENT)
