@@ -205,17 +205,35 @@ class ORCIDOAUTHView(APIView):
     permission_classes = (AllowAny,)
     def post(self, request):
         print(self.request.data)
-        payload = {
-            "client_id": settings.ORCID["client_id"],
-            "client_secret": settings.ORCID["secret"],
-            "grant_type": "authorization_code",
-            "code": self.request.data["auth_token"],
-            "redirect_uri": self.request.data["redirect_uri"]
-        }
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-        response = req.post("https://orcid.org/oauth/token", payload, headers=headers)
-        print(response.content)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if "auth_token" in self.request.data and "redirect_uri" in self.request.data:
+            payload = {
+                "client_id": settings.ORCID["client_id"],
+                "client_secret": settings.ORCID["secret"],
+                "grant_type": "authorization_code",
+                "code": self.request.data["auth_token"],
+                "redirect_uri": self.request.data["redirect_uri"]
+            }
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+            response = req.post("https://orcid.org/oauth/token", payload, headers=headers)
+            data = response.json()
+            try:
+                user = User.objects.filter(username=data["orcid"]).first()
+                if user:
+                    refresh_token = RefreshToken.for_user(user)
+                    return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
+                else:
+                    user = User.objects.create_user(username=data["orcid"],
+                                                    password=User.objects.make_random_password())
+                    user.save()
+                    social = SocialPlatform.objects.get_or_create(SocialPlatform(name="ORCID"))
+                    social.user.add(user)
+                    social.save()
+                    refresh_token = RefreshToken.for_user(user)
+                    return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
