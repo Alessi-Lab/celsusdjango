@@ -83,6 +83,7 @@ curtain_query_schema = base_query_params_schema.extend(
         "id": IntegerLike(),
         "link_id": six.text_type,
         "created": DatetimeWithTZ(),
-        "username": six.text_type
+        "username": six.text_type,
+        "description": six.text_type
     }
 )

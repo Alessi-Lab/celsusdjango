@@ -36,7 +36,8 @@ from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, Experim
     GeneNameMapSerializer, LabGroupSerializer, UniprotRecordSerializer, ProjectSettingsSerializer
 from celsus.utils import is_user_staff, delete_file_related_objects, calculate_boxplot_parameters
 from celsus.validations import organism_query_schema, differential_data_query_schema, raw_data_query_schema, \
-    comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema
+    comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema, \
+    curtain_query_schema
 
 
 class ProjectSettingsViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
@@ -850,9 +851,10 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     ordering = ("created", "id")
     filter_mappings = {
         "id": "id",
-        "username": "owners__username"
+        "username": "owners__username",
+        "description": "description__icontains"
     }
-
+    filter_validation_schema = curtain_query_schema
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
     ])
