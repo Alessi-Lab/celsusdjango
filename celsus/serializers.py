@@ -109,10 +109,19 @@ class QuantificationMethodSerializer(FlexFieldsModelSerializer):
         fields = [f.name for f in model._meta.fields] + ["project_count"]
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(FlexFieldsModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    curtain = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ["username", "is_staff", "is_authenticated"]
+        fields = ["id", "username", "is_staff", "is_authenticated", "project", "curtain"]
+        expandable_fields = dict(
+            project=("celsus.serializers.ProjectSerializer",
+                            dict(many=True, read_only=True)),
+            curtain=(
+            "celsus.serializers.CurtainSerializer", dict(fields=["id", "description"], many=True, read_only=True))
+        )
 
 
 class DiseaseSerializer(FlexFieldsModelSerializer):

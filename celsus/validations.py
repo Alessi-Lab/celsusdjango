@@ -1,7 +1,7 @@
 import six
 
 from filters.schema import base_query_params_schema
-from filters.validations import DatetimeWithTZ, IntegerLike, CSVofIntegers, Alphanumeric
+from filters.validations import DatetimeWithTZ, IntegerLike, CSVofIntegers, Alphanumeric, GenericSeparatedValidator
 
 organism_query_schema = base_query_params_schema.extend(
     {
@@ -57,7 +57,9 @@ project_query_schema = base_query_params_schema.extend(
         "id": IntegerLike(),
         "created": DatetimeWithTZ(),
         "title": six.text_type,
-        "ids": CSVofIntegers()
+        "ids": CSVofIntegers(),
+        "owner_ids": CSVofIntegers(),
+        "project_type": GenericSeparatedValidator(str, ",")
     }
 )
 

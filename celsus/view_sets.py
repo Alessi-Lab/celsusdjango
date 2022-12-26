@@ -153,10 +153,18 @@ class QuantificationMethodViewSet(FiltersMixin, viewsets.ModelViewSet):
         return Response(project_json.data)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(FlexFieldsMixin, FiltersMixin, viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        if is_expanded(self.request, 'project'):
+            self.queryset = self.queryset.prefetch_related('project')
+        if is_expanded(self.request, 'curtain'):
+            self.queryset = self.queryset.prefetch_related('curtain')
+
+        return self.querysetF
 
 
 class DiseaseViewSet(FiltersMixin, viewsets.ModelViewSet):
@@ -171,17 +179,20 @@ class DiseaseViewSet(FiltersMixin, viewsets.ModelViewSet):
     }
     filter_validation_schema = organism_query_schema
 
+
 class ProjectViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsOwnerOrReadOnly | permissions.IsAdminUser,]
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ("id", "title")
+    ordering_fields = ("id", "date")
     ordering = ("id",)
     filter_mappings = {
         "id": "id",
         "title": "title__icontains",
-        "ids": "pk__in"
+        "ids": "pk__in",
+        "owner_ids": "owners__pk__in",
+        "project_type": "project_type__in",
     }
     filter_validation_schema = project_query_schema
 
