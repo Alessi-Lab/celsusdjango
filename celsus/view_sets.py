@@ -912,7 +912,8 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         if "file" in self.request.data:
             c.file.save(str(c.link_id) + ".json", djangoFile(self.request.data["file"]))
-
+        if "description" in self.request.data:
+            c.description = self.request.data["description"]
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
         return Response(data=curtain_json.data)
