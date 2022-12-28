@@ -863,7 +863,8 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     filter_mappings = {
         "id": "id",
         "username": "owners__username",
-        "description": "description__icontains"
+        "description": "description__icontains",
+        "curtain_type": "curtain_type__in"
     }
     filter_validation_schema = curtain_query_schema
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[

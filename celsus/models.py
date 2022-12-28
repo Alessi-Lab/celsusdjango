@@ -187,6 +187,17 @@ class Curtain(models.Model):
     description = models.TextField()
     owners = models.ManyToManyField(User, related_name="curtain")
     enable = models.BooleanField(default=True)
+    curtain_type_choices = [
+        ("TP", "Total Proteomics"),
+        ("PTM", "Post-translational Modification"),
+    ]
+
+    curtain_type = models.CharField(
+        max_length=3,
+        choices=curtain_type_choices,
+        default="TP"
+    )
+
     project = models.ForeignKey(
         "Project", on_delete=models.RESTRICT, related_name="curtain",
         blank=True,
