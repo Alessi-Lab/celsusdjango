@@ -35,6 +35,8 @@ services:
       - DJANGO_CORS_WHITELIST=http://curtain.proteo.info,http://curtainptm.proteo.info,http://localhost,http://celsus.proteo.info
       - DJANGO_ALLOWED_HOSTS=http://localhost,http://celsus.muttsu.xyz,http://127.0.0.1
       - DJANGO_MEDIA_ROOT=/app/media/
+      - CURTAIN_ALLOW_NON_STAFF_DELETE=0
+      - CURTAIN_ALLOW_NON_USER_POST=1
     depends_on:
       - db
     volumes:

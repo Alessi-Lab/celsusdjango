@@ -9,6 +9,7 @@ from rest_framework import serializers
 from celsus.models import CellType, TissueType, ExperimentType, Instrument, Organism, OrganismPart, \
     QuantificationMethod, Project, Author, File, Keyword, Disease, Curtain, DifferentialSampleColumn, RawSampleColumn, \
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings
+from celsusdjango import settings
 
 
 class CellTypeSerializer(FlexFieldsModelSerializer):
@@ -112,10 +113,17 @@ class QuantificationMethodSerializer(FlexFieldsModelSerializer):
 class UserSerializer(FlexFieldsModelSerializer):
     project = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     curtain = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    can_delete = serializers.SerializerMethodField()
+
+    def get_can_delete(self, user):
+        if settings.CURTAIN_ALLOW_NON_STAFF_DELETE:
+            return True
+        else:
+            return user.is_staff
 
     class Meta:
         model = User
-        fields = ["id", "username", "is_staff", "is_authenticated", "project", "curtain"]
+        fields = ["id", "username", "is_staff", "is_authenticated", "project", "curtain", "can_delete"]
         expandable_fields = dict(
             project=("celsus.serializers.ProjectSerializer",
                             dict(many=True, read_only=True)),

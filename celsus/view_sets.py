@@ -164,7 +164,9 @@ class UserViewSet(FlexFieldsMixin, FiltersMixin, viewsets.ModelViewSet):
         if is_expanded(self.request, 'curtain'):
             self.queryset = self.queryset.prefetch_related('curtain')
 
-        return self.querysetF
+        return self.queryset
+
+
 
 
 class DiseaseViewSet(FiltersMixin, viewsets.ModelViewSet):
