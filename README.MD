@@ -46,6 +46,8 @@ services:
       - DJANGO_MEDIA_ROOT=/app/media/
       - ORCID_OAUTH_CLIENT_ID=
       - ORCID_OAUTH_SECRET=
+      - CURTAIN_ALLOW_NON_STAFF_DELETE=0
+      - CURTAIN_ALLOW_NON_USER_POST=1
     depends_on:
       - db
     volumes:
@@ -54,8 +56,8 @@ services:
       - celsus-net
   netphos:
     build:
-      context: D:/PycharmProjects/netphos-web
-      dockerfile: D:/PycharmProjects/netphos-web/Dockerfile
+      context: /usr/path/to/netphos/web/git/clone
+      dockerfile: /usr/path/to/netphos/web/git/clone/Dockerfile
     container_name: netphos
     networks:
       - celsus-net
@@ -69,6 +71,9 @@ Replace environmental variables in the docker-compose file content with the appr
 3. `DJANGO_ALLOWED_HOSTS` is a list of hostname that can be used to access our backend
 4. `ORCID_OAUTH_CLIENT_ID` is your application clientid registered from orcid.org
 5. `ORCID_OAUTH_SECRET` is your application secret registered from orcid.org
+6. `CURTAIN_ALLOW_NON_STAFF_DELETE` value `1` or `0` is to whether or not allow non_staff Curtain user to delete a Curtain entry.
+7. `CURTAIN_ALLOW_NON_USER_POST` value `1` or `0` is to whether or not allow not yet authenticated user to save a new Curtain session.
+
 
 From the location of the `docker-compose.yml` file, execute
 
@@ -82,7 +87,7 @@ Then execute the following command to perform initial database tables creation i
 docker-compose exec -it web python manage.py migrate
 ```
 
-The following commands to download the initial fixtures for disease and taxonomy data and add them into our data table
+The following commands to download the initial fixtures for disease and taxonomy data and add them into our data table. These are optional and only if you are running Celsus data management application.
 
 ```shell
 docker-compose exec -it web curl -o /app/celsus/fixtures/diseases.json https://nextcloud1.muttsu.xyz/s/dBnT8tGxjneB4AR/download/diseases.json
