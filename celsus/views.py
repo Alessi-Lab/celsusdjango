@@ -57,10 +57,15 @@ class UserView(APIView):
             user = User.objects.filter(pk=access_token["user_id"]).first()
             user_json = {
                     "username": user.username,
-                    "id": user.id
+                    "id": user.id,
                 }
+
             if user.is_staff:
                 user_json["is_staff"] = True
+            if settings.CURTAIN_ALLOW_NON_STAFF_DELETE:
+                user_json["can_delete"] = True
+            else:
+                user_json["can_delete"] = user_json["is_staff"]
             if user:
                 return Response(user_json)
         return Response(status=status.HTTP_404_NOT_FOUND)
