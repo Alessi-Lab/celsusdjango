@@ -21,10 +21,12 @@ class IsFileOwnerOrPublic(BasePermission):
 class IsCurtainOwnerOrPublic(BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.enable:
-            return True
+            if request.method in SAFE_METHODS:
+                return True
         if obj.project:
             if obj.project.enable:
-                return True
+                if request.method in SAFE_METHODS:
+                    return True
             if bool(request.user and request.user.is_authenticated):
                 return bool(request.user in obj.project.owners.all())
         else:
