@@ -58,7 +58,10 @@ class UserView(APIView):
             user_json = {
                     "username": user.username,
                     "id": user.id,
+                    "total_curtain": user.curtain.count()
                 }
+
+
 
             if user.is_staff:
                 user_json["is_staff"] = True
@@ -66,6 +69,9 @@ class UserView(APIView):
                 user_json["can_delete"] = True
             else:
                 user_json["can_delete"] = user_json["is_staff"]
+
+            user_json["curtain_link_limit"] = user.extraproperties.curtain_link_limits
+            user_json["curtain_link_limit_exceed"] = user.extraproperties.curtain_link_limit_exceed
             if user:
                 return Response(user_json)
         return Response(status=status.HTTP_404_NOT_FOUND)

@@ -38,6 +38,7 @@ from celsus.utils import is_user_staff, delete_file_related_objects, calculate_b
 from celsus.validations import organism_query_schema, differential_data_query_schema, raw_data_query_schema, \
     comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema, \
     curtain_query_schema
+from celsusdjango import settings
 
 
 class ProjectSettingsViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
@@ -904,6 +905,14 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
             c.curtain_type = self.request.data["curtain_type"]
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
+
+        if settings.CURTAIN_DEFAULT_USER_LINK_LIMIT != 0:
+            total_count = self.request.user.curtain.count()
+            self.request.user.extraproperties.curtain_link_limit_exceed = total_count >= settings.CURTAIN_DEFAULT_USER_LINK_LIMIT
+        else:
+            self.request.user.extraproperties.curtain_link_limit_exceed = False
+        self.request.user.extraproperties.save()
+
         return Response(data=curtain_json.data)
 
     def update(self, request, *args, **kwargs):
@@ -964,6 +973,18 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         cs = self.request.user.curtain.all()
         cs_json = CurtainSerializer(cs, many=True, context={"request": request})
         return Response(data=cs_json.data)
+
+    def destroy(self, request, *args, **kwargs):
+        curtain = self.get_object()
+        print("Deleting", curtain)
+        curtain.delete()
+        if settings.CURTAIN_DEFAULT_USER_LINK_LIMIT != 0:
+            total_count = self.request.user.curtain.count()
+            self.request.user.extraproperties.curtain_link_limit_exceed = total_count >= settings.CURTAIN_DEFAULT_USER_LINK_LIMIT
+        else:
+            self.request.user.extraproperties.curtain_link_limit_exceed = False
+        self.request.user.extraproperties.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 def update_section(section, data_array, model):
     section.clear()

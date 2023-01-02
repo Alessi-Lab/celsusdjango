@@ -15,6 +15,7 @@ class ExtraProperties(models.Model):
     social_platform = models.ForeignKey("SocialPlatform", on_delete=models.RESTRICT, related_name="user_social_platform",
         blank=True,
         null=True)
+    curtain_link_limit_exceed = models.BooleanField(default=False)
 
 
 class Author(models.Model):
