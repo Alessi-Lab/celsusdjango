@@ -4,10 +4,17 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+from celsusdjango import settings
+
 
 # Create your models here.
 
-
+class ExtraProperties(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    curtain_link_limits = models.IntegerField(default=settings.CURTAIN_DEFAULT_USER_LINK_LIMIT)
+    social_platform = models.ForeignKey("SocialPlatform", on_delete=models.RESTRICT, related_name="user_social_platform",
+        blank=True,
+        null=True)
 
 
 class Author(models.Model):
@@ -267,7 +274,6 @@ class File(models.Model):
 
 class SocialPlatform(models.Model):
     name = models.TextField()
-    user = models.ManyToManyField(User, related_name="social_platform")
 
 class ExperimentType(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)

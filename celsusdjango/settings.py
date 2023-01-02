@@ -244,6 +244,13 @@ if os.environ.get("CURTAIN_ALLOW_NON_USER_POST"):
     else:
         CURTAIN_ALLOW_NON_STAFF_DELETE = False
 
+CURTAIN_DEFAULT_USER_LINK_LIMIT = 0
+if os.environ.get("CURTAIN_DEFAULT_USER_LINK_LIMIT"):
+    v = int(os.environ.get("CURTAIN_DEFAULT_USER_LINK_LIMIT"))
+    if v > 0:
+        CURTAIN_DEFAULT_USER_LINK_LIMIT = v
+
+
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False
 

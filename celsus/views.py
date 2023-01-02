@@ -20,7 +20,7 @@ from rest_framework import status
 from django_sendfile import sendfile
 from uniprotparser.betaparser import UniprotParser
 import requests as req
-from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform
+from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties
 from celsusdjango import settings
 from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 from dj_rest_auth.registration.views import SocialLoginView
@@ -200,9 +200,11 @@ class GoogleLogin2(APIView): # if you want to use Implicit Grant, use this
         else:
             user = User.objects.create_user(username=idinfo["email"], password=User.objects.make_random_password(), email=idinfo["email"])
             user.save()
+            ex = ExtraProperties(user=user)
             social = SocialPlatform.objects.get_or_create(SocialPlatform(name="Google"))
-            social.user.add(user)
             social.save()
+            ex.social_platform = social
+            ex.save()
             refresh_token = RefreshToken.for_user(user)
             return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
 
@@ -232,13 +234,24 @@ class ORCIDOAUTHView(APIView):
                 else:
                     user = User.objects.create_user(username=data["orcid"],
                                                     password=User.objects.make_random_password())
+
                     user.save()
+                    ex = ExtraProperties(user=user)
+                    ex.save()
+                    ex = ExtraProperties(user=user)
                     social = SocialPlatform.objects.get_or_create(SocialPlatform(name="ORCID"))
-                    social.user.add(user)
                     social.save()
+                    ex.social_platform = social
+                    ex.save()
                     refresh_token = RefreshToken.for_user(user)
                     return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class SitePropertiesView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self):
+        return Response(data={
+            "non_user_post": settings.CURTAIN_ALLOW_NON_USER_POST
+        })
