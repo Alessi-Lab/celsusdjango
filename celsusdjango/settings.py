@@ -240,9 +240,9 @@ CURTAIN_ALLOW_NON_USER_POST = False
 if os.environ.get("CURTAIN_ALLOW_NON_USER_POST"):
     v = int(os.environ.get("CURTAIN_ALLOW_NON_USER_POST"))
     if v == 1:
-        CURTAIN_ALLOW_NON_STAFF_DELETE = True
+        CURTAIN_ALLOW_NON_USER_POST = True
     else:
-        CURTAIN_ALLOW_NON_STAFF_DELETE = False
+        CURTAIN_ALLOW_NON_USER_POST = False
 
 CURTAIN_DEFAULT_USER_LINK_LIMIT = 0
 if os.environ.get("CURTAIN_DEFAULT_USER_LINK_LIMIT"):
