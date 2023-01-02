@@ -3,6 +3,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken
 
 from celsus.models import CurtainAccessToken
+from celsusdjango import settings
 
 
 class IsOwnerOrReadOnly(BasePermission):
@@ -17,16 +18,22 @@ class IsFileOwnerOrPublic(BasePermission):
             return True
         return bool(request.user and request.user.is_authenticated and request.user in obj.project.owners.all())
 
-
+class IsNonUserPostAllow(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if settings.CURTAIN_ALLOW_NON_USER_POST:
+            if request.method == "POST":
+                return True
 class IsCurtainOwnerOrPublic(BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.enable:
             if request.method in SAFE_METHODS:
                 return True
+
         if obj.project:
             if obj.project.enable:
                 if request.method in SAFE_METHODS:
                     return True
+
             if bool(request.user and request.user.is_authenticated):
                 return bool(request.user in obj.project.owners.all())
         else:

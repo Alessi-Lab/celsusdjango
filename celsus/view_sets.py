@@ -28,7 +28,7 @@ from celsus.models import CellType, TissueType, ExperimentType, Instrument, Orga
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
     CurtainAccessToken
 from celsus.permissions import IsOwnerOrReadOnly, IsFileOwnerOrPublic, IsCurtainOwnerOrPublic, HasCurtainToken, \
-    IsCurtainOwner
+    IsCurtainOwner, IsNonUserPostAllow
 from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, ExperimentTypeSerializer, InstrumentSerializer, \
     OrganismSerializer, OrganismPartSerializer, QuantificationMethodSerializer, UserSerializer, ProjectSerializer, \
     AuthorSerializer, FileSerializer, KeywordSerializer, DifferentialSampleColumnSerializer, RawSampleColumnSerializer, \
@@ -858,7 +858,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     serializer_class = CurtainSerializer
     filter_backends = [filters.OrderingFilter]
     parser_classes = [MultiPartParser, JSONParser]
-    permission_classes = [(permissions.IsAdminUser|IsCurtainOwnerOrPublic),]
+    permission_classes = [(permissions.IsAdminUser|IsNonUserPostAllow|IsCurtainOwnerOrPublic),]
     lookup_field = 'link_id'
     ordering_fields = ("id", "created")
     ordering = ("created", "id")
