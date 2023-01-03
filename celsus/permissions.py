@@ -34,10 +34,10 @@ class IsCurtainOwnerOrPublic(BasePermission):
                 if request.method in SAFE_METHODS:
                     return True
 
-            if bool(request.user and request.user.is_authenticated and not request.user.extraproperties.curtain_link_limit_exceed):
+            if bool(request.user and request.user.is_authenticated and not request.user.extraproperties.curtain_link_limit_exceed and request.user.extraproperties.curtain_post):
                 return bool(request.user in obj.project.owners.all())
         else:
-            if bool(request.user and request.user.is_authenticated and not request.user.extraproperties.curtain_link_limit_exceed):
+            if bool(request.user and request.user.is_authenticated and not request.user.extraproperties.curtain_link_limit_exceed and request.user.extraproperties.curtain_post):
                 return bool(request.user in obj.owners.all())
 
         return False

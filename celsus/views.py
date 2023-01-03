@@ -202,9 +202,11 @@ class GoogleLogin2(APIView): # if you want to use Implicit Grant, use this
         user = User.objects.filter(email=idinfo["email"]).first()
         if user:
             refresh_token = RefreshToken.for_user(user)
+            user.is_authenticated = True
             return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
         else:
             user = User.objects.create_user(username=idinfo["email"], password=User.objects.make_random_password(), email=idinfo["email"])
+            user.is_authenticated = True
             user.save()
             ex = ExtraProperties(user=user)
             social = SocialPlatform.objects.get_or_create(SocialPlatform(name="Google"))
@@ -234,12 +236,15 @@ class ORCIDOAUTHView(APIView):
             data = json.loads(response.content.decode())
             try:
                 user = User.objects.filter(username=data["orcid"]).first()
+
                 if user:
                     refresh_token = RefreshToken.for_user(user)
+                    user.is_authenticated = True
                     return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
                 else:
                     user = User.objects.create_user(username=data["orcid"],
                                                     password=User.objects.make_random_password())
+                    user.is_authenticated = True
 
                     user.save()
                     ex = ExtraProperties(user=user)
