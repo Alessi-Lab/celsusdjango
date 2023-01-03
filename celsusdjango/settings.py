@@ -250,6 +250,13 @@ if os.environ.get("CURTAIN_DEFAULT_USER_LINK_LIMIT"):
     if v > 0:
         CURTAIN_DEFAULT_USER_LINK_LIMIT = v
 
+CURTAIN_DEFAULT_USER_CAN_POST = True
+if os.environ.get("CURTAIN_DEFAULT_USER_CAN_POST"):
+    v = int(os.environ.get("CURTAIN_DEFAULT_USER_CAN_POST"))
+    if v == 1:
+        CURTAIN_DEFAULT_USER_CAN_POST = True
+    else:
+        CURTAIN_DEFAULT_USER_CAN_POST = False
 
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False

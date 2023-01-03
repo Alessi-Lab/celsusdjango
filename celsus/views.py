@@ -257,7 +257,7 @@ class ORCIDOAUTHView(APIView):
 
 class SitePropertiesView(APIView):
     permission_classes = (AllowAny,)
-    def get(self):
+    def get(self, request, format=None):
         return Response(data={
             "non_user_post": settings.CURTAIN_ALLOW_NON_USER_POST
         })

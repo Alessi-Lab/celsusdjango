@@ -16,6 +16,7 @@ class ExtraProperties(models.Model):
         blank=True,
         null=True)
     curtain_link_limit_exceed = models.BooleanField(default=False)
+    curtain_post = models.BooleanField(default=settings.CURTAIN_DEFAULT_USER_CAN_POST)
 
 
 class Author(models.Model):

@@ -37,6 +37,8 @@ services:
       - DJANGO_MEDIA_ROOT=/app/media/
       - CURTAIN_ALLOW_NON_STAFF_DELETE=0
       - CURTAIN_ALLOW_NON_USER_POST=1
+      - CURTAIN_DEFAULT_USER_CAN_POST=1
+      - CURTAIN_DEFAULT_USER_LINK_LIMIT=0
     depends_on:
       - db
     volumes:
