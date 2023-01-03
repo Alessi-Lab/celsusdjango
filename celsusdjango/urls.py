@@ -59,7 +59,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('logout/', LogoutView.as_view(), name='auth_logout'),
     path('csrf/', CSRFTokenView.as_view(), name="csrf_token"),
