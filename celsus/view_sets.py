@@ -1,5 +1,6 @@
 import json
 import os
+import uuid
 from datetime import timedelta
 
 from django.core.files.base import File as djangoFile
@@ -275,6 +276,7 @@ class ProjectViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
             project.owners.add(self.request.user)
 
         project.default_settings = ProjectSettings()
+        project.default_settings.save()
         project.save()
         project_json = ProjectSerializer(project, context={'request': request})
         pro = project_json.data
@@ -444,11 +446,24 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
         project_limit = Project.objects.filter(enable=True)
         return self.queryset.filter(project__in=project_limit).distinct()
 
+    def create(self, request, **kwargs):
+        file = File()
+        print(self.request.data)
+        filename = self.request.data["file"].name.split('.')[:-1]
+        file.file.save(f"{filename}.{uuid.uuid4()}.txt", djangoFile(self.request.data["file"]))
+        file.file_type = self.request.data["file_type"]
+        file.save()
+        file_json = FileSerializer(file, many=False, context={"request": request})
+        print(file_json.data)
+        return Response(data=file_json.data)
+
     @method_decorator(cache_page(60 * 60 * 2))
     @action(methods=["get"], detail=True)
     def get_columns(self, request, pk=None):
         file = self.get_object()
         columns = []
+        print(file)
+        print(file.file)
         with open(file.file.path, "rt") as f:
             for line in f:
                 line = line.strip()
@@ -523,13 +538,28 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
                         if pd.notnull(row[self.request.data[accession_id_column]]):
                             for p in row[self.request.data[accession_id_column]].split(";"):
                                 if p in uni_df.index:
-                                    if not pd.isnull(uni_df.loc[p]["Gene Names"]):
-                                        gene = GeneNameMap(accession_id=row[self.request.data[accession_id_column]], gene_names=uni_df.loc[p]["Gene Names"].upper(), entry=uni_df.loc[p]["Entry"])
-                                        if uni_df.loc[p]["Entry"] in uniprot_record_map:
-                                            gene.uniprot_record = uni_df.loc[p]["Entry"]
-                                        gene.save()
-                                        geneMap[row[self.request.data[accession_id_column]]] = gene
-                                        break
+                                    uni_d = uni_df.loc[p]
+                                    if type(uni_d) is pd.DataFrame:
+                                        for uni_ind, uni_r in uni_d.iterrows():
+                                            if not pd.isnull(uni_r["Gene Names"]):
+                                                gene = GeneNameMap(
+                                                    accession_id=row[self.request.data[accession_id_column]],
+                                                    gene_names=uni_r["Gene Names"].upper(), entry=uni_r["Entry"])
+                                                gene.save()
+                                                if uni_r["Entry"] in uniprot_record_map:
+                                                    gene.uniprot_record.add(uniprot_record_map[uni_r["Entry"]])
+                                                gene.save()
+                                                geneMap[row[self.request.data[accession_id_column]]] = gene
+                                                break
+                                    else:
+                                        if not pd.isnull(uni_df.loc[p]["Gene Names"]):
+                                            gene = GeneNameMap(accession_id=row[self.request.data[accession_id_column]], gene_names=uni_df.loc[p]["Gene Names"].upper(), entry=uni_df.loc[p]["Entry"])
+                                            gene.save()
+                                            if uni_df.loc[p]["Entry"] in uniprot_record_map:
+                                                gene.uniprot_record.add(uniprot_record_map[uni_df.loc[p]["Entry"]])
+                                            gene.save()
+                                            geneMap[row[self.request.data[accession_id_column]]] = gene
+                                    break
                     da = DifferentialAnalysisData(primary_id=row[self.request.data["primary_id"]],
                                                   fold_change=row[dsc_fc.name], significant=row[dsc_s.name])
                     da.comparison = comp
@@ -619,14 +649,32 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
                     if row[accession_id_column] not in geneMap:
                         for p in row[accession_id_column].split(";"):
                             if p in uni_df.index:
-                                if not pd.isnull(uni_df.loc[p]["Gene Names"]):
-                                    gene = GeneNameMap(accession_id=row[accession_id_column],
-                                                       gene_names=uni_df.loc[p]["Gene Names"].upper(), entry=uni_df.loc[p]["Entry"])
-                                    if uni_df.loc[p]["Entry"] in uniprot_record_map:
-                                        gene.uniprot_record = uniprot_record_map[uni_df.loc[p]["Entry"]]
-                                    gene.save()
-                                    geneMap[row[accession_id_column]] = gene
-                                    break
+                                uni_d = uni_df.loc[p]
+                                if type(uni_d) is pd.DataFrame:
+                                    print(uni_df.loc[p]["Entry"])
+                                    for uni_ind, uni_r in uni_d.iterrows():
+                                        if not pd.isnull(uni_r["Gene Names"]):
+                                            gene = GeneNameMap(
+                                                accession_id=row[self.request.data[accession_id_column]],
+                                                gene_names=uni_r["Gene Names"].upper(),
+                                                entry=uni_r["Entry"])
+                                            if uni_r["Entry"] in uniprot_record_map:
+                                                gene.uniprot_record.add(uniprot_record_map[uni_r["Entry"]])
+                                            gene.save()
+                                            geneMap[row[self.request.data[accession_id_column]]] = gene
+                                            break
+                                else:
+                                    if not pd.isnull(uni_df.loc[p]["Gene Names"]):
+                                        gene = GeneNameMap(accession_id=row[self.request.data[accession_id_column]],
+                                                           gene_names=uni_df.loc[p]["Gene Names"].upper(),
+                                                           entry=uni_df.loc[p]["Entry"])
+                                        gene.save()
+                                        if uni_df.loc[p]["Entry"] in uniprot_record_map:
+                                            gene.uniprot_record.add(uniprot_record_map[uni_df.loc[p]["Entry"]])
+                                        gene.save()
+                                        geneMap[row[self.request.data[accession_id_column]]] = gene
+
+                                break
 
         for s in self.request.data["samples"]:
             columns = [self.request.data["primary_id"], s]
@@ -639,13 +687,23 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
             with transaction.atomic():
                 for i, row in temp_df.iterrows():
                     print(row[accession_id_column])
+                    value = np.nan
+                    try:
+                        value = float(row[s])
+                    except:
+                        continue
                     if row[accession_id_column] in geneMap:
-                        if row[accession_id_column] == s:
-                            print(s)
-                            print(geneMap[row[accession_id_column]].gene_names)
-                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]], raw_sample_column=rsc, gene_names=geneMap[row[accession_id_column]], value=row[s], file=file)
+                        #if row[accession_id_column] == s:
+                        #    print(s)
+                        #    print(geneMap[row[accession_id_column]].gene_names)
+
+                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]],
+                                           raw_sample_column=rsc,
+                                           gene_names=geneMap[row[accession_id_column]],
+                                           value=value,
+                                           file=file)
                     else:
-                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]], raw_sample_column=rsc, value=row[s],
+                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]], raw_sample_column=rsc, value=value,
                                            file=file)
                     raw_data.save()
                 #raw_objects.append(raw_data)
@@ -715,7 +773,13 @@ class RawSampleColumnViewSet(viewsets.ModelViewSet):
     def get_boxplot_parameters(self, request, pk=None):
         raw_sample_column = self.get_object()
         data = RawData.objects.filter(raw_sample_column_id__exact=raw_sample_column.id)
-        values = np.array([np.log2(i.value) for i in data.all()])
+        print(data.all())
+        values = []
+        for i in data.all():
+            if i.value:
+                values.append(np.log2(i.value))
+        values = np.array(values)
+        print(values)
         res = calculate_boxplot_parameters(values)
         res["id"] = raw_sample_column.id
         res["name"] = raw_sample_column.name

@@ -95,8 +95,8 @@ class DifferentialAnalysisData(models.Model):
         blank=True,
         null=True
     )
-    fold_change = models.FloatField()
-    significant = models.FloatField()
+    fold_change = models.FloatField(null=True)
+    significant = models.FloatField(null=True)
     probability_score = models.FloatField(null=True)
     sequence_window = models.TextField(null=True)
     peptide_sequence = models.TextField(null=True)
@@ -113,7 +113,7 @@ class DifferentialAnalysisData(models.Model):
 class RawData(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     primary_id = models.TextField()
-    value = models.FloatField()
+    value = models.FloatField(null=True)
     raw_sample_column = models.ForeignKey(
         "RawSampleColumn", on_delete=models.CASCADE,
         blank=True,
