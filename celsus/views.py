@@ -52,6 +52,7 @@ class UserView(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'HTTP_AUTHORIZATION' in request.META:
+            print(request.META['HTTP_AUTHORIZATION'])
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
