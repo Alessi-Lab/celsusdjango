@@ -52,24 +52,23 @@ class UserView(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'HTTP_AUTHORIZATION' in request.META:
-            print(request.META['HTTP_AUTHORIZATION'])
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
-            print(user)
+
             user_json = {
                     "username": user.username,
                     "id": user.id,
                     "total_curtain": user.curtain.count()
                 }
-
             if user.is_staff:
                 user_json["is_staff"] = True
+            else:
+                user_json["is_staff"] = False
             if settings.CURTAIN_ALLOW_NON_STAFF_DELETE:
                 user_json["can_delete"] = True
             else:
                 user_json["can_delete"] = user_json["is_staff"]
-            print(user.extraproperties)
             user_json["curtain_link_limit"] = user.extraproperties.curtain_link_limits
             user_json["curtain_link_limit_exceed"] = user.extraproperties.curtain_link_limit_exceed
             if user:
