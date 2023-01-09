@@ -239,15 +239,16 @@ class ORCIDOAUTHView(APIView):
                 print(user)
                 if user:
                     refresh_token = RefreshToken.for_user(user)
-                    user.is_authenticated = True
-                    user.save()
+                    #user.is_authenticated = True
+                    #user.save()
                     return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
                 else:
                     user = User.objects.create_user(username=data["orcid"],
                                                     password=User.objects.make_random_password())
-                    user.is_authenticated = True
 
-                    user.save()
+                    #user.is_authenticated = True
+
+                    #user.save()
                     ex = ExtraProperties(user=user)
                     ex.save()
                     ex = ExtraProperties(user=user)
