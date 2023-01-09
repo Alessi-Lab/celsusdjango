@@ -55,13 +55,12 @@ class UserView(APIView):
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
+            print(user)
             user_json = {
                     "username": user.username,
                     "id": user.id,
                     "total_curtain": user.curtain.count()
                 }
-
-
 
             if user.is_staff:
                 user_json["is_staff"] = True
