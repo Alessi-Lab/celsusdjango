@@ -236,7 +236,7 @@ class ORCIDOAUTHView(APIView):
             data = json.loads(response.content.decode())
             try:
                 user = User.objects.filter(username=data["orcid"]).first()
-
+                print(user)
                 if user:
                     refresh_token = RefreshToken.for_user(user)
                     user.is_authenticated = True
