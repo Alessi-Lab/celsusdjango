@@ -4,7 +4,7 @@ import uuid
 from datetime import timedelta
 
 from django.core.files.base import File as djangoFile
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.db.models import Q, Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page, never_cache
@@ -958,7 +958,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         c.file.save(str(c.link_id)+".json", djangoFile(self.request.data["file"]))
         if "description" in self.request.data:
             c.description = self.request.data["description"]
-        if self.request.user:
+        if type(self.request.user) != AnonymousUser:
             c.owners.add(self.request.user)
         if "enable" in self.request.data:
             if self.request.data["enable"] == "True":
@@ -969,13 +969,13 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
             c.curtain_type = self.request.data["curtain_type"]
         c.save()
         curtain_json = CurtainSerializer(c, many=False, context={"request": request})
-
-        if settings.CURTAIN_DEFAULT_USER_LINK_LIMIT != 0:
-            total_count = self.request.user.curtain.count()
-            self.request.user.extraproperties.curtain_link_limit_exceed = total_count >= settings.CURTAIN_DEFAULT_USER_LINK_LIMIT
-        else:
-            self.request.user.extraproperties.curtain_link_limit_exceed = False
-        self.request.user.extraproperties.save()
+        if type(self.request.user) != AnonymousUser:
+            if settings.CURTAIN_DEFAULT_USER_LINK_LIMIT != 0:
+                total_count = self.request.user.curtain.count()
+                self.request.user.extraproperties.curtain_link_limit_exceed = total_count >= settings.CURTAIN_DEFAULT_USER_LINK_LIMIT
+            else:
+                self.request.user.extraproperties.curtain_link_limit_exceed = False
+            self.request.user.extraproperties.save()
 
         return Response(data=curtain_json.data)
 
