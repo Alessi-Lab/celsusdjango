@@ -1028,6 +1028,11 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
                     c.save()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             else:
+                user = User.objects.create_user(username=self.request.data["username"],
+                                                password=User.objects.make_random_password())
+                if user not in c.owners.all():
+                    c.owners.add(user)
+                    c.save()
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)

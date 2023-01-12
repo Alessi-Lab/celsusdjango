@@ -235,8 +235,14 @@ class ORCIDOAUTHView(APIView):
             data = json.loads(response.content.decode())
             try:
                 user = User.objects.filter(username=data["orcid"]).first()
+
                 print(user)
                 if user:
+                    social = SocialPlatform.objects.filter(name="ORCID").first()
+                    if social:
+                        if social is not user.extraproperties.social_platform:
+                            user.extraproperties.social_platform = social
+                            user.extraproperties.save()
                     refresh_token = RefreshToken.for_user(user)
                     #user.is_authenticated = True
                     #user.save()
