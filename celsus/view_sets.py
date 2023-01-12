@@ -1033,7 +1033,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
                 if user not in c.owners.all():
                     c.owners.add(user)
                     c.save()
-                return Response(status=status.HTTP_404_NOT_FOUND)
+                return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
