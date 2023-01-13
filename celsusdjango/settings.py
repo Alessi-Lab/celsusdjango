@@ -46,13 +46,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_sendfile',
-
     'allauth',
     'allauth.account',
     'dj_rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
+    'dbbackup'
 ]
 
 MIDDLEWARE = [
@@ -257,7 +256,8 @@ if os.environ.get("CURTAIN_DEFAULT_USER_CAN_POST"):
         CURTAIN_DEFAULT_USER_CAN_POST = True
     else:
         CURTAIN_DEFAULT_USER_CAN_POST = False
-
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/app/backup'}
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False
 
@@ -278,3 +278,5 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "http://localhost,http://127.0.0.1").split(",")
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
     MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
+    DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get("DBBACKUP_STORAGE_LOCATION")}
+
