@@ -8,7 +8,8 @@ from rest_framework import serializers
 
 from celsus.models import CellType, TissueType, ExperimentType, Instrument, Organism, OrganismPart, \
     QuantificationMethod, Project, Author, File, Keyword, Disease, Curtain, DifferentialSampleColumn, RawSampleColumn, \
-    DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings
+    DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
+    KinaseLibraryModel
 from celsusdjango import settings
 
 
@@ -356,6 +357,15 @@ class ProjectSerializer(FlexFieldsModelSerializer):
             default_settings=(ProjectSettingsSerializer,)
         )
 
+
+class KinaseLibrarySerializer(FlexFieldsModelSerializer):
+    data = serializers.SerializerMethodField()
+
+    def get_data(self, kinase_library):
+        return json.loads(kinase_library.data)
+    class Meta:
+        model = KinaseLibraryModel
+        fields = ["id", "entry", "position", "residue", "data"]
 
 class DifferentialSampleColumnSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

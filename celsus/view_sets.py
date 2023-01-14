@@ -27,18 +27,19 @@ import io
 from celsus.models import CellType, TissueType, ExperimentType, Instrument, Organism, OrganismPart, \
     QuantificationMethod, Project, Author, File, Keyword, Disease, Curtain, DifferentialSampleColumn, RawSampleColumn, \
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
-    CurtainAccessToken
+    CurtainAccessToken, KinaseLibraryModel
 from celsus.permissions import IsOwnerOrReadOnly, IsFileOwnerOrPublic, IsCurtainOwnerOrPublic, HasCurtainToken, \
     IsCurtainOwner, IsNonUserPostAllow
 from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, ExperimentTypeSerializer, InstrumentSerializer, \
     OrganismSerializer, OrganismPartSerializer, QuantificationMethodSerializer, UserSerializer, ProjectSerializer, \
     AuthorSerializer, FileSerializer, KeywordSerializer, DifferentialSampleColumnSerializer, RawSampleColumnSerializer, \
     DifferentialAnalysisDataSerializer, RawDataSerializer, DiseaseSerializer, CurtainSerializer, ComparisonSerializer, \
-    GeneNameMapSerializer, LabGroupSerializer, UniprotRecordSerializer, ProjectSettingsSerializer
+    GeneNameMapSerializer, LabGroupSerializer, UniprotRecordSerializer, ProjectSettingsSerializer, \
+    KinaseLibrarySerializer
 from celsus.utils import is_user_staff, delete_file_related_objects, calculate_boxplot_parameters
 from celsus.validations import organism_query_schema, differential_data_query_schema, raw_data_query_schema, \
     comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema, \
-    curtain_query_schema
+    curtain_query_schema, kinase_library_query_schema
 from celsusdjango import settings
 
 
@@ -1054,6 +1055,21 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
             self.request.user.extraproperties.curtain_link_limit_exceed = False
         self.request.user.extraproperties.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class KinaseLibraryViewSet(FiltersMixin, viewsets.ModelViewSet):
+    queryset = KinaseLibraryModel.objects.all()
+    serializer_class = KinaseLibrarySerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ("id", "entry")
+    ordering = ("entry")
+    filter_mappings = {
+        "id": "id",
+        "position": "position",
+        "entry": "entry",
+        "residue": "residue"
+    }
+    filter_validation_schema = kinase_library_query_schema
+
 
 def update_section(section, data_array, model):
     section.clear()

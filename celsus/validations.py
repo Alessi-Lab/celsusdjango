@@ -90,3 +90,12 @@ curtain_query_schema = base_query_params_schema.extend(
         "curtain_type": GenericSeparatedValidator(str, ",")
     }
 )
+
+kinase_library_query_schema = base_query_params_schema.extend(
+    {
+        "id": IntegerLike(),
+        "entry": six.text_type,
+        "position": IntegerLike(),
+        "residue": six.text_type,
+    }
+)

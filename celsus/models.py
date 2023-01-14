@@ -346,4 +346,10 @@ class Project(models.Model):
             unique_set.add(i.gene_names)
         return unique_set
 
-
+class KinaseLibraryModel(models.Model):
+    entry = models.TextField()
+    position = models.IntegerField()
+    residue = models.CharField(
+        max_length=1
+    )
+    data = models.TextField()
