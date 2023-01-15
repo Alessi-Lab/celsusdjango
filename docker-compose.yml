@@ -54,5 +54,26 @@ services:
     container_name: netphos
     networks:
       - celsus-net
+  curtain:
+    build:
+      context: D:/PycharmProjects/curtain
+      dockerfile: D:/PycharmProjects/curtain/Dockerfile
+      args:
+        API_HOST: https://celsus.muttsu.xyz/
+        ORCID_APPID: APP-5RXLC3W1MS2MOW0F
+    container_name: curtain
+    ports:
+      - "8002:80"
+  curtainptm:
+    build:
+      context: D:/PycharmProjects/curtainPTM
+      dockerfile: D:/PycharmProjects/curtainPTM/Dockerfile
+      args:
+        API_HOST: https://celsus.muttsu.xyz/
+        ORCID_APPID: APP-5RXLC3W1MS2MOW0F
+    container_name: curtainptm
+    ports:
+      - "8001:80"
+
 networks:
   celsus-net:
