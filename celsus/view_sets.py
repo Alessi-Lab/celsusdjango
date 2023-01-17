@@ -1059,6 +1059,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
 class KinaseLibraryViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = KinaseLibraryModel.objects.all()
     serializer_class = KinaseLibrarySerializer
+    permission_classes = [permissions.AllowAny,]
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ("id", "entry")
     ordering = ("entry")
