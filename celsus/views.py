@@ -273,3 +273,13 @@ class SitePropertiesView(APIView):
         return Response(data={
             "non_user_post": settings.CURTAIN_ALLOW_NON_USER_POST
         })
+
+
+class KinaseLibraryProxyView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format=None):
+        if request.query_params['sequence']:
+            res = req.get(f"https://kinase-library.phosphosite.org/api/scorer/score-site/{request.query_params['sequence']}/")
+            return Response(data=res.json())
+        return Response(status=status.HTTP_400_BAD_REQUEST)
