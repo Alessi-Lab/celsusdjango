@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django_q',
     'dbbackup'
 ]
 
@@ -227,6 +228,29 @@ ORCID = {
     'secret': os.environ.get('ORCID_OAUTH_SECRET', 'resorc'),
 }
 
+
+Q_CLUSTER = {
+    'name': 'cactuscluster',
+    'retry': 3601,
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 3600,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'cactus-q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0,
+    }
+}
+
+if os.environ.get("Q_CLUSTER_REDIS_HOST"):
+    Q_CLUSTER['redis']['host'] = os.environ.get("Q_CLUSTER_REDIS_HOST")
+
+
 CURTAIN_ALLOW_NON_STAFF_DELETE = False
 if os.environ.get("CURTAIN_ALLOW_NON_STAFF_DELETE"):
     v = int(os.environ.get("CURTAIN_ALLOW_NON_STAFF_DELETE"))
@@ -258,9 +282,8 @@ if os.environ.get("CURTAIN_DEFAULT_USER_CAN_POST"):
         CURTAIN_DEFAULT_USER_CAN_POST = False
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/backup'}
-if os.environ.get("WORKDB_PROFILE") == "production":
-    DEBUG = False
 
+if os.environ.get('POSTGRES_DB'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -271,6 +294,10 @@ if os.environ.get("WORKDB_PROFILE") == "production":
             'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
         }
     }
+
+if os.environ.get("WORKDB_PROFILE") == "production":
+    DEBUG = False
+
 
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
                 "rest_framework.renderers.JSONRenderer",

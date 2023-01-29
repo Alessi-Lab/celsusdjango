@@ -17,6 +17,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     container_name: db
+    ports:
+      - "5432:5432"
     networks:
       - celsus-net
   web:
@@ -24,25 +26,55 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    command: gunicorn celsusdjango.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn celsusdjango.wsgi:application --log-level=debug --bind 0.0.0.0:8000 --timeout 300
     ports:
       - "8000:8000"
     environment:
-      - WORKDB_PROFILE=dev
+      - WORKDB_PROFILE=production
       - SECRET_KEY=django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST=db
-      - DJANGO_CORS_WHITELIST=http://curtain.proteo.info,http://curtainptm.proteo.info,http://localhost,http://celsus.proteo.info
-      - DJANGO_ALLOWED_HOSTS=http://localhost,http://celsus.muttsu.xyz,http://127.0.0.1
+      - DJANGO_CORS_WHITELIST=http://curtain.proteo.info,http://curtainptm.proteo.info,http://localhost,http://celsus.proteo.info,http://127.0.0.1,http://localhost:4200
+      - DJANGO_ALLOWED_HOSTS=localhost,celsus.muttsu.xyz,127.0.0.1
       - DJANGO_MEDIA_ROOT=/app/media/
       - CURTAIN_ALLOW_NON_STAFF_DELETE=0
       - CURTAIN_ALLOW_NON_USER_POST=1
       - CURTAIN_DEFAULT_USER_CAN_POST=1
       - CURTAIN_DEFAULT_USER_LINK_LIMIT=0
+      - Q_CLUSTER_REDIS_HOST=redis
     depends_on:
       - db
+      - redis
+    volumes:
+      - ./data/media:/app/media
+    networks:
+      - celsus-net
+  djangoq:
+    container_name: djangoq
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-djangoq
+    command: python manage.py qcluster
+    environment:
+      - WORKDB_PROFILE=production
+      - SECRET_KEY=django-insecure-56n6z$55fer(z9c+=x0e117u6y=t_k-@d_!z-k&5f9x*nt)_hu
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - DJANGO_CORS_WHITELIST=http://curtain.proteo.info,http://curtainptm.proteo.info,http://localhost,http://celsus.proteo.info,http://127.0.0.1
+      - DJANGO_ALLOWED_HOSTS=localhost,celsus.muttsu.xyz,127.0.0.1
+      - DJANGO_MEDIA_ROOT=/app/media/
+      - CURTAIN_ALLOW_NON_STAFF_DELETE=0
+      - CURTAIN_ALLOW_NON_USER_POST=1
+      - CURTAIN_DEFAULT_USER_CAN_POST=1
+      - CURTAIN_DEFAULT_USER_LINK_LIMIT=0
+      - Q_CLUSTER_REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
     volumes:
       - ./data/media:/app/media
     networks:
@@ -74,6 +106,14 @@ services:
     container_name: curtainptm
     ports:
       - "8001:80"
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - celsus-net
+
 
 networks:
   celsus-net:

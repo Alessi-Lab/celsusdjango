@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.db.models import Q, Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page, never_cache
+from django_q.tasks import async_task
 from django_sendfile import sendfile
 from filters.mixins import FiltersMixin
 from rest_flex_fields import is_expanded
@@ -36,7 +37,8 @@ from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, Experim
     DifferentialAnalysisDataSerializer, RawDataSerializer, DiseaseSerializer, CurtainSerializer, ComparisonSerializer, \
     GeneNameMapSerializer, LabGroupSerializer, UniprotRecordSerializer, ProjectSettingsSerializer, \
     KinaseLibrarySerializer
-from celsus.utils import is_user_staff, delete_file_related_objects, calculate_boxplot_parameters
+from celsus.utils import is_user_staff, delete_file_related_objects, calculate_boxplot_parameters, \
+    check_nan_return_none, get_uniprot_data
 from celsus.validations import organism_query_schema, differential_data_query_schema, raw_data_query_schema, \
     comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema, \
     curtain_query_schema, kinase_library_query_schema
@@ -477,242 +479,21 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
     def add_differential_analysis_data(self, request, pk=None):
         file = self.get_object()
         df = pd.read_csv(file.file.path, sep="\t")
-        geneMap = {}
-        no_geneMap = []
-        accession_id_column = "primary_id"
-        ptm_data = False
-        file.file_parameters = json.dumps(self.request.data)
-        if "project_id" in self.request.data:
-            project = Project.objects.filter(pk=int(self.request.data["project_id"])).first()
-            project.files.add(file)
-            project.save()
-            if project.ptm_data:
-                accession_id_column = "accession_id"
-                ptm_data = True
-        file.save()
-        for i in df[self.request.data[accession_id_column]]:
-            if pd.notnull(i):
-                g = GeneNameMap.objects.filter(accession_id=i).first()
-                if g:
-                    geneMap[i] = g
-                else:
-                    no_geneMap.append(i)
+        job_id = async_task('celsus.utils.process_differential_analysis_data', self.request.data, file, df)
+        #file_json = FileSerializer(file, context={'request': request})
+        #file_json.data["id"] = file.id
+        return Response(data={'job_id': job_id})
 
-        uni_df = self.get_uniprot_data(df[df[self.request.data[accession_id_column]].isin(no_geneMap)], self.request.data[accession_id_column])
-        uniprot_record_map = {}
-        if not uni_df.empty:
-            with transaction.atomic():
-                for ind, row in uni_df.iterrows():
-                    uniprot_record = UniprotRecord.objects.filter(entry=row["Entry"]).first()
-                    if not uniprot_record:
-                        uniprot_record = UniprotRecord(entry=row["Entry"], record=json.dumps(row.to_dict()))
-                    uniprot_record.save()
-                    uniprot_record_map[uniprot_record.entry] = uniprot_record
 
-        for i in self.request.data["comparisons"]:
-            if "data" in self.request.data["comparisons"][i]:
-                comp = Comparison.objects.filter(pk=int(self.request.data["comparisons"][i]["data"]["id"])).first()
-                comp.file = file
-                comp.save()
-                dsc_fc = DifferentialSampleColumn(name=i, column_type="FC")
-                dsc_fc.comparison = comp
-                dsc_s = DifferentialSampleColumn(name=self.request.data["comparisons"][i]["significant"], column_type="P")
-                dsc_s.comparison = comp
-                dsc_fc.save()
-                dsc_s.save()
-                columns = [self.request.data["primary_id"], dsc_fc.name, dsc_s.name]
-                if ptm_data:
-                    columns = columns + [
-                        self.request.data["sequence_window"],
-                        self.request.data["peptide_sequence"],
-                        self.request.data["probability_score"],
-                        self.request.data["ptm_position"],
-                        self.request.data["ptm_position_in_peptide"],
-                        self.request.data[accession_id_column],
-                    ]
-                temp_df = df[columns]
-                temp_df["Gene Names"] = ""
-                #da_objects = []
-
-                for ind, row in temp_df.iterrows():
-                    if row[self.request.data[accession_id_column]] not in geneMap:
-                        if pd.notnull(row[self.request.data[accession_id_column]]):
-                            for p in row[self.request.data[accession_id_column]].split(";"):
-                                if p in uni_df.index:
-                                    uni_d = uni_df.loc[p]
-                                    if type(uni_d) is pd.DataFrame:
-                                        for uni_ind, uni_r in uni_d.iterrows():
-                                            if not pd.isnull(uni_r["Gene Names"]):
-                                                gene = GeneNameMap(
-                                                    accession_id=row[self.request.data[accession_id_column]],
-                                                    gene_names=uni_r["Gene Names"].upper(), entry=uni_r["Entry"])
-                                                gene.save()
-                                                if uni_r["Entry"] in uniprot_record_map:
-                                                    gene.uniprot_record.add(uniprot_record_map[uni_r["Entry"]])
-                                                gene.save()
-                                                geneMap[row[self.request.data[accession_id_column]]] = gene
-                                                break
-                                    else:
-                                        if not pd.isnull(uni_df.loc[p]["Gene Names"]):
-                                            gene = GeneNameMap(accession_id=row[self.request.data[accession_id_column]], gene_names=uni_df.loc[p]["Gene Names"].upper(), entry=uni_df.loc[p]["Entry"])
-                                            gene.save()
-                                            if uni_df.loc[p]["Entry"] in uniprot_record_map:
-                                                gene.uniprot_record.add(uniprot_record_map[uni_df.loc[p]["Entry"]])
-                                            gene.save()
-                                            geneMap[row[self.request.data[accession_id_column]]] = gene
-                                    break
-                    da = DifferentialAnalysisData(primary_id=row[self.request.data["primary_id"]],
-                                                  fold_change=row[dsc_fc.name], significant=row[dsc_s.name])
-                    da.comparison = comp
-                    if row[self.request.data[accession_id_column]] in geneMap:
-                        da.gene_names = geneMap[row[self.request.data[accession_id_column]]]
-                        if ptm_data:
-                            da.peptide_sequence = row[self.request.data["peptide_sequence"]]
-                            da.probability_score = row[self.request.data["probability_score"]]
-                            da.ptm_position = row[self.request.data["ptm_position"]]
-                            da.ptm_position_in_peptide = row[self.request.data["ptm_position_in_peptide"]]
-                            da.ptm_data = True
-                            da.sequence_window = row[self.request.data["sequence_window"]]
-
-                    da.save()
-                #da_objects.append(da)
-            #DifferentialAnalysisData.objects.bulk_create(da_objects)
-        file_json = FileSerializer(file, context={'request': request})
-        file_json.data["id"] = file.id
-        return Response(file_json.data)
-
-    def get_uniprot_data(self, df, column_name):
-        primary_id = df[column_name].str.split(";")
-        primary_id = primary_id.explode().unique()
-        parser = UniprotParser()
-        uni_df = []
-        for p in parser.parse(primary_id):
-            uniprot_df = pd.read_csv(io.StringIO(p), sep="\t")
-            uni_df.append(uniprot_df)
-        if len(uni_df) == 1:
-            uni_df = uni_df[0]
-        elif len(uni_df) > 1:
-            uni_df = pd.concat(uni_df, ignore_index=True)
-        else:
-            return pd.DataFrame()
-        uni_df.set_index("From", inplace=True)
-        return uni_df
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAuthenticated], parser_classes=[JSONParser])
     def add_raw_data(self, request, pk=None):
 
         file = self.get_object()
         df = pd.read_csv(file.file.path, sep="\t")
-        geneMap = {}
-        no_geneMap = []
-        file.file_parameters = json.dumps(self.request.data)
-        file.save()
-        if "project_id" in self.request.data:
-            project = Project.objects.filter(pk=int(self.request.data["project_id"])).first()
-            project.files.add(file)
-            project.save()
+        job_id = async_task('celsus.utils.process_raw_data', self.request.data, file, df)
 
-        accession_id_column = self.request.data["primary_id"]
-        s = ""
-        if "accession_id" in self.request.data:
-            if self.request.data["accession_id"]:
-                accession_id_column = self.request.data["accession_id"]
-        for i, r in df.iterrows():
-            if pd.notnull(r[accession_id_column]):
-                g = GeneNameMap.objects.filter(accession_id=r[accession_id_column]).first()
-                if r[accession_id_column].startswith("Q9ULR3"):
-                    s = g.accession_id
-                if g:
-                    geneMap[r[accession_id_column]] = g
-                else:
-                    g = DifferentialAnalysisData.objects.filter(primary_id=r[self.request.data["primary_id"]], comparison__file__project_id=int(self.request.data["project_id"])).first()
-                    if g:
-                        if g.gene_names:
-                            geneMap[r[accession_id_column]] = g.gene_names
-                        else:
-                            no_geneMap.append(r[accession_id_column])
-                    else:
-                        no_geneMap.append(r[accession_id_column])
-        uni_df = self.get_uniprot_data(df[df[accession_id_column].isin(no_geneMap)], accession_id_column)
-        uniprot_record_map = {}
-        print(geneMap[s])
-        if not uni_df.empty:
-            with transaction.atomic():
-                for ind, row in uni_df.iterrows():
-                    uniprot_record = UniprotRecord.objects.filter(entry=row["Entry"]).first()
-                    if not uniprot_record:
-                        uniprot_record = UniprotRecord(entry=row["Entry"], record=json.dumps(row.to_dict()))
-                    uniprot_record.save()
-                    uniprot_record_map[uniprot_record.entry] = uniprot_record
-
-            for i, row in df.iterrows():
-                if pd.notnull(row[accession_id_column]):
-                    if row[accession_id_column] not in geneMap:
-                        for p in row[accession_id_column].split(";"):
-                            if p in uni_df.index:
-                                uni_d = uni_df.loc[p]
-                                if type(uni_d) is pd.DataFrame:
-                                    print(uni_df.loc[p]["Entry"])
-                                    for uni_ind, uni_r in uni_d.iterrows():
-                                        if not pd.isnull(uni_r["Gene Names"]):
-                                            gene = GeneNameMap(
-                                                accession_id=row[self.request.data[accession_id_column]],
-                                                gene_names=uni_r["Gene Names"].upper(),
-                                                entry=uni_r["Entry"])
-                                            if uni_r["Entry"] in uniprot_record_map:
-                                                gene.uniprot_record.add(uniprot_record_map[uni_r["Entry"]])
-                                            gene.save()
-                                            geneMap[row[self.request.data[accession_id_column]]] = gene
-                                            break
-                                else:
-                                    if not pd.isnull(uni_df.loc[p]["Gene Names"]):
-                                        gene = GeneNameMap(accession_id=row[self.request.data[accession_id_column]],
-                                                           gene_names=uni_df.loc[p]["Gene Names"].upper(),
-                                                           entry=uni_df.loc[p]["Entry"])
-                                        gene.save()
-                                        if uni_df.loc[p]["Entry"] in uniprot_record_map:
-                                            gene.uniprot_record.add(uniprot_record_map[uni_df.loc[p]["Entry"]])
-                                        gene.save()
-                                        geneMap[row[self.request.data[accession_id_column]]] = gene
-
-                                break
-
-        for s in self.request.data["samples"]:
-            columns = [self.request.data["primary_id"], s]
-            if accession_id_column != self.request.data["primary_id"]:
-                columns = columns + [accession_id_column]
-            temp_df = df[columns]
-            rsc = RawSampleColumn(name=s, file=file)
-            rsc.save()
-            #raw_objects = []
-            with transaction.atomic():
-                for i, row in temp_df.iterrows():
-                    print(row[accession_id_column])
-                    value = np.nan
-                    try:
-                        value = float(row[s])
-                    except:
-                        continue
-                    if row[accession_id_column] in geneMap:
-                        #if row[accession_id_column] == s:
-                        #    print(s)
-                        #    print(geneMap[row[accession_id_column]].gene_names)
-
-                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]],
-                                           raw_sample_column=rsc,
-                                           gene_names=geneMap[row[accession_id_column]],
-                                           value=value,
-                                           file=file)
-                    else:
-                        raw_data = RawData(primary_id=row[self.request.data["primary_id"]], raw_sample_column=rsc, value=value,
-                                           file=file)
-                    raw_data.save()
-                #raw_objects.append(raw_data)
-            #RawData.objects.bulk_create(raw_objects)
-
-        file_json = FileSerializer(file, context={'request': request})
-        file_json.data["id"] = file.id
-        return Response(file_json.data)
+        return Response(data={'job_id': job_id})
 
     def update(self, request, *args, **kwargs):
         file = self.get_object()

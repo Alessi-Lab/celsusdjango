@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django_q.tasks import result, fetch
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework.generics import GenericAPIView
@@ -55,7 +56,9 @@ class UserView(APIView):
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
-
+            if not user.extraproperties:
+                extra = ExtraProperties(user=user)
+                extra.save()
             user_json = {
                     "username": user.username,
                     "id": user.id,
@@ -114,67 +117,71 @@ class GetOverview(APIView):
         )
 
 
+def refresh_uniprot():
+    accession_id = set()
+    accession_map = {}
+    for i in GeneNameMap.objects.all():
+        acc_split = i.accession_id.split(";")
+        accession_map[i.accession_id] = {"entries": acc_split, "primary_id": acc_split[0].split("-")[0], "object": i}
+        for i2 in acc_split:
+            # acc_comp = i2.split("-")
+            #
+            # if acc_comp[0] not in accession_map:
+            #     accession_map[acc_comp[0]] = {"primary_acc": acc_comp[0], "acc_map": {}}
+            # if len(acc_comp) > 1:
+            #     if i.accession_id not in accession_map[acc_comp[0]]["acc_map"]:
+            #         accession_map[acc_comp[0]]["acc_map"][i.accession_id] = {}
+            #     if i2 not in accession_map[acc_comp[0]]["acc_map"][i.accession_id]:
+            #         accession_map[acc_comp[0]]["acc_map"][i.accession_id][i2] = i
+
+            accession_id.add(i2)
+    accession_id = list(accession_id)
+    parser = UniprotParser(include_isoform=True)
+    uni_df = []
+    for p in parser.parse(accession_id):
+        uniprot_df = pd.read_csv(io.StringIO(p), sep="\t")
+        uni_df.append(uniprot_df)
+    if len(uni_df) == 1:
+        uni_df = uni_df[0]
+    else:
+        uni_df = pd.concat(uni_df, ignore_index=True)
+    uniprot_record_map = {}
+    with transaction.atomic():
+        for ind, row in uni_df.iterrows():
+            uniprot_record = UniprotRecord.objects.filter(entry=row["Entry"]).first()
+            if uniprot_record:
+                uniprot_record.record = json.dumps(row.to_dict())
+            else:
+                uniprot_record = UniprotRecord(entry=row["Entry"], record=json.dumps(row.to_dict()))
+            uniprot_record.save()
+            uniprot_record_map[uniprot_record.entry] = uniprot_record
+        for acc in accession_map:
+            accession_map[acc]["object"].clean()
+            for i in accession_map[acc]["entries"]:
+                if i in uniprot_record_map:
+                    accession_map[acc]["object"].uniprot_record.add(uniprot_record_map[i])
+            if accession_map[acc]["primary_id"] in uniprot_record_map:
+                accession_map[acc]["object"].primary_uniprot_record = uniprot_record_map[
+                    accession_map[acc]["primary_id"]]
+            accession_map[acc]["object"].entry = accession_map[acc]["primary_id"]
+            accession_map[acc]["object"].save()
+
+        # for ind, row in uni_df.iterrows():
+        #     if row["From"] in accession_map:
+        #         accession_map[row["From"]].entry = row["Entry"]
+        #         if row["Entry"] in uniprot_record_map:
+        #             accession_map[row["From"]].uniprot_record = uniprot_record_map[row["Entry"]]
+        #         if pd.notnull(row["Gene Names"]):
+        #             accession_map[row["From"]].gene_names = row["Gene Names"].upper()
+        #         else:
+        #             accession_map[row["From"]].gene_names = row["Entry"]
+        #         accession_map[row["From"]].save()
+
 class UniprotRefreshView(APIView):
     permission_classes = (IsAdminUser, )
 
     def post(self, request):
-        accession_id = set()
-        accession_map = {}
-        for i in GeneNameMap.objects.all():
-            acc_split = i.accession_id.split(";")
-            accession_map[i.accession_id] = {"entries": acc_split, "primary_id": acc_split[0].split("-")[0], "object": i}
-            for i2 in acc_split:
-                # acc_comp = i2.split("-")
-                #
-                # if acc_comp[0] not in accession_map:
-                #     accession_map[acc_comp[0]] = {"primary_acc": acc_comp[0], "acc_map": {}}
-                # if len(acc_comp) > 1:
-                #     if i.accession_id not in accession_map[acc_comp[0]]["acc_map"]:
-                #         accession_map[acc_comp[0]]["acc_map"][i.accession_id] = {}
-                #     if i2 not in accession_map[acc_comp[0]]["acc_map"][i.accession_id]:
-                #         accession_map[acc_comp[0]]["acc_map"][i.accession_id][i2] = i
-
-                accession_id.add(i2)
-        accession_id = list(accession_id)
-        parser = UniprotParser(include_isoform=True)
-        uni_df = []
-        for p in parser.parse(accession_id):
-            uniprot_df = pd.read_csv(io.StringIO(p), sep="\t")
-            uni_df.append(uniprot_df)
-        if len(uni_df) == 1:
-            uni_df = uni_df[0]
-        else:
-            uni_df = pd.concat(uni_df, ignore_index=True)
-        uniprot_record_map = {}
-        with transaction.atomic():
-            for ind, row in uni_df.iterrows():
-                uniprot_record = UniprotRecord.objects.filter(entry=row["Entry"]).first()
-                if uniprot_record:
-                    uniprot_record.record = json.dumps(row.to_dict())
-                else:
-                    uniprot_record = UniprotRecord(entry=row["Entry"], record=json.dumps(row.to_dict()))
-                uniprot_record.save()
-                uniprot_record_map[uniprot_record.entry] = uniprot_record
-            for acc in accession_map:
-                accession_map[acc]["object"].clean()
-                for i in accession_map[acc]["entries"]:
-                    if i in uniprot_record_map:
-                        accession_map[acc]["object"].uniprot_record.add(uniprot_record_map[i])
-                if accession_map[acc]["primary_id"] in uniprot_record_map:
-                    accession_map[acc]["object"].primary_uniprot_record = uniprot_record_map[accession_map[acc]["primary_id"]]
-                accession_map[acc]["object"].entry = accession_map[acc]["primary_id"]
-                accession_map[acc]["object"].save()
-
-            # for ind, row in uni_df.iterrows():
-            #     if row["From"] in accession_map:
-            #         accession_map[row["From"]].entry = row["Entry"]
-            #         if row["Entry"] in uniprot_record_map:
-            #             accession_map[row["From"]].uniprot_record = uniprot_record_map[row["Entry"]]
-            #         if pd.notnull(row["Gene Names"]):
-            #             accession_map[row["From"]].gene_names = row["Gene Names"].upper()
-            #         else:
-            #             accession_map[row["From"]].gene_names = row["Entry"]
-            #         accession_map[row["From"]].save()
+        refresh_uniprot()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class NetPhosView(APIView):
@@ -282,4 +289,24 @@ class KinaseLibraryProxyView(APIView):
         if request.query_params['sequence']:
             res = req.get(f"https://kinase-library.phosphosite.org/api/scorer/score-site/{request.query_params['sequence']}/")
             return Response(data=res.json())
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class CheckJobView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format=None):
+        if request.query_params['id']:
+            task = fetch(request.query_params['id'])
+            if task:
+                resp = {"job_id": request.query_params['id'], "status": "progressing"}
+                if task.success:
+                    resp["status"] = "completed"
+
+                    return Response(data=resp)
+                elif task.stopped:
+                    return Response(data=resp)
+                else:
+                    return Response(data=resp)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_400_BAD_REQUEST)
