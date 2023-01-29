@@ -250,6 +250,8 @@ Q_CLUSTER = {
 if os.environ.get("Q_CLUSTER_REDIS_HOST"):
     Q_CLUSTER['redis']['host'] = os.environ.get("Q_CLUSTER_REDIS_HOST")
 
+if os.environ.get("Q_CLUSTER_REDIS_PASSWORD"):
+    Q_CLUSTER['redis']['password'] = os.environ.get("Q_CLUSTER_REDIS_PASSWORD")
 
 CURTAIN_ALLOW_NON_STAFF_DELETE = False
 if os.environ.get("CURTAIN_ALLOW_NON_STAFF_DELETE"):
