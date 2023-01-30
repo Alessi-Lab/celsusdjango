@@ -56,7 +56,8 @@ class UserView(APIView):
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
-            if not user.extraproperties:
+            extra = ExtraProperties.objects.filter(user=user).first()
+            if not extra:
                 extra = ExtraProperties(user=user)
                 extra.save()
             user_json = {
