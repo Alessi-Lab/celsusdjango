@@ -12,7 +12,7 @@ from celsusdjango import settings
 class ExtraProperties(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     curtain_link_limits = models.IntegerField(default=settings.CURTAIN_DEFAULT_USER_LINK_LIMIT)
-    social_platform = models.ForeignKey("SocialPlatform", on_delete=models.RESTRICT, related_name="user_social_platform",
+    social_platform = models.ForeignKey("SocialPlatform", on_delete=models.SET_NULL, related_name="user_social_platform",
         blank=True,
         null=True)
     curtain_link_limit_exceed = models.BooleanField(default=False)
@@ -91,7 +91,7 @@ class DifferentialAnalysisData(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     primary_id = models.TextField()
     gene_names = models.ForeignKey(
-        "GeneNameMap", on_delete=models.RESTRICT,
+        "GeneNameMap", on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
@@ -120,12 +120,12 @@ class RawData(models.Model):
         null=True
     )
     gene_names = models.ForeignKey(
-        "GeneNameMap", on_delete=models.RESTRICT,
+        "GeneNameMap", on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
     file = models.ForeignKey(
-        "File", on_delete=models.RESTRICT, related_name="raw_datas",
+        "File", on_delete=models.CASCADE, related_name="raw_datas",
         blank=True,
         null=True
     )
@@ -136,7 +136,7 @@ class SampleAnnotation(models.Model):
     name = models.TextField()
     description = models.TextField()
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="sample_annotations",
+        "Project", on_delete=models.CASCADE, related_name="sample_annotations",
         blank=True,
         null=True
     )
@@ -168,7 +168,7 @@ class GeneNameMap(models.Model):
     entry = models.TextField()
     uniprot_record = models.ManyToManyField(UniprotRecord, related_name="gene_map")
     primary_uniprot_record = models.ForeignKey(
-        "UniprotRecord", on_delete=models.RESTRICT, related_name="gene_map_primary",
+        "UniprotRecord", on_delete=models.SET_NULL, related_name="gene_map_primary",
         blank=True,
         null=True
     )
@@ -178,7 +178,7 @@ class ProjectSettings(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     data = models.TextField(default="{}")
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="project",
+        "Project", on_delete=models.CASCADE, related_name="project",
         blank=True,
         null=True
     )
@@ -208,7 +208,7 @@ class Curtain(models.Model):
     )
 
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="curtain",
+        "Project", on_delete=models.SET_NULL, related_name="curtain",
         blank=True,
         null=True
     )
@@ -216,7 +216,7 @@ class Curtain(models.Model):
 class CurtainAccessToken(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
     curtain = models.ForeignKey(
-        "Curtain", on_delete=models.RESTRICT, related_name="access_token",
+        "Curtain", on_delete=models.CASCADE, related_name="access_token",
         blank=True,
         null=True
     )
@@ -240,7 +240,7 @@ class OtherPersonnel(models.Model):
     is_collaborator = models.BooleanField()
     is_pi = models.BooleanField()
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="other_personnels",
+        "Project", on_delete=models.SET_NULL, related_name="other_personnels",
         blank=True,
         null=True
     )
@@ -263,7 +263,7 @@ class File(models.Model):
     )
 
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="files",
+        "Project", on_delete=models.CASCADE, related_name="files",
         blank=True,
         null=True
     )
@@ -287,7 +287,7 @@ class Collaborator(models.Model):
     name = models.TextField()
     email = models.EmailField()
     project = models.ForeignKey(
-        "Project", on_delete=models.RESTRICT, related_name="collaborators",
+        "Project", on_delete=models.SET_NULL, related_name="collaborators",
         blank=True,
         null=True
     )
