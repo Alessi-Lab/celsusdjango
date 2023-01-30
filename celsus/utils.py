@@ -213,8 +213,7 @@ def process_raw_data(parameters, file, df):
     for i, r in df.iterrows():
         if pd.notnull(r[accession_id_column]):
             g = GeneNameMap.objects.filter(accession_id=r[accession_id_column]).first()
-            if r[accession_id_column].startswith("Q9ULR3"):
-                s = g.accession_id
+
             if g:
                 geneMap[r[accession_id_column]] = g
             else:
@@ -250,24 +249,24 @@ def process_raw_data(parameters, file, df):
                                 for uni_ind, uni_r in uni_d.iterrows():
                                     if not pd.isnull(uni_r["Gene Names"]):
                                         gene = GeneNameMap(
-                                            accession_id=row[parameters[accession_id_column]],
+                                            accession_id=row[accession_id_column],
                                             gene_names=uni_r["Gene Names"].upper(),
                                             entry=uni_r["Entry"])
                                         if uni_r["Entry"] in uniprot_record_map:
                                             gene.uniprot_record.add(uniprot_record_map[uni_r["Entry"]])
                                         gene.save()
-                                        geneMap[row[parameters[accession_id_column]]] = gene
+                                        geneMap[row[accession_id_column]] = gene
                                         break
                             else:
                                 if not pd.isnull(uni_df.loc[p]["Gene Names"]):
-                                    gene = GeneNameMap(accession_id=row[parameters[accession_id_column]],
+                                    gene = GeneNameMap(accession_id=row[accession_id_column],
                                                        gene_names=uni_df.loc[p]["Gene Names"].upper(),
                                                        entry=uni_df.loc[p]["Entry"])
                                     gene.save()
                                     if uni_df.loc[p]["Entry"] in uniprot_record_map:
                                         gene.uniprot_record.add(uniprot_record_map[uni_df.loc[p]["Entry"]])
                                     gene.save()
-                                    geneMap[row[parameters[accession_id_column]]] = gene
+                                    geneMap[row[accession_id_column]] = gene
 
                             break
 
