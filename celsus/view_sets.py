@@ -726,6 +726,7 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         filter_list = DataFilterList(name=self.request.data["name"], data=self.request.data["data"], user=self.request.user)
+        filter_list.save()
         filter_data = DataFilterListSerializer(filter_list, many=False, context={"request": request})
         return Response(data=filter_data.data)
 
