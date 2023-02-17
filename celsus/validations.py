@@ -99,3 +99,10 @@ kinase_library_query_schema = base_query_params_schema.extend(
         "residue": six.text_type,
     }
 )
+
+data_filter_list_query_schema = base_query_params_schema.extend(
+    {
+        "id": IntegerLike(),
+        "name": six.text_type
+    }
+)

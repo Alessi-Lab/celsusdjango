@@ -1,10 +1,14 @@
 # curl -o /app/celsus/fixtures/diseases.json https://nextcloud1.muttsu.xyz/s/dBnT8tGxjneB4AR/download/diseases.json
 # curl -o /app/celsus/fixtures/organisms.json https://nextcloud1.muttsu.xyz/s/saKLFYRj4RqXaDa/download/organisms.json
 # curl -o /app/celsus/fixtures/kinase_library.json https://nextcloud1.muttsu.xyz/s/eL6Y3tQWJcArEzR/download/kinase_library.json
+# curl -o /app/celsus/fixtures/data_filter_list.json https://nextcloud1.muttsu.xyz/s/WmgjRrPJFQNEWR5/download/data_filter_list.json
 # docker exec celsusdjango-web-1 python manage.py migrate
 # docker exec celsusdjango-web-1 python manage.py loaddata diseases.json
 # docker exec celsusdjango-web-1 python manage.py loaddata organisms.json
 # docker exec celsusdjango-web-1 python manage.py loaddata kinase_library.json
+# docker exec celsusdjango-web-1 python manage.py loaddata data_filter_list.json
+# docker exec -it celsusdjango-web-1 python manage.py mediabackup -O ./media/testdbbackup2
+# docker exec -it celsusdjango-web-1 python manage.py dbbackup -O ./media/testbackup
 
 version: "3.8"
 services:

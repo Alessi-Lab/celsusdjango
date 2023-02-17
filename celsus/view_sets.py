@@ -28,7 +28,7 @@ import io
 from celsus.models import CellType, TissueType, ExperimentType, Instrument, Organism, OrganismPart, \
     QuantificationMethod, Project, Author, File, Keyword, Disease, Curtain, DifferentialSampleColumn, RawSampleColumn, \
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
-    CurtainAccessToken, KinaseLibraryModel
+    CurtainAccessToken, KinaseLibraryModel, DataFilterList
 from celsus.permissions import IsOwnerOrReadOnly, IsFileOwnerOrPublic, IsCurtainOwnerOrPublic, HasCurtainToken, \
     IsCurtainOwner, IsNonUserPostAllow
 from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, ExperimentTypeSerializer, InstrumentSerializer, \
@@ -36,12 +36,12 @@ from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, Experim
     AuthorSerializer, FileSerializer, KeywordSerializer, DifferentialSampleColumnSerializer, RawSampleColumnSerializer, \
     DifferentialAnalysisDataSerializer, RawDataSerializer, DiseaseSerializer, CurtainSerializer, ComparisonSerializer, \
     GeneNameMapSerializer, LabGroupSerializer, UniprotRecordSerializer, ProjectSettingsSerializer, \
-    KinaseLibrarySerializer
+    KinaseLibrarySerializer, DataFilterListSerializer
 from celsus.utils import is_user_staff, delete_file_related_objects, calculate_boxplot_parameters, \
     check_nan_return_none, get_uniprot_data
 from celsus.validations import organism_query_schema, differential_data_query_schema, raw_data_query_schema, \
     comparison_query_schema, project_query_schema, gene_name_map_query_schema, uniprot_record_query_schema, \
-    curtain_query_schema, kinase_library_query_schema
+    curtain_query_schema, kinase_library_query_schema, data_filter_list_query_schema
 from celsusdjango import settings
 
 
@@ -277,13 +277,15 @@ class ProjectViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
                 update_section(project.first_authors, self.request.data["first_authors"], Author)
         if self.request.user:
             project.owners.add(self.request.user)
-
+        if project.project_type == "PTM":
+            project.ptm_data = True
         project.default_settings = ProjectSettings()
         project.default_settings.save()
         project.save()
         project_json = ProjectSerializer(project, context={'request': request})
         pro = project_json.data
         pro["id"] = project.id
+
         return Response(pro)
 
     def update(self, request, *args, **kwargs):
@@ -699,6 +701,33 @@ class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
         project_limit = Project.objects.filter(enable=True)
         return self.queryset.filter(rawdata__file__project__in=project_limit).distinct()
 
+
+class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
+    queryset = DataFilterList.objects.all()
+    serializer_class = DataFilterListSerializer
+    filter_backends = [filters.OrderingFilter]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    parser_classes = [MultiPartParser, JSONParser]
+    ordering_fields = ("id", "name")
+    ordering = ("name", "id")
+    filter_mappings = {
+        "id": "id",
+        "name": "name"
+    }
+    filter_validation_schema = data_filter_list_query_schema
+    def get_queryset(self):
+        if self.request.user:
+            if self.request.user.is_authenticated:
+                query = Q()
+                query.add(Q(default=True), Q.OR)
+                query.add(Q(user=self.request.user), Q.OR)
+                return self.queryset.filter(query).distinct()
+        return self.queryset.filter(default=True).distinct()
+
+    def create(self, request, *args, **kwargs):
+        filter_list = DataFilterList(name=self.request.data["name"], data=self.request.data["data"], user=self.request.user)
+        filter_data = DataFilterListSerializer(filter_list, many=False, context={"request": request})
+        return Response(data=filter_data.data)
 
 class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = Curtain.objects.all()

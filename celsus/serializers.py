@@ -9,7 +9,7 @@ from rest_framework import serializers
 from celsus.models import CellType, TissueType, ExperimentType, Instrument, Organism, OrganismPart, \
     QuantificationMethod, Project, Author, File, Keyword, Disease, Curtain, DifferentialSampleColumn, RawSampleColumn, \
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
-    KinaseLibraryModel
+    KinaseLibraryModel, DataFilterList
 from celsusdjango import settings
 
 
@@ -233,6 +233,10 @@ class CurtainSerializer(serializers.ModelSerializer):
         fields = ["id", "created", "link_id", "file", "enable", "description", "curtain_type"]
         lookup_field = "link_id"
 
+class DataFilterListSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = DataFilterList
+        fields = ["id", "name", "data"]
 
 class ComparisonSerializer(FlexFieldsModelSerializer):
     file = serializers.PrimaryKeyRelatedField(read_only=True)

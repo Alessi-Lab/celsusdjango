@@ -25,7 +25,7 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
     OrganismPartViewSet, CellTypeViewSet, TissueTypeViewSet, ExperimentTypeViewSet, QuantificationMethodViewSet, \
     KeywordViewSet, RawSampleColumnViewSet, DifferentialSampleColumnViewSet, RawDataViewSet, \
     DifferentialAnalysisDataViewSet, InstrumentViewSet, DiseaseViewSet, CurtainViewSet, ComparisonViewSet, \
-    GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet, KinaseLibraryViewSet
+    GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet, KinaseLibraryViewSet, DataFilterListViewSet
 from django.conf import settings
 
 from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
@@ -55,6 +55,7 @@ router.register(r'genenamemap', GeneNameMapViewSet)
 router.register(r'lab_groups', LabGroupViewSet)
 router.register(r'uniprot_record', UniprotRecordViewSet)
 router.register(r'kinase_library', KinaseLibraryViewSet)
+router.register(r'data_filter_list', DataFilterListViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

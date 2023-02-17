@@ -292,7 +292,11 @@ class Collaborator(models.Model):
         null=True
     )
 
-
+class DataFilterList(models.Model):
+    name = models.TextField()
+    data = models.TextField()
+    default = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="users", blank=True, null=True)
 
 class Project(models.Model):
     created = models.DateTimeField(default=timezone.now, editable=False)
