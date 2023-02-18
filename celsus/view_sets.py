@@ -30,7 +30,7 @@ from celsus.models import CellType, TissueType, ExperimentType, Instrument, Orga
     DifferentialAnalysisData, RawData, Comparison, GeneNameMap, LabGroup, UniprotRecord, ProjectSettings, \
     CurtainAccessToken, KinaseLibraryModel, DataFilterList
 from celsus.permissions import IsOwnerOrReadOnly, IsFileOwnerOrPublic, IsCurtainOwnerOrPublic, HasCurtainToken, \
-    IsCurtainOwner, IsNonUserPostAllow
+    IsCurtainOwner, IsNonUserPostAllow, IsDataFilterListOwner
 from celsus.serializers import CellTypeSerializer, TissueTypeSerializer, ExperimentTypeSerializer, InstrumentSerializer, \
     OrganismSerializer, OrganismPartSerializer, QuantificationMethodSerializer, UserSerializer, ProjectSerializer, \
     AuthorSerializer, FileSerializer, KeywordSerializer, DifferentialSampleColumnSerializer, RawSampleColumnSerializer, \
@@ -706,7 +706,7 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = DataFilterList.objects.all()
     serializer_class = DataFilterListSerializer
     filter_backends = [filters.OrderingFilter]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    permission_classes = [IsDataFilterListOwner|permissions.IsAuthenticatedOrReadOnly,]
     parser_classes = [MultiPartParser, JSONParser]
     ordering_fields = ("id", "name")
     ordering = ("name", "id")
@@ -726,9 +726,16 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         filter_list = DataFilterList(name=self.request.data["name"], data=self.request.data["data"], user=self.request.user)
+
         filter_list.save()
         filter_data = DataFilterListSerializer(filter_list, many=False, context={"request": request})
         return Response(data=filter_data.data)
+
+    def destroy(self, request, *args, **kwargs):
+        filter_list = self.get_object()
+        filter_list.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = Curtain.objects.all()

@@ -236,7 +236,7 @@ class CurtainSerializer(serializers.ModelSerializer):
 class DataFilterListSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = DataFilterList
-        fields = ["id", "name", "data"]
+        fields = ["id", "name", "data", "default"]
 
 class ComparisonSerializer(FlexFieldsModelSerializer):
     file = serializers.PrimaryKeyRelatedField(read_only=True)
