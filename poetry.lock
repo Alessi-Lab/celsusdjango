@@ -551,6 +551,22 @@ sentry = ["django-q-sentry (>=0.1)"]
 testing = ["boto3 (>=1.14.12,<2.0.0)", "croniter (>=0.3.34,<0.4.0)", "django-redis (>=4.12.1,<5.0.0)", "hiredis (>=1.0.1,<2.0.0)", "iron-mq (>=0.9,<0.10)", "psutil (>=5.7.0,<6.0.0)", "pymongo (>=3.10.1,<4.0.0)"]
 
 [[package]]
+name = "django-request"
+version = "1.6.2"
+description = "django-request is a statistics module for django. It stores requests in a database for admins to see, it can also be used to get statistics on who is online etc."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-request-1.6.2.tar.gz", hash = "sha256:51c390344c31044e791c36f01eec44cb73d132b7f47e62b005430b37d53b684b"},
+    {file = "django_request-1.6.2-py3-none-any.whl", hash = "sha256:61ee2bc2c823e14450dc0a18b12868e06487bbf3f26ad29ef4d41e3f145e49ae"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+python-dateutil = "*"
+
+[[package]]
 name = "django-rest-auth"
 version = "0.9.5"
 description = "Create a set of REST API endpoints for Authentication and Registration"
@@ -1848,4 +1864,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "5a929b1cbaec3f7c3d04a0de34372b1b8054c12c2ee910ea8c15623063afd5f7"
+content-hash = "2d2e69166dc943d0489e0078551673cfe2f8bfe29c68d57301319958e4886c6c"
