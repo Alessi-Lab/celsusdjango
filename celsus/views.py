@@ -2,6 +2,7 @@ import io
 import json
 
 import pandas as pd
+from request.models import Request as django_request
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -311,3 +312,13 @@ class CheckJobView(APIView):
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class DownloadStatsView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format=None):
+        download_stats = django_request.objects.filter(path__regex="\/curtain\/[a-z0-9\-]+\/download\/\w*").count()
+        return Response(data={
+            "download": download_stats
+        })
