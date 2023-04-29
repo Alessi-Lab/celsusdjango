@@ -4,12 +4,14 @@ from celsus.models import Author, CellType, TissueType, Organism, OrganismPart, 
 from celsus.factories import CellTypeFactory, AuthorFactory, TissueTypeFactory, OrganismFactory, OrganismPartFactory, \
     DiseaseFactory, InstrumentFactory, QuantificationMethodFactory, KeywordFactory
 
+# Test Author model
 
 class AuthorTestCase(TestCase):
     def setUp(self) -> None:
         AuthorFactory()
 
     def test_author(self):
+
         a = Author.objects.all()
         for i in a:
             print(i.name, i.email)
@@ -20,6 +22,7 @@ class CellTypeTestCase(TestCase):
         CellTypeFactory()
 
     def test_cell_type(self):
+
         c = CellType.objects.all()
         for i in c:
             print(i.name)

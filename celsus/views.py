@@ -27,10 +27,14 @@ from celsusdjango import settings
 from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+# Logout view used to blacklist refresh token
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    # only access this view if user is authenticated
 
     def post(self, request):
+        # try to blacklist the refresh token and return 205 if successful or 400 if not successful (bad request)
         try:
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
@@ -48,19 +52,25 @@ class CSRFTokenView(APIView):
     def get(self, request, *args, **kwargs):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+# View to get user information
 class UserView(APIView):
     permission_classes = (IsAuthenticated,)
+    # only access this view if user is authenticated
 
     def post(self, request, *args, **kwargs):
+        # get user information and return it as json
+        # if user is staff, return is_staff = true
         if 'HTTP_AUTHORIZATION' in request.META:
             authorization = request.META['HTTP_AUTHORIZATION'].replace("Bearer ", "")
+            # get user from access token
             access_token = AccessToken(authorization)
             user = User.objects.filter(pk=access_token["user_id"]).first()
             extra = ExtraProperties.objects.filter(user=user).first()
+            # create extra properties if they don't exist
             if not extra:
                 extra = ExtraProperties(user=user)
                 extra.save()
+            # create user json
             user_json = {
                     "username": user.username,
                     "id": user.id,
@@ -76,12 +86,16 @@ class UserView(APIView):
                 user_json["can_delete"] = user_json["is_staff"]
             user_json["curtain_link_limit"] = user.extraproperties.curtain_link_limits
             user_json["curtain_link_limit_exceed"] = user.extraproperties.curtain_link_limit_exceed
+            # return user json
             if user:
                 return Response(user_json)
+        # if user is not authenticated, return 404
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+# Get database project overview (total projects, total unique proteins, average unique proteins per project)
 class GetOverview(APIView):
     permission_classes = (AllowAny,)
+    # user can access without being authenticated
 
     def get(self, request):
         queryset = Project.objects.all()
@@ -224,10 +238,15 @@ class GoogleLogin2(APIView): # if you want to use Implicit Grant, use this
             refresh_token = RefreshToken.for_user(user)
             return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
 
+# View for handling ORCID OAuth
 class ORCIDOAUTHView(APIView):
     permission_classes = (AllowAny,)
+    # user can post to this view without being authenticated
+    # this view will handle the OAuth process
+
     def post(self, request):
         print(self.request.data)
+        # check if the request contains the auth_token and redirect_uri
         if "auth_token" in self.request.data and "redirect_uri" in self.request.data:
             payload = {
                 "client_id": settings.ORCID["client_id"],
@@ -240,59 +259,75 @@ class ORCIDOAUTHView(APIView):
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded"
             }
+            # post the request to the ORCID API to get the user data
             response = req.post("https://orcid.org/oauth/token", payload, headers=headers)
             data = json.loads(response.content.decode())
+            # check if the user has already been created from the ORCID ID
             try:
+                # get the user from the ORCID ID
                 user = User.objects.filter(username=data["orcid"]).first()
 
                 print(user)
+                # check if the user exists
                 if user:
+                    # check if the user has been assigned a social platform
                     social = SocialPlatform.objects.filter(name="ORCID").first()
                     if social:
                         if social is not user.extraproperties.social_platform:
+                            # assign the user to the social platform
                             user.extraproperties.social_platform = social
                             user.extraproperties.save()
+                    # create a refresh token for the user
                     refresh_token = RefreshToken.for_user(user)
                     #user.is_authenticated = True
                     #user.save()
                     return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
                 else:
+                    # create a new user with the ORCID ID as the username
                     user = User.objects.create_user(username=data["orcid"],
                                                     password=User.objects.make_random_password())
-
                     #user.is_authenticated = True
 
                     #user.save()
+                    # create a new ExtraProperties object for the user
                     ex = ExtraProperties(user=user)
                     ex.save()
-                    ex = ExtraProperties(user=user)
+                    # assign the user to the ORCID social platform
                     social = SocialPlatform.objects.get_or_create(SocialPlatform(name="ORCID"))
                     social.save()
                     ex.social_platform = social
                     ex.save()
+                    # create a refresh token for the user
                     refresh_token = RefreshToken.for_user(user)
                     return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# Get general site properties
 class SitePropertiesView(APIView):
     permission_classes = (AllowAny,)
+    # user can get this view without being authenticated
+
     def get(self, request, format=None):
         return Response(data={
             "non_user_post": settings.CURTAIN_ALLOW_NON_USER_POST
         })
 
-
+# Kinase Library Proxy view for getting kinase scores
 class KinaseLibraryProxyView(APIView):
     permission_classes = (AllowAny,)
+    # user can get this view without being authenticated
 
     def get(self, request, format=None):
+        # check if the request contains the sequence
         if request.query_params['sequence']:
             res = req.get(f"https://kinase-library.phosphosite.org/api/scorer/score-site/{request.query_params['sequence']}/")
             return Response(data=res.json())
+        # if the request does not contain the sequence, return a 400 error
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# View for handling the checking of job status
 class CheckJobView(APIView):
     permission_classes = (AllowAny,)
 
@@ -314,10 +349,14 @@ class CheckJobView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+# View for getting Curtain download stats
 class DownloadStatsView(APIView):
     permission_classes = (AllowAny,)
+    # user can get this view without being authenticated
 
     def get(self, request, format=None):
+        # get the number of downloads
+        # this is done by filtering the django_request table for requests that match the download url
         download_stats = django_request.objects.filter(path__regex="\/curtain\/[a-z0-9\-]+\/download\/\w*").count()
         return Response(data={
             "download": download_stats

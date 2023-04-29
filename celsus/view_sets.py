@@ -204,13 +204,14 @@ class ProjectViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
     filter_validation_schema = project_query_schema
 
     def get_queryset(self):
+
         if is_expanded(self.request, 'default_settings'):
 
             self.queryset = self.queryset.select_related("default_settings")
         search_query = self.request.query_params.get("search_query", "")
         search_in = self.request.query_params.get("search_in", "")
         is_staff = is_user_staff(self.request)
-
+        # check if search
         if search_in != "" and search_query != "":
             query = Q()
             extra_params = search_in.split(",")

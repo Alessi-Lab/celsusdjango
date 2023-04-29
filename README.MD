@@ -18,46 +18,46 @@ Copy and paste the content of the following `docker-compose.yml` file into the l
 version: "3.8"
 services:
   db:
-    image: postgres
+    image: postgres 
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data 
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres # This is the name of the postgres database
+      - POSTGRES_USER=postgres # This is the username for the postgres database
+      - POSTGRES_PASSWORD=postgres # This is the password for the postgres database user
     container_name: db
     networks:
-      - celsus-net
+      - celsus-net # This is the name of the network that will be used by the docker containers
   web:
     container_name: web
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
-    command: gunicorn celsusdjango.wsgi:application --bind 0.0.0.0:8000
+      dockerfile: ./docker/Dockerfile 
+    command: gunicorn celsusdjango.wsgi:application --bind 0.0.0.0:8000 
     ports:
       - "8000:8000"
     environment:
       - WORKDB_PROFILE=production
-      - SECRET_KEY=
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
-      - DJANGO_CORS_WHITELIST=
-      - DJANGO_ALLOWED_HOSTS=
-      - DJANGO_MEDIA_ROOT=/app/media/
-      - ORCID_OAUTH_CLIENT_ID=
-      - ORCID_OAUTH_SECRET=
-      - CURTAIN_ALLOW_NON_STAFF_DELETE=0
-      - CURTAIN_ALLOW_NON_USER_POST=1
-      - CURTAIN_DEFAULT_USER_CAN_POST=1
-      - CURTAIN_DEFAULT_USER_LINK_LIMIT=0
+      - SECRET_KEY= # This is a secret key for django
+      - POSTGRES_DB=postgres # This is the name of the postgres database
+      - POSTGRES_USER=postgres # This is the username for the postgres database
+      - POSTGRES_PASSWORD=postgres # This is the password for the postgres datqabase user
+      - POSTGRES_HOST=db # This is the hostname of the postgres database host
+      - DJANGO_CORS_WHITELIST= # This is a list of frontend url that are allowed to access our backend delimited by commas
+      - DJANGO_ALLOWED_HOSTS= # This is a list of hostname that can be used to access our backend
+      - DJANGO_MEDIA_ROOT=/app/media/ # This is the location of the media folder
+      - ORCID_OAUTH_CLIENT_ID= # This is the clientid registered from orcid.org
+      - ORCID_OAUTH_SECRET= # This is the secret registered from orcid.org
+      - CURTAIN_ALLOW_NON_STAFF_DELETE=0 # This is to whether or not allow non_staff Curtain user to delete a Curtain entry.
+      - CURTAIN_ALLOW_NON_USER_POST=1 # This is to whether or not allow not yet authenticated user to save a new Curtain session.
+      - CURTAIN_DEFAULT_USER_CAN_POST=1 # This is to whether or not allow user to be able to save session by default
+      - CURTAIN_DEFAULT_USER_LINK_LIMIT=0 # This is to limit the number of session one user can own or 0 to set it to be infinite
     depends_on:
-      - db
+      - db # This is to ensure that the database is up and running before the web application is started
     volumes:
-      - ./data/media:/app/media
+      - ./data/media:/app/media # This is the location of the media folder
     networks:
-      - celsus-net
+      - celsus-net # This is to ensure that the web application can access the database
   netphos:
     build:
       context: /usr/path/to/netphos/web/git/clone

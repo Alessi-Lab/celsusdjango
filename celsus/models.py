@@ -199,6 +199,7 @@ class Curtain(models.Model):
     curtain_type_choices = [
         ("TP", "Total Proteomics"),
         ("PTM", "Post-translational Modification"),
+        ("F", "Flex")
     ]
 
     curtain_type = models.CharField(
