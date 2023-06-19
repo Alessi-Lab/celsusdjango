@@ -709,11 +709,12 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter]
     permission_classes = [IsDataFilterListOwner|permissions.IsAuthenticatedOrReadOnly,]
     parser_classes = [MultiPartParser, JSONParser]
-    ordering_fields = ("id", "name")
+    ordering_fields = ("id", "name", "data")
     ordering = ("name", "id")
     filter_mappings = {
         "id": "id",
-        "name": "name"
+        "name": "name",
+        "data": "data__icontains",
     }
     filter_validation_schema = data_filter_list_query_schema
     def get_queryset(self):
