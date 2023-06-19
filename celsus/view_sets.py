@@ -709,23 +709,31 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter]
     permission_classes = [IsDataFilterListOwner|permissions.IsAuthenticatedOrReadOnly,]
     parser_classes = [MultiPartParser, JSONParser]
-    ordering_fields = ("id", "name", "data")
+    ordering_fields = ("id", "name")
     ordering = ("name", "id")
     filter_mappings = {
         "id": "id",
-        "name": "name__icontains",
-        "data": "data__icontains",
+        #"name": "name__icontains",
+        #"data": "data__icontains",
     }
     filter_validation_schema = data_filter_list_query_schema
-    
+
     def get_queryset(self):
+        name = self.request.query_params.get("name", None)
+        data = self.request.query_params.get("data", None)
+        query = Q()
+        if name:
+            query.add(Q(name__icontains=name), Q.OR)
+        if data:
+            query.add(Q(data__icontains=data), Q.OR)
+        result = self.queryset.filter(query)
         if self.request.user:
             if self.request.user.is_authenticated:
                 query = Q()
                 query.add(Q(default=True), Q.OR)
                 query.add(Q(user=self.request.user), Q.OR)
-                return self.queryset.filter(query).distinct()
-        return self.queryset.filter(default=True).distinct()
+                return result.filter(query).distinct()
+        return result.filter(default=True).distinct()
 
     def create(self, request, *args, **kwargs):
         filter_list = DataFilterList(name=self.request.data["name"], data=self.request.data["data"], user=self.request.user)
