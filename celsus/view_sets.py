@@ -713,10 +713,11 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     ordering = ("name", "id")
     filter_mappings = {
         "id": "id",
-        "name": "name",
+        "name": "name__icontains",
         "data": "data__icontains",
     }
     filter_validation_schema = data_filter_list_query_schema
+    
     def get_queryset(self):
         if self.request.user:
             if self.request.user.is_authenticated:
