@@ -384,5 +384,5 @@ class PrimitiveStatsTestView(APIView):
             return Response(data={
                 "test_statistic": st, "p_value": p, "degrees_of_freedom": f
             })
-
+        print(test_type, test_data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
