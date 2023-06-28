@@ -709,8 +709,8 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter]
     permission_classes = [IsDataFilterListOwner|permissions.IsAuthenticatedOrReadOnly,]
     parser_classes = [MultiPartParser, JSONParser]
-    ordering_fields = ("id", "name")
-    ordering = ("name", "id")
+    ordering_fields = ("id", "name", "category")
+    ordering = ("name", "category", "id")
     filter_mappings = {
         "id": "id",
         #"name": "name__icontains",
@@ -721,11 +721,14 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         name = self.request.query_params.get("name", None)
         data = self.request.query_params.get("data", None)
+        category = self.request.query_params.get("category", None)
         query = Q()
         if name:
             query.add(Q(name__icontains=name), Q.OR)
         if data:
             query.add(Q(data__icontains=data), Q.OR)
+        if category:
+            query.add(Q(category__icontains=category), Q.OR)
         result = self.queryset.filter(query)
         if self.request.user:
             if self.request.user.is_authenticated:

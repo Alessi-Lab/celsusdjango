@@ -27,6 +27,7 @@ from celsusdjango import settings
 from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from statsmodels.stats.weightstats import ttest_ind
 
 # Logout view used to blacklist refresh token
 class LogoutView(APIView):
@@ -369,4 +370,19 @@ class InteractomeAtlasProxyView(APIView):
         if request.data["link"]:
             res = req.get(request.data["link"].replace("https", "http"))
             return Response(data=res.json())
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class PrimitiveStatsTestView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        test_type = request.data["type"]
+        test_data = request.data["data"]
+        if test_type == "t-test":
+            st, p, f = ttest_ind(test_data[0], test_data[1])
+            return Response(data={
+                "test_statistic": st, "p_value": p, "degrees_of_freedom": f
+            })
+
         return Response(status=status.HTTP_400_BAD_REQUEST)
