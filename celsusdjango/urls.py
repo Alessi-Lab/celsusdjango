@@ -29,7 +29,8 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
 from django.conf import settings
 
 from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
-    GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, CheckJobView, DownloadStatsView
+    GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, CheckJobView, DownloadStatsView, \
+    InteractomeAtlasProxyView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -74,6 +75,7 @@ urlpatterns = [
     path('rest-auth/orcid/', ORCIDOAUTHView.as_view(), name='orcid_login'),
     path('kinase_library_proxy/', KinaseLibraryProxyView.as_view(), name='kinase_library_proxy'),
     path('check_job/', CheckJobView.as_view(), name='check_job'),
-    path('stats/download/', DownloadStatsView.as_view(), name='download_stats')
+    path('stats/download/', DownloadStatsView.as_view(), name='download_stats'),
+    path('interactome-atlas-proxy/', InteractomeAtlasProxyView.as_view(), name='interactome_atlas_proxy'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

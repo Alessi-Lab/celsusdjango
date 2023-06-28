@@ -295,6 +295,7 @@ class Collaborator(models.Model):
 
 class DataFilterList(models.Model):
     name = models.TextField()
+    category = models.TextField()
     data = models.TextField()
     default = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="users", blank=True, null=True)

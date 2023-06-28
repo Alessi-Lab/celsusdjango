@@ -361,3 +361,12 @@ class DownloadStatsView(APIView):
         return Response(data={
             "download": download_stats
         })
+
+class InteractomeAtlasProxyView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        if request.data["link"]:
+            res = req.get(request.data["link"].replace("https", "http"))
+            return Response(data=res.json())
+        return Response(status=status.HTTP_400_BAD_REQUEST)
