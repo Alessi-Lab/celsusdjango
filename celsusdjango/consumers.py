@@ -1,16 +1,18 @@
 import json
 
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer, AsyncJsonWebsocketConsumer
+
 
 class CurtainConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.session_id = self.scope['url_route']['kwargs']['session_id']
         self.personal_id = self.scope['url_route']['kwargs']['personal_id']
-        await self.channel_layer.group_add(self.session_id, self.personal_id)
+        self.channel_name = f'curtain_{self.personal_id}'
+        await self.channel_layer.group_add(self.session_id, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.session_id, self.personal_id)
+        await self.channel_layer.group_discard(self.session_id, self.channel_name)
         pass
 
     async def receive(self, text_data, **kwargs):
@@ -19,7 +21,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.session_id,
             {
-                'type': 'chat.message',
+                'type': 'chat_message',
                 'message': data['message']
             }
         )
