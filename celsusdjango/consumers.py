@@ -7,7 +7,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.session_id = self.scope['url_route']['kwargs']['session_id']
         self.personal_id = self.scope['url_route']['kwargs']['personal_id']
-        self.channel_name = f'curtain_{self.personal_id}'
+
         await self.channel_layer.group_add(self.session_id, self.channel_name)
         await self.accept()
 
