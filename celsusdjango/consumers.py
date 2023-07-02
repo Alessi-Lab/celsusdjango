@@ -17,6 +17,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data, **kwargs):
         data = json.loads(text_data)
+        self.sender_name = data['senderName']
         print(data)
         await self.channel_layer.group_send(
             self.session_id,
@@ -30,7 +31,9 @@ class CurtainConsumer(AsyncWebsocketConsumer):
         message = event['message']
         print(message)
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'senderID': self.personal_id,
+            'senderName': self.sender_name
         }))
 
 
