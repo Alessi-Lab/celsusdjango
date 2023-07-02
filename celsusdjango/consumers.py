@@ -7,7 +7,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.session_id = self.scope['url_route']['kwargs']['session_id']
         self.personal_id = self.scope['url_route']['kwargs']['personal_id']
-        print(self.session_id + " conncted")
+        print(self.session_id + " connected")
         await self.channel_layer.group_add(self.session_id, self.channel_name)
         await self.accept()
 
@@ -32,7 +32,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
         message = event['message']
         print(message)
         await self.send(text_data=json.dumps({
-            'message': message['message'],
+            'message': message,
             'senderID': self.personal_id,
             'senderName': self.senderName
         }))
