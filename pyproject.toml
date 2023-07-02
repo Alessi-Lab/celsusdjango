@@ -29,7 +29,7 @@ django-dbbackup = "^4.0.2"
 django-request = "^1.6.2"
 statsmodels = "^0.14.0"
 channels = "^4.0.0"
-uvicorn = "^0.22.0"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
 channels-redis = {extras = ["cryptography"], version = "^4.1.0"}
 
 [tool.poetry.dev-dependencies]
