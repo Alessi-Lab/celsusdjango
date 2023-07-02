@@ -13,13 +13,13 @@ class CurtainConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.session_id, self.personal_id)
         pass
 
-    async def receive(self, text_data):
+    async def receive(self, text_data, **kwargs):
         data = json.loads(text_data)
         await self.channel_layer.group_send(
             self.session_id,
             {
-                'type': 'chat_message',
-                'text': data['message']
+                'type': 'chat.message',
+                'message': data['message']
             }
         )
 
