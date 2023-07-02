@@ -8,7 +8,6 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.db.models import Q, Count
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page, never_cache
-from django_q.tasks import async_task
 from django_sendfile import sendfile
 from filters.mixins import FiltersMixin
 from rest_flex_fields import is_expanded
@@ -478,25 +477,25 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
         return Response({"columns": columns})
 
     #@action(methods=["post"], detail=True, permission_classes=[IsAuthenticated])
-    @action(methods=["post"], detail=True, permission_classes=[permissions.IsAuthenticated], parser_classes=[JSONParser])
-    def add_differential_analysis_data(self, request, pk=None):
-        file = self.get_object()
-        df = pd.read_csv(file.file.path, sep="\t")
-        job_id = async_task('celsus.utils.process_differential_analysis_data', self.request.data, file, df)
-        #file_json = FileSerializer(file, context={'request': request})
-        #file_json.data["id"] = file.id
-        return Response(data={'job_id': job_id})
-
-
-
-    @action(methods=["post"], detail=True, permission_classes=[permissions.IsAuthenticated], parser_classes=[JSONParser])
-    def add_raw_data(self, request, pk=None):
-
-        file = self.get_object()
-        df = pd.read_csv(file.file.path, sep="\t")
-        job_id = async_task('celsus.utils.process_raw_data', self.request.data, file, df)
-
-        return Response(data={'job_id': job_id})
+    # @action(methods=["post"], detail=True, permission_classes=[permissions.IsAuthenticated], parser_classes=[JSONParser])
+    # def add_differential_analysis_data(self, request, pk=None):
+    #     file = self.get_object()
+    #     df = pd.read_csv(file.file.path, sep="\t")
+    #     job_id = async_task('celsus.utils.process_differential_analysis_data', self.request.data, file, df)
+    #     #file_json = FileSerializer(file, context={'request': request})
+    #     #file_json.data["id"] = file.id
+    #     return Response(data={'job_id': job_id})
+    #
+    #
+    #
+    # @action(methods=["post"], detail=True, permission_classes=[permissions.IsAuthenticated], parser_classes=[JSONParser])
+    # def add_raw_data(self, request, pk=None):
+    #
+    #     file = self.get_object()
+    #     df = pd.read_csv(file.file.path, sep="\t")
+    #     job_id = async_task('celsus.utils.process_raw_data', self.request.data, file, df)
+    #
+    #     return Response(data={'job_id': job_id})
 
     def update(self, request, *args, **kwargs):
         file = self.get_object()

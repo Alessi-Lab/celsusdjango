@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django_q.tasks import result, fetch
+
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework.generics import GenericAPIView
@@ -329,25 +329,25 @@ class KinaseLibraryProxyView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # View for handling the checking of job status
-class CheckJobView(APIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request, format=None):
-        if request.query_params['id']:
-            task = fetch(request.query_params['id'])
-            if task:
-                resp = {"job_id": request.query_params['id'], "status": "progressing"}
-                if task.success:
-                    resp["status"] = "completed"
-
-                    return Response(data=resp)
-                elif task.stopped:
-                    return Response(data=resp)
-                else:
-                    return Response(data=resp)
-            else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+# class CheckJobView(APIView):
+#     permission_classes = (AllowAny,)
+#
+#     def get(self, request, format=None):
+#         if request.query_params['id']:
+#             task = fetch(request.query_params['id'])
+#             if task:
+#                 resp = {"job_id": request.query_params['id'], "status": "progressing"}
+#                 if task.success:
+#                     resp["status"] = "completed"
+#
+#                     return Response(data=resp)
+#                 elif task.stopped:
+#                     return Response(data=resp)
+#                 else:
+#                     return Response(data=resp)
+#             else:
+#                 return Response(status=status.HTTP_404_NOT_FOUND)
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 # View for getting Curtain download stats

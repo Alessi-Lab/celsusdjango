@@ -26,11 +26,11 @@ google = "^3.0.0"
 django-rest-auth = "^0.9.5"
 dj-rest-auth = "^4.0.1"
 django-dbbackup = "^4.0.2"
-django-q = "^1.3.9"
 django-request = "^1.6.2"
 statsmodels = "^0.14.0"
 channels = "^4.0.0"
 uvicorn = "^0.22.0"
+channels-redis = {extras = ["cryptography"], version = "^4.1.0"}
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"

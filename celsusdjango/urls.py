@@ -29,7 +29,7 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
 from django.conf import settings
 
 from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
-    GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, CheckJobView, DownloadStatsView, \
+    GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
     InteractomeAtlasProxyView, PrimitiveStatsTestView
 
 router = routers.DefaultRouter()

@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'django_q',
     'dbbackup',
     'request',
 ]
@@ -318,4 +317,13 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
     MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
     DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get("DBBACKUP_STORAGE_LOCATION")}
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [f"redis://:{Q_CLUSTER['redis']['password']}@{Q_CLUSTER['redis']['host']}:{Q_CLUSTER['redis']['port']}/{Q_CLUSTER['redis']['db']}"],
+                "symmetric_encryption_keys": [SECRET_KEY]
+            },
+        },
+    }
 
