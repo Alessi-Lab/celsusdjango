@@ -679,8 +679,9 @@ class RawDataViewSet(FiltersMixin, viewsets.ModelViewSet):
     @action(methods=["get"], detail=False, permission_classes=[permissions.AllowAny])
     def get_all_category(self, request, *args, **kwargs):
         categories = DataFilterList.objects.values("category").distinct()
-        serializer = DataFilterListSerializer(categories, many=True, context={"request": request})
-        return Response(data=serializer.data, )
+        results = [i["category"] for i in categories if i["category"] != ""]
+        
+        return Response(data=json.dumps(results), )
 
 
 class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
