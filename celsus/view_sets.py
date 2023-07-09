@@ -756,7 +756,7 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
         categories = DataFilterList.objects.values("category").distinct()
         #results = [i["category"] for i in categories if i["category"] != ""]
         results = [i["category"] for i in categories if i["category"] != ""]
-        return Response(data=json.dumps(results), )
+        return Response(data=results, )
 
 
 class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
