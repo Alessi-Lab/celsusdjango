@@ -755,8 +755,8 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     def get_all_category(self, request, *args, **kwargs):
         categories = DataFilterList.objects.values("category").distinct()
         #results = [i["category"] for i in categories if i["category"] != ""]
-        results = DataFilterListSerializer(categories, many=True, context={"request": request})
-        return Response(data=results.data, )
+        results = [i["category"] for i in categories if i["category"] != ""]
+        return Response(data=json.dumps(results), )
 
 
 class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
