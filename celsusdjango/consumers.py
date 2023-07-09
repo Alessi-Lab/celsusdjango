@@ -23,7 +23,7 @@ class CurtainConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': {
                     'message': data['message'],
-                    'requestType': data['requestType']
+                    'requestType': data['requestType'],
                 }
             }
         )

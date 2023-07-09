@@ -22,7 +22,8 @@ from rest_framework import status
 from django_sendfile import sendfile
 from uniprotparser.betaparser import UniprotParser
 import requests as req
-from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties
+from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
+from celsus.serializers import DataFilterListSerializer
 from celsusdjango import settings
 from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 from dj_rest_auth.registration.views import SocialLoginView
@@ -386,3 +387,11 @@ class PrimitiveStatsTestView(APIView):
             })
         print(test_type, test_data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class GetAvailableDataFilterCategoryView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format=None):
+        categories = DataFilterList.objects.values("category").distinct()
+        serializer = DataFilterListSerializer(categories, many=True)
+        return Response(data=serializer.data)
