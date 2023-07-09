@@ -105,5 +105,7 @@ data_filter_list_query_schema = base_query_params_schema.extend(
         "id": IntegerLike(),
         #"name": six.text_type,
         #"data": six.text_type
+        "name__exact": six.text_type,
+        "category__exact": six.text_type,
     }
 )

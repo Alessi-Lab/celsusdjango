@@ -712,8 +712,8 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
     ordering = ("name", "category", "id")
     filter_mappings = {
         "id": "id",
-        #"name": "name__icontains",
-        #"data": "data__icontains",
+        "name_exact": "name__exact",
+        "category_exact": "category__exact",
     }
     filter_validation_schema = data_filter_list_query_schema
 
