@@ -30,7 +30,7 @@ from django.conf import settings
 
 from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
     GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
-    InteractomeAtlasProxyView, PrimitiveStatsTestView, GetAvailableDataFilterCategoryView
+    InteractomeAtlasProxyView, PrimitiveStatsTestView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -78,6 +78,5 @@ urlpatterns = [
     path('stats/download/', DownloadStatsView.as_view(), name='download_stats'),
     path('interactome-atlas-proxy/', InteractomeAtlasProxyView.as_view(), name='interactome_atlas_proxy'),
     path('primitive-stats-test/', PrimitiveStatsTestView.as_view(), name='primitive_stats_test'),
-    path('data-filter-category/', GetAvailableDataFilterCategoryView.as_view(), name='data_filter_category'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

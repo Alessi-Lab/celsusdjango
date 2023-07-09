@@ -388,10 +388,4 @@ class PrimitiveStatsTestView(APIView):
         print(test_type, test_data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class GetAvailableDataFilterCategoryView(APIView):
-    permission_classes = (AllowAny,)
 
-    def get(self, request, format=None):
-        categories = DataFilterList.objects.values("category").distinct()
-        serializer = DataFilterListSerializer(categories, many=True)
-        return Response(data=serializer.data)

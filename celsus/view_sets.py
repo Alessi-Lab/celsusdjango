@@ -676,6 +676,12 @@ class RawDataViewSet(FiltersMixin, viewsets.ModelViewSet):
         project_limit = Project.objects.filter(enable=True)
         return RawData.objects.filter(file__project__in=project_limit).distinct()
 
+    @action(methods=["get"], detail=False, permission_classes=[permissions.AllowAny])
+    def get_all_category(self, request, *args, **kwargs):
+        categories = DataFilterList.objects.values("category").distinct()
+        serializer = DataFilterListSerializer(categories, many=True, context={"request": request})
+        return Response(data=serializer.data, )
+
 
 class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
     queryset = GeneNameMap.objects.all()
