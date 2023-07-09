@@ -676,12 +676,7 @@ class RawDataViewSet(FiltersMixin, viewsets.ModelViewSet):
         project_limit = Project.objects.filter(enable=True)
         return RawData.objects.filter(file__project__in=project_limit).distinct()
 
-    @action(methods=["get"], detail=False, permission_classes=[permissions.AllowAny])
-    def get_all_category(self, request, *args, **kwargs):
-        categories = DataFilterList.objects.values("category").distinct()
-        results = [i["category"] for i in categories if i["category"] != ""]
-        
-        return Response(data=json.dumps(results), )
+
 
 
 class GeneNameMapViewSet(FiltersMixin, viewsets.ModelViewSet):
@@ -755,6 +750,13 @@ class DataFilterListViewSet(FiltersMixin, viewsets.ModelViewSet):
         filter_list = self.get_object()
         filter_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=["get"], detail=False, permission_classes=[permissions.AllowAny])
+    def get_all_category(self, request, *args, **kwargs):
+        categories = DataFilterList.objects.values("category").distinct()
+        #results = [i["category"] for i in categories if i["category"] != ""]
+        results = DataFilterListSerializer(results, many=True, context={"request": request})
+        return Response(data=results.data, )
 
 
 class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
