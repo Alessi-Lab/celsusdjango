@@ -31,6 +31,8 @@ statsmodels = "^0.14.0"
 channels = "^4.0.0"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
 channels-redis = {extras = ["cryptography"], version = "^4.1.0"}
+django-storages = "^1.13.2"
+boto3 = "^1.28.12"
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"
