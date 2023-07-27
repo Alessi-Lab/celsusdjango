@@ -327,6 +327,7 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     DBBACKUP_CONNECTORS = {
         'default': {
             'dump_cmd': 'pg_dump --no-owner --no-acl --no-privileges',
+            'restore_cmd': 'pg_restore --no-owner --no-acl --no-privileges',
         }
     }
     CHANNEL_LAYERS = {
