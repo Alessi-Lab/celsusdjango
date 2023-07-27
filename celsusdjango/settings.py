@@ -306,6 +306,7 @@ if os.environ.get('POSTGRES_DB'):
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
             'HOST': os.environ.get('POSTGRES_HOST', 'db'),
             'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
+
         }
     }
 
@@ -323,6 +324,11 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
     MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
     DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get("DBBACKUP_STORAGE_LOCATION")}
+    DBBACKUP_CONNECTORS = {
+        'default': {
+            'dump_cmd': 'pg_dump --no-owner'
+        }
+    }
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
