@@ -326,7 +326,7 @@ if os.environ.get("WORKDB_PROFILE") == "production":
     DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get("DBBACKUP_STORAGE_LOCATION")}
     DBBACKUP_CONNECTORS = {
         'default': {
-            'dump_cmd': 'pg_dump --no-owner'
+            'dump_cmd': 'pg_dump --no-owner --no-acl --no-privileges',
         }
     }
     CHANNEL_LAYERS = {
