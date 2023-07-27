@@ -295,6 +295,8 @@ if os.environ.get("CURTAIN_DEFAULT_USER_CAN_POST"):
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/backup'}
 
+
+
 if os.environ.get('POSTGRES_DB'):
     DATABASES = {
         'default': {
@@ -306,6 +308,9 @@ if os.environ.get('POSTGRES_DB'):
             'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
         }
     }
+
+    if os.environ.get('POSTGRES_SSL', '0') == '1':
+        DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 if os.environ.get("WORKDB_PROFILE") == "production":
     DEBUG = False
