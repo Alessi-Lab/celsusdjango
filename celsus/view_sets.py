@@ -789,11 +789,11 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     def download(self, request, pk=None, link_id=None, token=None):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
-        response = HttpResponse()
-        #return sendfile(request, c.file.name, attachment_filename=file_name)
-        response['X-Accel-Redirect'] = c.file.url
-        logging.info(c.file.url)
-        return response
+        #response = HttpResponse()
+        return sendfile(request, c.file.name, attachment_filename=file_name)
+        #['X-Accel-Redirect'] = c.file.url
+        #logging.info(c.file.url)
+        #return response
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
