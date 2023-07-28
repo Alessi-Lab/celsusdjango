@@ -6,6 +6,7 @@ from datetime import timedelta
 from django.core.files.base import File as djangoFile
 from django.contrib.auth.models import User, AnonymousUser
 from django.db.models import Q, Count
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page, never_cache
 from django_sendfile import sendfile
@@ -787,7 +788,10 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     def download(self, request, pk=None, link_id=None, token=None):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
-        return sendfile(request, c.file.name, attachment_filename=file_name)
+        response = HttpResponse()
+        #return sendfile(request, c.file.name, attachment_filename=file_name)
+        response['X-Accel-Redirect'] = c.file.url
+        return response
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
