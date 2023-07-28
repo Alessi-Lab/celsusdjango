@@ -10,9 +10,10 @@ s3 = boto3.resource(
     endpoint_url=os.environ.get('AWS_S3_ENDPOINT_URL', 'your-spaces-endpoint-url'),
 )
 if __name__ == '__main__':
+
     allSessions = Curtain.objects.all()
     for session in allSessions:
-        filename = "media/files/curtain_upload/" + session.file.name
+        filename = session.file.name
         try:
             res = s3.Object(
                 os.environ.get('AWS_STORAGE_BUCKET_NAME', 'your-spaces-bucket-name'),
@@ -20,6 +21,6 @@ if __name__ == '__main__':
         except ClientError as e:
             if e.response['Error']['Code'] == 'NoSuchKey':
                 with open(filename, 'rb') as data:
-                    session.file.save(session.file.name, data)
+                    session.file.save(session.file.name.replace("media/files/curtain_upload"), data)
             else:
                 raise
