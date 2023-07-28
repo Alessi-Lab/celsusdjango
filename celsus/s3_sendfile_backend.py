@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from botocore.exceptions import ClientError
 from django.http import HttpResponse
 
@@ -8,6 +6,7 @@ import os
 
 
 def sendfile(request, filename, **kwargs):
+    print(filename)
     response = HttpResponse()
     s3 = boto3.client(
         service_name='s3',
@@ -27,4 +26,5 @@ def sendfile(request, filename, **kwargs):
         )
         response['X-Accel-Redirect'] = presigned_url
     except ClientError as e:
+        print(e)
         return HttpResponse(status=404)
