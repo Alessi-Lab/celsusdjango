@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import uuid
 from datetime import timedelta
@@ -791,6 +792,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         response = HttpResponse()
         #return sendfile(request, c.file.name, attachment_filename=file_name)
         response['X-Accel-Redirect'] = c.file.url
+        logging.info(c.file.url)
         return response
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
