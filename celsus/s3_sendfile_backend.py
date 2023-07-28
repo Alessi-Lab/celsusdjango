@@ -25,6 +25,7 @@ def sendfile(request, filename, **kwargs):
             ExpiresIn= 60*30
         )
         response['X-Accel-Redirect'] = presigned_url
+        return response
     except ClientError as e:
         print(e)
         return HttpResponse(status=404)
