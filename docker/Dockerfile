@@ -9,6 +9,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
 RUN apt-get update
 RUN apt-get -y install postgresql-client-14
 WORKDIR /app
+RUN mkdir "/app/media"
 RUN mkdir "/app/backup"
 COPY . /app/
 

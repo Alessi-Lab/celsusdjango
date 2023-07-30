@@ -147,9 +147,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
-MEDIA_URL = ''
-MEDIA_ROOT = BASE_DIR / "media/"
+# STATIC_URL = "static/"
+# MEDIA_URL = ''
+# MEDIA_ROOT = BASE_DIR / "media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -216,9 +216,9 @@ SPECTACULAR_SETTINGS = {
 
 #SENDFILE_BACKEND = "django_sendfile.backends.simple"
 SENDFILE_BACKEND = "celsus.s3_sendfile_backend"
-SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
+# SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
 
-NETPHOS_WEB_URL = os.environ.get("NETPHOS_WEB_URL", "http://netphos:8000/api/netphos/predict")
+# NETPHOS_WEB_URL = os.environ.get("NETPHOS_WEB_URL", "http://netphos:8000/api/netphos/predict")
 
 
 SITE_ID = 1
@@ -332,7 +332,7 @@ if os.environ.get("WORKDB_PROFILE") == "production":
             )
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "http://localhost,http://127.0.0.1").split(",")
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST").split(",")
-    MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
+    #MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT")
     DBBACKUP_STORAGE_OPTIONS = {'location': os.environ.get("DBBACKUP_STORAGE_LOCATION")}
     DBBACKUP_CONNECTORS = {
         'default': {
