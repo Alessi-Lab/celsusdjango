@@ -7,10 +7,9 @@ from datetime import timedelta
 from django.core.files.base import File as djangoFile
 from django.contrib.auth.models import User, AnonymousUser
 from django.db.models import Q, Count
-from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page, never_cache
-from django_sendfile import sendfile
+#from django_sendfile import sendfile
 from filters.mixins import FiltersMixin
 from rest_flex_fields import is_expanded
 from rest_flex_fields.views import FlexFieldsMixin
@@ -537,8 +536,11 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
     @action(methods=["get"], detail=True, permission_classes=[permissions.IsAdminUser | IsFileOwnerOrPublic,])
     def download(self, request, pk=None):
         file = self.get_object()
-        _, file_name = os.path.split(file.file.name)
-        return sendfile(request, file.file.name, attachment_filename=file_name)
+        #_, file_name = os.path.split(file.file.name)
+        #return sendfile(request, file.file.name, attachment_filename=file_name)
+        headers = {'Location': file.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
+        # logging.info(c.file.url)
+        return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
 
 class DifferentialSampleColumnViewSet(viewsets.ModelViewSet):
@@ -789,10 +791,10 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     def download(self, request, pk=None, link_id=None, token=None):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
-        return sendfile(request, c.file.url)
-        #headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
+        #return sendfile(request, c.file.url)
+        headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
         #logging.info(c.file.url)
-       # return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
+        return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):

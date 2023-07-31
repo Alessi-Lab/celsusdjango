@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'celsus.apps.CelsusConfig',
     'channels',
-    'django_sendfile',
+    #'django_sendfile',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
@@ -216,7 +216,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 #SENDFILE_BACKEND = "django_sendfile.backends.simple"
-SENDFILE_BACKEND = "celsus.s3_sendfile_backend"
+#SENDFILE_BACKEND = "celsus.s3_sendfile_backend"
 # SENDFILE_ROOT = os.environ.get("DJANGO_MEDIA_ROOT", "D:/PycharmProjects/celsusdjango/media")
 
 # NETPHOS_WEB_URL = os.environ.get("NETPHOS_WEB_URL", "http://netphos:8000/api/netphos/predict")

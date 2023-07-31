@@ -619,23 +619,6 @@ six = ">=1.9.0"
 with-social = ["django-allauth (>=0.25.0)"]
 
 [[package]]
-name = "django-sendfile2"
-version = "0.7.0"
-description = "Abstraction to offload file uploads to web-server (e.g. Apache with mod_xsendfile) once Django has checked permissions etc."
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-sendfile2-0.7.0.tar.gz", hash = "sha256:d900b1557cb1ba881798728de7ed7c82bff808868f331136b867a106e73bcd1f"},
-    {file = "django_sendfile2-0.7.0-py3-none-any.whl", hash = "sha256:0ee17b4f7ce8cc7159f75fa4e5d62e7795c1217de8f1e52ee6265d4aa46dce03"},
-]
-
-[package.dependencies]
-django = "*"
-
-[package.extras]
-docs = ["sphinx", "sphinx-rtd-theme"]
-
-[[package]]
 name = "django-storages"
 version = "1.13.2"
 description = "Support for many storage backends in Django"
@@ -2103,4 +2086,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "618cc96c4f5bf05a94c0cf47d16d975015d597ca57c1c21080a6017de34318c8"
+content-hash = "57df171f702263da2153a0d3298da160dcb14590862247157db6400e0467650e"
