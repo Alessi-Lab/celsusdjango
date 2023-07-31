@@ -1011,13 +1011,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.90.0"
+version = "2.95.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-python-client-2.90.0.tar.gz", hash = "sha256:cbcb3ba8be37c6806676a49df16ac412077e5e5dc7fa967941eff977b31fba03"},
-    {file = "google_api_python_client-2.90.0-py2.py3-none-any.whl", hash = "sha256:4a41ffb7797d4f28e44635fb1e7076240b741c6493e7c3233c0e4421cec7c913"},
+    {file = "google-api-python-client-2.95.0.tar.gz", hash = "sha256:d2731ede12f79e53fbe11fdb913dfe986440b44c0a28431c78a8ec275f4c1541"},
+    {file = "google_api_python_client-2.95.0-py2.py3-none-any.whl", hash = "sha256:a8aab2da678f42a01f2f52108f787fef4310f23f9dd917c4e64664c3f0c885ba"},
 ]
 
 [package.dependencies]
@@ -1029,13 +1029,13 @@ uritemplate = ">=3.0.1,<5"
 
 [[package]]
 name = "google-auth"
-version = "2.21.0"
+version = "2.22.0"
 description = "Google Authentication Library"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "google-auth-2.21.0.tar.gz", hash = "sha256:b28e8048e57727e7cf0e5bd8e7276b212aef476654a09511354aa82753b45c66"},
-    {file = "google_auth-2.21.0-py2.py3-none-any.whl", hash = "sha256:da3f18d074fa0f5a7061d99b9af8cee3aa6189c987af7c1b07d94566b6b11268"},
+    {file = "google-auth-2.22.0.tar.gz", hash = "sha256:164cba9af4e6e4e40c3a4f90a1a6c12ee56f14c0b4868d1ca91b32826ab334ce"},
+    {file = "google_auth-2.22.0-py2.py3-none-any.whl", hash = "sha256:d61d1b40897407b574da67da1a833bdc10d5a11642566e506565d1b1a46ba873"},
 ]
 
 [package.dependencies]
@@ -1574,24 +1574,24 @@ test = ["pytest", "pytest-cov", "scipy"]
 
 [[package]]
 name = "protobuf"
-version = "4.23.3"
+version = "4.23.4"
 description = ""
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "protobuf-4.23.3-cp310-abi3-win32.whl", hash = "sha256:514b6bbd54a41ca50c86dd5ad6488afe9505901b3557c5e0f7823a0cf67106fb"},
-    {file = "protobuf-4.23.3-cp310-abi3-win_amd64.whl", hash = "sha256:cc14358a8742c4e06b1bfe4be1afbdf5c9f6bd094dff3e14edb78a1513893ff5"},
-    {file = "protobuf-4.23.3-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:2991f5e7690dab569f8f81702e6700e7364cc3b5e572725098215d3da5ccc6ac"},
-    {file = "protobuf-4.23.3-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:08fe19d267608d438aa37019236db02b306e33f6b9902c3163838b8e75970223"},
-    {file = "protobuf-4.23.3-cp37-abi3-manylinux2014_x86_64.whl", hash = "sha256:3b01a5274ac920feb75d0b372d901524f7e3ad39c63b1a2d55043f3887afe0c1"},
-    {file = "protobuf-4.23.3-cp37-cp37m-win32.whl", hash = "sha256:aca6e86a08c5c5962f55eac9b5bd6fce6ed98645d77e8bfc2b952ecd4a8e4f6a"},
-    {file = "protobuf-4.23.3-cp37-cp37m-win_amd64.whl", hash = "sha256:0149053336a466e3e0b040e54d0b615fc71de86da66791c592cc3c8d18150bf8"},
-    {file = "protobuf-4.23.3-cp38-cp38-win32.whl", hash = "sha256:84ea0bd90c2fdd70ddd9f3d3fc0197cc24ecec1345856c2b5ba70e4d99815359"},
-    {file = "protobuf-4.23.3-cp38-cp38-win_amd64.whl", hash = "sha256:3bcbeb2bf4bb61fe960dd6e005801a23a43578200ea8ceb726d1f6bd0e562ba1"},
-    {file = "protobuf-4.23.3-cp39-cp39-win32.whl", hash = "sha256:5cb9e41188737f321f4fce9a4337bf40a5414b8d03227e1d9fbc59bc3a216e35"},
-    {file = "protobuf-4.23.3-cp39-cp39-win_amd64.whl", hash = "sha256:29660574cd769f2324a57fb78127cda59327eb6664381ecfe1c69731b83e8288"},
-    {file = "protobuf-4.23.3-py3-none-any.whl", hash = "sha256:447b9786ac8e50ae72cae7a2eec5c5df6a9dbf9aa6f908f1b8bda6032644ea62"},
-    {file = "protobuf-4.23.3.tar.gz", hash = "sha256:7a92beb30600332a52cdadbedb40d33fd7c8a0d7f549c440347bc606fb3fe34b"},
+    {file = "protobuf-4.23.4-cp310-abi3-win32.whl", hash = "sha256:5fea3c64d41ea5ecf5697b83e41d09b9589e6f20b677ab3c48e5f242d9b7897b"},
+    {file = "protobuf-4.23.4-cp310-abi3-win_amd64.whl", hash = "sha256:7b19b6266d92ca6a2a87effa88ecc4af73ebc5cfde194dc737cf8ef23a9a3b12"},
+    {file = "protobuf-4.23.4-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:8547bf44fe8cec3c69e3042f5c4fb3e36eb2a7a013bb0a44c018fc1e427aafbd"},
+    {file = "protobuf-4.23.4-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:fee88269a090ada09ca63551bf2f573eb2424035bcf2cb1b121895b01a46594a"},
+    {file = "protobuf-4.23.4-cp37-abi3-manylinux2014_x86_64.whl", hash = "sha256:effeac51ab79332d44fba74660d40ae79985901ac21bca408f8dc335a81aa597"},
+    {file = "protobuf-4.23.4-cp37-cp37m-win32.whl", hash = "sha256:c3e0939433c40796ca4cfc0fac08af50b00eb66a40bbbc5dee711998fb0bbc1e"},
+    {file = "protobuf-4.23.4-cp37-cp37m-win_amd64.whl", hash = "sha256:9053df6df8e5a76c84339ee4a9f5a2661ceee4a0dab019e8663c50ba324208b0"},
+    {file = "protobuf-4.23.4-cp38-cp38-win32.whl", hash = "sha256:e1c915778d8ced71e26fcf43c0866d7499891bca14c4368448a82edc61fdbc70"},
+    {file = "protobuf-4.23.4-cp38-cp38-win_amd64.whl", hash = "sha256:351cc90f7d10839c480aeb9b870a211e322bf05f6ab3f55fcb2f51331f80a7d2"},
+    {file = "protobuf-4.23.4-cp39-cp39-win32.whl", hash = "sha256:6dd9b9940e3f17077e820b75851126615ee38643c2c5332aa7a359988820c720"},
+    {file = "protobuf-4.23.4-cp39-cp39-win_amd64.whl", hash = "sha256:0a5759f5696895de8cc913f084e27fd4125e8fb0914bb729a17816a33819f474"},
+    {file = "protobuf-4.23.4-py3-none-any.whl", hash = "sha256:e9d0be5bf34b275b9f87ba7407796556abeeba635455d036c7351f7c183ef8ff"},
+    {file = "protobuf-4.23.4.tar.gz", hash = "sha256:ccd9430c0719dce806b93f89c91de7977304729e55377f872a92465d548329a9"},
 ]
 
 [[package]]
@@ -1674,13 +1674,13 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pyparsing"
-version = "3.1.0"
+version = "3.1.1"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
 optional = false
 python-versions = ">=3.6.8"
 files = [
-    {file = "pyparsing-3.1.0-py3-none-any.whl", hash = "sha256:d554a96d1a7d3ddaf7183104485bc19fd80543ad6ac5bdb6426719d766fb06c1"},
-    {file = "pyparsing-3.1.0.tar.gz", hash = "sha256:edb662d6fe322d6e990b1594b5feaeadf806803359e3d4d42f11e295e588f0ea"},
+    {file = "pyparsing-3.1.1-py3-none-any.whl", hash = "sha256:32c7c0b711493c72ff18a981d24f28aaf9c1fb7ed5e9667c9e84e3db623bdbfb"},
+    {file = "pyparsing-3.1.1.tar.gz", hash = "sha256:ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db"},
 ]
 
 [package.extras]
@@ -2427,4 +2427,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9c77cd7aa631e110a769bac9ff2a648758e3149fb3e29616693e7c8736bfe3d7"
+content-hash = "3444599193edca261997c7bb51d953c8ac3238baf2d81bd925c70a5191e7ec66"

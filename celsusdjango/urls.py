@@ -28,9 +28,9 @@ from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileVie
     GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet, KinaseLibraryViewSet, DataFilterListViewSet
 from django.conf import settings
 
-from celsus.views import LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView, GoogleLogin, \
-    GoogleLogin2, ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
-    InteractomeAtlasProxyView, PrimitiveStatsTestView
+from celsus.views import (LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView,
+                          ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
+    InteractomeAtlasProxyView, PrimitiveStatsTestView)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -71,7 +71,7 @@ urlpatterns = [
     path('site-properties/', SitePropertiesView.as_view(), name="site_properties"),
     #path('accounts/', include('allauth.urls')),
     #path('genemap-refresh/', UniprotRefreshView.as_view(), name="genemap_refresh"),
-    path('rest-auth/google/', GoogleLogin2.as_view(), name='google_login'),
+    #path('rest-auth/google/', GoogleLogin2.as_view(), name='google_login'),
     path('rest-auth/orcid/', ORCIDOAUTHView.as_view(), name='orcid_login'),
     path('kinase_library_proxy/', KinaseLibraryProxyView.as_view(), name='kinase_library_proxy'),
     #path('check_job/', CheckJobView.as_view(), name='check_job'),

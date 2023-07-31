@@ -20,9 +20,6 @@ drf-spectacular = "^0.26.3"
 django-sendfile2 = "^0.7.0"
 psycopg2 = "^2.9.6"
 gunicorn = "^20.1.0"
-django-allauth = "^0.54.0"
-google-api-python-client = "^2.90.0"
-google = "^3.0.0"
 django-rest-auth = "^0.9.5"
 dj-rest-auth = "^4.0.1"
 django-dbbackup = "^4.0.2"
@@ -33,6 +30,9 @@ uvicorn = {extras = ["standard"], version = "^0.22.0"}
 channels-redis = {extras = ["cryptography"], version = "^4.1.0"}
 django-storages = "^1.13.2"
 boto3 = "^1.28.12"
+django-allauth = "^0.54.0"
+google-api-python-client = "^2.95.0"
+google = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"

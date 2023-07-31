@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    #'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,12 +48,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'drf_spectacular',
-    'django_sendfile',
-    'allauth',
-    'allauth.account',
-    'dj_rest_auth.registration',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    #'allauth',
+    #'allauth.account',
+    #'dj_rest_auth.registration',
+    #'allauth.socialaccount',
+    #'allauth.socialaccount.providers.google',
     'dbbackup',
     'storages',
     'request',
@@ -74,22 +73,22 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'celsusdjango.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [BASE_DIR / 'templates']
+#         ,
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
 
 
 WSGI_APPLICATION = 'celsusdjango.wsgi.application'

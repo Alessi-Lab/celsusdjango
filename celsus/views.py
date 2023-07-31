@@ -3,15 +3,15 @@ import json
 
 import pandas as pd
 from request.models import Request as django_request
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+#from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from google.auth.transport import requests
-from google.oauth2 import id_token
+#from google.auth.transport import requests
+#from google.oauth2 import id_token
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny,IsAdminUser
@@ -25,9 +25,9 @@ import requests as req
 from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
 from celsus.serializers import DataFilterListSerializer
 from celsusdjango import settings
-from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
-from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+#from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
+#from dj_rest_auth.registration.views import SocialLoginView
+#from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from statsmodels.stats.weightstats import ttest_ind
 
 # Logout view used to blacklist refresh token
@@ -209,36 +209,36 @@ class NetPhosView(APIView):
         return Response(da.json())
 
 
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2AdapterIdToken
-    client_class = OAuth2Client
-    parser_classes = [JSONParser,]
+# class GoogleLogin(SocialLoginView):
+#     adapter_class = GoogleOAuth2AdapterIdToken
+#     client_class = OAuth2Client
+#     parser_classes = [JSONParser,]
 
 
-class GoogleLogin2(APIView): # if you want to use Implicit Grant, use this
-    permission_classes = (AllowAny,)
-    def post(self, request):
-        print(self.request.data)
-        try:
-            idinfo = id_token.verify_oauth2_token(self.request.data["auth_token"], requests.Request(), settings.SOCIALACCOUNT_PROVIDERS.get("google").get("APP").get("client_id"))
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        user = User.objects.filter(email=idinfo["email"]).first()
-        if user:
-            refresh_token = RefreshToken.for_user(user)
-            user.is_authenticated = True
-            return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
-        else:
-            user = User.objects.create_user(username=idinfo["email"], password=User.objects.make_random_password(), email=idinfo["email"])
-            user.is_authenticated = True
-            user.save()
-            ex = ExtraProperties(user=user)
-            social = SocialPlatform.objects.get_or_create(SocialPlatform(name="Google"))
-            social.save()
-            ex.social_platform = social
-            ex.save()
-            refresh_token = RefreshToken.for_user(user)
-            return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
+# class GoogleLogin2(APIView): # if you want to use Implicit Grant, use this
+#     permission_classes = (AllowAny,)
+#     def post(self, request):
+#         print(self.request.data)
+#         try:
+#             idinfo = id_token.verify_oauth2_token(self.request.data["auth_token"], requests.Request(), settings.SOCIALACCOUNT_PROVIDERS.get("google").get("APP").get("client_id"))
+#         except:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         user = User.objects.filter(email=idinfo["email"]).first()
+#         if user:
+#             refresh_token = RefreshToken.for_user(user)
+#             user.is_authenticated = True
+#             return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
+#         else:
+#             user = User.objects.create_user(username=idinfo["email"], password=User.objects.make_random_password(), email=idinfo["email"])
+#             user.is_authenticated = True
+#             user.save()
+#             ex = ExtraProperties(user=user)
+#             social = SocialPlatform.objects.get_or_create(SocialPlatform(name="Google"))
+#             social.save()
+#             ex.social_platform = social
+#             ex.save()
+#             refresh_token = RefreshToken.for_user(user)
+#             return Response(data={"refresh": str(refresh_token), "access": str(refresh_token.access_token)})
 
 # View for handling ORCID OAuth
 class ORCIDOAUTHView(APIView):
