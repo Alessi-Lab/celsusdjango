@@ -790,10 +790,11 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     ])
     @method_decorator(cache_page(0))
     def download(self, request, pk=None, link_id=None, token=None):
+
         c = self.get_object()
-        _, file_name = os.path.split(c.file.name)
+        logging.info(c.file.url)
         #return sendfile(request, c.file.url)
-        headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
+        headers = {'Location': c.file.url}
         logging.info(c.file.url)
         return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
