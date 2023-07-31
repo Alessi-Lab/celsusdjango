@@ -784,6 +784,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         "curtain_type": "curtain_type__in"
     }
     filter_validation_schema = curtain_query_schema
+
     @action(methods=["get"], url_path="download/?token=(?P<token>[^/]*)", detail=True, permission_classes=[
         permissions.IsAdminUser | HasCurtainToken | IsCurtainOwnerOrPublic
     ])
@@ -793,7 +794,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         _, file_name = os.path.split(c.file.name)
         #return sendfile(request, c.file.url)
         headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
-        #logging.info(c.file.url)
+        logging.info(c.file.url)
         return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
