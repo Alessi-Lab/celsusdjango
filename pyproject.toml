@@ -30,9 +30,6 @@ uvicorn = {extras = ["standard"], version = "^0.22.0"}
 channels-redis = {extras = ["cryptography"], version = "^4.1.0"}
 django-storages = "^1.13.2"
 boto3 = "^1.28.12"
-django-allauth = "^0.54.0"
-google-api-python-client = "^2.95.0"
-google = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 factory-boy = "^3.2.1"
