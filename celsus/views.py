@@ -4,7 +4,7 @@ import json
 import pandas as pd
 from request.models import Request as django_request
 #from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from django.contrib.auth import authenticate
+#from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.decorators import method_decorator
@@ -12,18 +12,17 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 #from google.auth.transport import requests
 #from google.oauth2 import id_token
-from rest_framework.generics import GenericAPIView
-from rest_framework.parsers import JSONParser
+#from rest_framework.generics import GenericAPIView
+#from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny,IsAdminUser
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.response import Response
 from rest_framework import status
-from django_sendfile import sendfile
 from uniprotparser.betaparser import UniprotParser
 import requests as req
 from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
-from celsus.serializers import DataFilterListSerializer
+#from celsus.serializers import DataFilterListSerializer
 from celsusdjango import settings
 #from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
 #from dj_rest_auth.registration.views import SocialLoginView
