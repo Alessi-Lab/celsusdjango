@@ -790,9 +790,9 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
         #return sendfile(request, c.file.name, attachment_filename=file_name)
-        headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
+        #headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
         #logging.info(c.file.url)
-        return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
+        return sendfile(request, c.file.url)
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
