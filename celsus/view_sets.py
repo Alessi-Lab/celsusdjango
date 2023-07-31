@@ -789,10 +789,10 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
     def download(self, request, pk=None, link_id=None, token=None):
         c = self.get_object()
         _, file_name = os.path.split(c.file.name)
-        #return sendfile(request, c.file.name, attachment_filename=file_name)
+        return sendfile(request, c.file.url)
         #headers = {'Location': c.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
         #logging.info(c.file.url)
-        return sendfile(request, c.file.url)
+       # return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
     @action(methods=["post"], detail=True, permission_classes=[permissions.IsAdminUser | IsCurtainOwner])
     def generate_token(self, request, pk=None, link_id=None):
