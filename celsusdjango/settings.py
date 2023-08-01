@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'request',
 ]
 
+
+
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -95,7 +97,9 @@ ROOT_URLCONF = 'celsusdjango.urls'
 
 WSGI_APPLICATION = 'celsusdjango.wsgi.application'
 
-
+REQUEST_IGNORE_PATHS = (
+    r'^stats/download/',
+)
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
