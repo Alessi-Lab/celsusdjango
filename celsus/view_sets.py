@@ -794,7 +794,7 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         c = self.get_object()
         logging.info(c.file.url)
         #return sendfile(request, c.file.url)
-        headers = {'Location': c.file.url}
+        headers = {'Location': c.file.url, "Access-Control-Allow-Origin": "*"}
         logging.info(c.file.url)
         return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
