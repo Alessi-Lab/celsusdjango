@@ -538,7 +538,12 @@ class FileViewSet(FiltersMixin, FlexFieldsMixin, viewsets.ModelViewSet):
         file = self.get_object()
         #_, file_name = os.path.split(file.file.name)
         #return sendfile(request, file.file.name, attachment_filename=file_name)
-        headers = {'Location': file.file.url, 'Access-Control-Allow-Origin': request.headers['Origin']}
+        headers = {
+            'Location': file.file.url,
+            'Access-Control-Allow-Origin': request.headers['Origin'],
+            "Access-Control-Allow-Credentials": "true",
+            "Vary": "Origin",
+        }
         # logging.info(c.file.url)
         return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
@@ -794,7 +799,12 @@ class CurtainViewSet(FiltersMixin, viewsets.ModelViewSet):
         c = self.get_object()
         logging.info(c.file.url)
         #return sendfile(request, c.file.url)
-        headers = {'Location': c.file.url, "Access-Control-Allow-Origin": "*"}
+        headers = {
+            'Location': c.file.url,
+            "Access-Control-Allow-Origin": request.headers['Origin'],
+            "Access-Control-Allow-Credentials": "true",
+            "Vary": "Origin",
+        }
         logging.info(c.file.url)
         return Response(status=status.HTTP_303_SEE_OTHER, headers=headers)
 
