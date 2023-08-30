@@ -21,7 +21,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf.urls.static import static
 
 from celsus.models import File
-from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileViewSet, OrganismViewSet, \
+from celsus.view_sets import CompareSessionView, UserViewSet, ProjectViewSet, AuthorViewSet, FileViewSet, OrganismViewSet, \
     OrganismPartViewSet, CellTypeViewSet, TissueTypeViewSet, ExperimentTypeViewSet, QuantificationMethodViewSet, \
     KeywordViewSet, RawSampleColumnViewSet, DifferentialSampleColumnViewSet, RawDataViewSet, \
     DifferentialAnalysisDataViewSet, InstrumentViewSet, DiseaseViewSet, CurtainViewSet, ComparisonViewSet, \
@@ -78,5 +78,6 @@ urlpatterns = [
     path('stats/download/', DownloadStatsView.as_view(), name='download_stats'),
     path('interactome-atlas-proxy/', InteractomeAtlasProxyView.as_view(), name='interactome_atlas_proxy'),
     path('primitive-stats-test/', PrimitiveStatsTestView.as_view(), name='primitive_stats_test'),
+    path('compare-session/', CompareSessionView.as_view(), name='compare_session'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
