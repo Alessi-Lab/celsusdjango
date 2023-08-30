@@ -21,7 +21,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from uniprotparser.betaparser import UniprotParser
 import requests as req
-from celsus.models import Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
+from celsus.models import Curtain, Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
 #from celsus.serializers import DataFilterListSerializer
 from celsusdjango import settings
 #from celsus.google_views import GoogleOAuth2AdapterIdToken # import custom adapter
@@ -387,4 +387,48 @@ class PrimitiveStatsTestView(APIView):
         print(test_type, test_data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+class CompareSessionView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        id_list = request.data["idList"]
+        curtain_list = Curtain.objects.filter(link_id__in=id_list)
+        to_be_processed_list = []
+        for item in curtain_list:
+            owners = item.owners.all()
+            if len(owners) > 0:
+                if not item.enable:
+                    if request.user and request.user.is_authenticated and request.user in owners and request.user:
+                        to_be_processed_list.append(item)
+                else:
+                    to_be_processed_list.append(item)
+            else:
+                to_be_processed_list.append(item)
+
+        study_list = request.data["studyList"]
+        result = {}
+        for i in to_be_processed_list:
+            data = json.loads(i.file.read().decode("utf-8"))
+            differential_form = data["differentialForm"]
+            pid_col = differential_form["_primaryIDs"]
+            fc_col = differential_form["_foldChange"]
+            significant_col = differential_form["_significant"]
+            raw_form = data["rawForm"]
+            string_data = io.StringIO(data["processed"])
+            df = pd.read_csv(StringData, sep="\t")
+            if len(differential_form["_comparisonSelect"]) > 0:
+                df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
+            if data["_transformFC"]:
+                df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
+            if data["_transformSignificant"]:
+                df[significant_col] = -np.log10(df[significant_col])
+            if request.data["matchType"] == "primaryID":
+                df = df[df[pid_col].isin(study_list)]
+                df = df[[pid_col, fc_col, significant_col]]
+                result[i.link_id] = df.to_dict(orient="records")
+
+        if result:
+            return Response(data=result)
+        return Response(data={})
 
