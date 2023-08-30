@@ -21,14 +21,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf.urls.static import static
 
 from celsus.models import File
-from celsus.view_sets import CompareSessionView, UserViewSet, ProjectViewSet, AuthorViewSet, FileViewSet, OrganismViewSet, \
+from celsus.view_sets import UserViewSet, ProjectViewSet, AuthorViewSet, FileViewSet, OrganismViewSet, \
     OrganismPartViewSet, CellTypeViewSet, TissueTypeViewSet, ExperimentTypeViewSet, QuantificationMethodViewSet, \
     KeywordViewSet, RawSampleColumnViewSet, DifferentialSampleColumnViewSet, RawDataViewSet, \
     DifferentialAnalysisDataViewSet, InstrumentViewSet, DiseaseViewSet, CurtainViewSet, ComparisonViewSet, \
     GeneNameMapViewSet, LabGroupViewSet, UniprotRecordViewSet, KinaseLibraryViewSet, DataFilterListViewSet
 from django.conf import settings
 
-from celsus.views import (LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView,
+from celsus.views import (CompareSessionView, LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView, NetPhosView,
                           ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
     InteractomeAtlasProxyView, PrimitiveStatsTestView)
 
