@@ -411,6 +411,7 @@ class CompareSessionView(APIView):
         result = {}
         for i in to_be_processed_list:
             data = json.loads(i.file.read().decode("utf-8"))
+            print(data)
             differential_form = data["differentialForm"]
             pid_col = differential_form["_primaryIDs"]
             fc_col = differential_form["_foldChange"]
@@ -428,7 +429,7 @@ class CompareSessionView(APIView):
                 df = df[df[pid_col].isin(study_list)]
                 df = df[[pid_col, fc_col, significant_col]]
                 result[i.link_id] = df.to_dict(orient="records")
-
+        print(result)
         if result:
             return Response(data=result)
         return Response(data={})
