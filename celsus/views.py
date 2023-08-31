@@ -417,15 +417,14 @@ class CompareSessionView(APIView):
             significant_col = differential_form["_significant"]
             string_data = io.StringIO(data["processed"])
             df = pd.read_csv(string_data, sep="\t")
-            print(df)
             if len(differential_form["_comparisonSelect"]) > 0:
-                print(differential_form)
-                if differential_form["_comparison"] in list(df.columns):
-                    print(df.columns)
-                    print(differential_form)
+                if differential_form["_comparison"] in df.columns:
                     df[differential_form["_comparison"]] = df[differential_form["_comparison"]].astype(str)
+                    print(df[differential_form["_comparison"]])
                     if type(differential_form["_comparisonSelect"]) == str:
+                        print(differential_form["_comparisonSelect"])
                         df = df[df[differential_form["_comparison"]] == differential_form["_comparisonSelect"]]
+                        print(df)
                     else:
                         df = df[differential_form["_comparison"].isin(differential_form["_comparisonSelect"])]
             print(data["_transformFC"])
