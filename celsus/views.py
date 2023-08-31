@@ -420,18 +420,15 @@ class CompareSessionView(APIView):
             if len(differential_form["_comparisonSelect"]) > 0:
                 if differential_form["_comparison"] in df.columns:
                     df[differential_form["_comparison"]] = df[differential_form["_comparison"]].astype(str)
-                    print(df[differential_form["_comparison"]])
                     if type(differential_form["_comparisonSelect"]) == str:
-                        print(differential_form["_comparisonSelect"])
                         df = df[df[differential_form["_comparison"]] == differential_form["_comparisonSelect"]]
-                        print(df)
                     else:
                         df = df[differential_form["_comparison"].isin(differential_form["_comparisonSelect"])]
-            print(data["_transformFC"])
-            if data["_transformFC"]:
+            print(differential_form["_transformFC"])
+            if differential_form["_transformFC"]:
                 df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
-            print(data["_transformSignificant"])
-            if data["_transformSignificant"]:
+            print(differential_form["_transformSignificant"])
+            if differential_form["_transformSignificant"]:
                 df[significant_col] = -np.log10(df[significant_col])
             if request.data["matchType"] == "primaryID":
                 df = df[df[pid_col].isin(study_list)]
