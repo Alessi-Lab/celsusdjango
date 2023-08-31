@@ -419,7 +419,9 @@ class CompareSessionView(APIView):
             df = pd.read_csv(string_data, sep="\t")
             print(df)
             if len(differential_form["_comparisonSelect"]) > 0:
-                df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
+                if differential_form["_comparison"] in df.columns:
+                    df[df[differential_form["_comparison"]]] = df[df[differential_form["_comparison"]]].astype(str)
+                    df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
             print(data["_transformFC"])
             if data["_transformFC"]:
                 df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
