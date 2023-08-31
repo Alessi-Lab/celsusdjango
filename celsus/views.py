@@ -392,6 +392,7 @@ class CompareSessionView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
+        print(request.data)
         id_list = request.data["idList"]
         curtain_list = Curtain.objects.filter(link_id__in=id_list)
         to_be_processed_list = []
