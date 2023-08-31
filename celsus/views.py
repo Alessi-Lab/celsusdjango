@@ -420,7 +420,7 @@ class CompareSessionView(APIView):
             print(df)
             if len(differential_form["_comparisonSelect"]) > 0:
                 print(differential_form)
-                if differential_form["_comparison"] in df.columns:
+                if differential_form["_comparison"] in list(df.columns):
                     print(df.columns)
                     print(differential_form)
                     df[differential_form["_comparison"]] = df[differential_form["_comparison"]].astype(str)
