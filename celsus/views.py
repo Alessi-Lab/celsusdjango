@@ -395,6 +395,7 @@ class CompareSessionView(APIView):
         print(request.data)
         id_list = request.data["idList"]
         curtain_list = Curtain.objects.filter(link_id__in=id_list)
+        print(curtain_list)
         to_be_processed_list = []
         for item in curtain_list:
             owners = item.owners.all()
@@ -406,7 +407,7 @@ class CompareSessionView(APIView):
                     to_be_processed_list.append(item)
             else:
                 to_be_processed_list.append(item)
-
+        print(to_be_processed_list)
         study_list = request.data["studyList"]
         result = {}
         for i in to_be_processed_list:
