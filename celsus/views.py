@@ -405,7 +405,6 @@ class CompareSessionView(APIView):
                     to_be_processed_list.append(item)
             else:
                 to_be_processed_list.append(item)
-        print(to_be_processed_list)
         study_list = request.data["studyList"]
         result = {}
         for i in to_be_processed_list:
@@ -423,18 +422,16 @@ class CompareSessionView(APIView):
                     if type(differential_form["_comparisonSelect"]) == str:
                         df = df[df[differential_form["_comparison"]] == differential_form["_comparisonSelect"]]
                     else:
-                        df = df[differential_form["_comparison"].isin(differential_form["_comparisonSelect"])]
-            print(differential_form["_transformFC"])
+                        df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
             if differential_form["_transformFC"]:
                 df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
-            print(differential_form["_transformSignificant"])
             if differential_form["_transformSignificant"]:
                 df[significant_col] = -np.log10(df[significant_col])
             if request.data["matchType"] == "primaryID":
                 df = df[df[pid_col].isin(study_list)]
                 df = df[[pid_col, fc_col, significant_col]]
+                df.rename(columns={pid_col: "primaryID", fc_col: "foldChange", significant_col: "significant"}, inplace=True)
                 result[i.link_id] = df.to_dict(orient="records")
-        print(result)
         if result:
             return Response(data=result)
         return Response(data={})
