@@ -410,18 +410,20 @@ class CompareSessionView(APIView):
         result = {}
         for i in to_be_processed_list:
             data = req.get(i.file.url).json()
-            print(data)
             differential_form = data["differentialForm"]
+            print(differential_form)
             pid_col = differential_form["_primaryIDs"]
             fc_col = differential_form["_foldChange"]
             significant_col = differential_form["_significant"]
-            raw_form = data["rawForm"]
             string_data = io.StringIO(data["processed"])
             df = pd.read_csv(string_data, sep="\t")
+            print(df)
             if len(differential_form["_comparisonSelect"]) > 0:
                 df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
+            print(data["_transformFC"])
             if data["_transformFC"]:
                 df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
+            print(data["_transformSignificant"])
             if data["_transformSignificant"]:
                 df[significant_col] = -np.log10(df[significant_col])
             if request.data["matchType"] == "primaryID":
