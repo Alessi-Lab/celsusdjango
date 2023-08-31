@@ -411,7 +411,7 @@ class CompareSessionView(APIView):
         for i in to_be_processed_list:
             data = req.get(i.file.url).json()
             differential_form = data["differentialForm"]
-            print(differential_form)
+
             pid_col = differential_form["_primaryIDs"]
             fc_col = differential_form["_foldChange"]
             significant_col = differential_form["_significant"]
@@ -419,7 +419,10 @@ class CompareSessionView(APIView):
             df = pd.read_csv(string_data, sep="\t")
             print(df)
             if len(differential_form["_comparisonSelect"]) > 0:
+                print(differential_form)
                 if differential_form["_comparison"] in df.columns:
+                    print(df.columns)
+                    print(differential_form)
                     df[differential_form["_comparison"]] = df[differential_form["_comparison"]].astype(str)
                     if type(differential_form["_comparisonSelect"]) == str:
                         df = df[df[differential_form["_comparison"]] == differential_form["_comparisonSelect"]]
