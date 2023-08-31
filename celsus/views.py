@@ -411,6 +411,7 @@ class CompareSessionView(APIView):
         study_list = request.data["studyList"]
         result = {}
         for i in to_be_processed_list:
+            print(i.file)
             data = json.loads(i.file.read().decode("utf-8"))
             print(data)
             differential_form = data["differentialForm"]
