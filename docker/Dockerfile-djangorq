@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9.7-bullseye
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -6,10 +6,11 @@ RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | te
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
 RUN apt-get update
+RUN apt-get -y install postgresql-client-14
 WORKDIR /app
+RUN mkdir "/app/media"
 RUN mkdir "/app/backup"
 COPY . /app/
+
 RUN pip install -r requirements.txt
-RUN apt-get -y install postgresql-client-14
-EXPOSE 8000
-CMD ["python", "manage.py", "qcluster"]
+CMD ["python", "manage.py",  "rqworker", "default"]

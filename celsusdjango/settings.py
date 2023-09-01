@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'dbbackup',
     'storages',
     'request',
+    'django_rq'
 ]
 
 
@@ -265,11 +266,25 @@ Q_CLUSTER = {
     }
 }
 
+
+
+
 if os.environ.get("Q_CLUSTER_REDIS_HOST"):
     Q_CLUSTER['redis']['host'] = os.environ.get("Q_CLUSTER_REDIS_HOST")
 
+
 if os.environ.get("Q_CLUSTER_REDIS_PASSWORD"):
     Q_CLUSTER['redis']['password'] = os.environ.get("Q_CLUSTER_REDIS_PASSWORD")
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': Q_CLUSTER['redis']['host'],
+        'PORT': int(os.environ.get('REDIS_PORT', '6379')),
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 1440,
+        'PASSWORD': Q_CLUSTER['redis']['password'],
+    }
+}
 
 CURTAIN_ALLOW_NON_STAFF_DELETE = False
 if os.environ.get("CURTAIN_ALLOW_NON_STAFF_DELETE"):
