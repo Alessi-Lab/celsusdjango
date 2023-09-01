@@ -19,7 +19,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.response import Response
 from rest_framework import status
-from uniprotparser.betaparser import UniprotParser
+from uniprotparser.betaparser import UniprotParser, UniprotSequence
 import requests as req
 from celsus.models import Curtain, Project, GeneNameMap, UniprotRecord, SocialPlatform, ExtraProperties, DataFilterList
 #from celsus.serializers import DataFilterListSerializer
@@ -407,6 +407,17 @@ class CompareSessionView(APIView):
                 to_be_processed_list.append(item)
         study_list = request.data["studyList"]
         result = {}
+        uniprot_id_list = []
+        study_map = {}
+
+        if request.data["matchType"] == "primaryID-uniprot" or request.data["matchType"] == "geneNames":
+            for i in study_list:
+                if UniprotSequence(i, parse_acc=True).accession:
+                    study_map[UniprotSequence(i, parse_acc=True).accession] = i
+
+            uniprot_id_list.extend(study_map.keys())
+        data_store_dict = {}
+
         for i in to_be_processed_list:
             data = req.get(i.file.url).json()
             differential_form = data["differentialForm"]
@@ -430,8 +441,59 @@ class CompareSessionView(APIView):
             if request.data["matchType"] == "primaryID":
                 df = df[df[pid_col].isin(study_list)]
                 df = df[[pid_col, fc_col, significant_col]]
+                df["source_pid"] = df[pid_col]
                 df.rename(columns={pid_col: "primaryID", fc_col: "foldChange", significant_col: "significant"}, inplace=True)
                 result[i.link_id] = df.to_dict(orient="records")
+            elif request.data["matchType"] == "primaryID-uniprot":
+                df["curtain_uniprot"] = df[pid_col].apply(lambda x: UniprotSequence(x, parse_acc=True).accession if UniprotSequence(x, parse_acc=True).accession else x)
+                df = df[df["curtain_uniprot"].isin(uniprot_id_list)]
+                df = df[[pid_col, "curtain_uniprot", fc_col, significant_col]]
+                df["source_pid"] = df["curtain_uniprot"].apply(lambda x: study_map[x] if x in study_map else None)
+                df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange", significant_col: "significant"}, inplace=True)
+                result[i.link_id] = df.to_dict(orient="records")
+            elif request.data["matchType"] == "geneNames":
+                df["curtain_uniprot"] = df[pid_col].apply(
+                    lambda x: UniprotSequence(x, parse_acc=True).accession if UniprotSequence(x,
+                                                                                              parse_acc=True).accession else x)
+                data_store_dict[i.link_id] = df
+                uniprot_id_list.extend(df["curtain_uniprot"].tolist())
+
+        if request.data["matchType"] == "geneNames":
+            unique_uniprot = set(uniprot_id_list)
+            parser = UniprotParser(columns="accession,id,gene_names")
+            uni_df = []
+            for p in parser.parse(unique_uniprot):
+                uniprot_df = pd.read_csv(io.StringIO(p), sep="\t")
+                uni_df.append(uniprot_df)
+            if len(uni_df) == 1:
+                uni_df = uni_df[0]
+            else:
+                uni_df = pd.concat(uni_df, ignore_index=True)
+            studied_uni_df = uni_df[uni_df["From"].isin(set(study_map.keys()))]
+            #studied_uni_df["gene_names_split"] = studied_uni_df["Gene Names"].str.split(" ")
+            #studied_uni_df = studied_uni_df.explode("gene_names_split")
+            for i in data_store_dict:
+                stored_df = data_store_dict[i]
+                stored_df = stored_df.merge(uni_df, left_on="curtain_uniprot", right_on="From", how="left")
+                stored_df["gene_names_split"] = stored_df["Gene Names"].str.split(" ")
+                stored_df = stored_df.explode("gene_names_split", ignore_index=True)
+                fin_df = []
+                for i2, r in studied_uni_df.iterrows():
+                    if pd.notnull(r["Gene Names"]):
+
+                        for g in r["Gene Names"].split(" "):
+                            if g in stored_df["gene_names_split"]:
+                                stored_result = stored_df[stored_df["gene_names_split"] == g]
+                                stored_result["source_pid"] = study_map[r["From"]]
+                                fin_df.append(stored_result)
+                                break
+                if len(fin_df) == 1:
+                    fin_df = fin_df[0]
+                else:
+                    fin_df = pd.concat(fin_df, ignore_index=True)
+                fin_df = fin_df[[pid_col, "curtain_uniprot", fc_col, significant_col, "source_pid"]]
+                result[i] = fin_df.to_dict(orient="records")
+
         if result:
             return Response(data=result)
         return Response(data={})
