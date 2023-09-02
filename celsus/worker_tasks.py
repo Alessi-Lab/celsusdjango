@@ -11,7 +11,7 @@ from celsus.models import Curtain
 
 
 @job("default")
-def compare_session(id_list, study_list, match_type, session_id, user):
+def compare_session(id_list, study_list, match_type, session_id):
     to_be_processed_list = Curtain.objects.filter(link_id__in=id_list)
     result = {}
     uniprot_id_list = []
