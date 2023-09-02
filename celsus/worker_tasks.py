@@ -57,7 +57,7 @@ def compare_session(id_list, study_list, match_type, session_id):
         if differential_form["_transformSignificant"]:
             df[significant_col] = -np.log10(df[significant_col])
         if match_type == "primaryID":
-            message_template["message"] = "Matching Primary ID for " + i
+            message_template["message"] = "Matching Primary ID for " + i.link_id
             async_to_sync(channel_layer.group_send)(session_id, {
                 'type': 'job_message',
                 'message': message_template
