@@ -528,10 +528,11 @@ class CompareSessionView(APIView):
         # return Response(data={})
 
 class JobResultView(APIView):
-    def get(self, request, format=None):
+    permission_classes = (AllowAny,)
+    def get(self, request, job_id):
         connection = django_rq.get_connection()
-        if request.query_params["job_id"]:
-            task = connection.fetch(request.query_params["job_id"])
+        if request:
+            task = connection.fetch(job_id)
             if task:
                 if task.success:
                     return Response(data=task.result)

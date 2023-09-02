@@ -80,6 +80,6 @@ urlpatterns = [
     path('interactome-atlas-proxy/', InteractomeAtlasProxyView.as_view(), name='interactome_atlas_proxy'),
     path('primitive-stats-test/', PrimitiveStatsTestView.as_view(), name='primitive_stats_test'),
     path('compare-session/', CompareSessionView.as_view(), name='compare_session'),
-    path('job/', JobResultView.as_view(), name='job_result'),
+    path(r'job/(?P<job_id>[\w-]+/', JobResultView.as_view(), name='job_result'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
