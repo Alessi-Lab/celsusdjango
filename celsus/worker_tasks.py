@@ -133,7 +133,7 @@ def compare_session(id_list, study_list, match_type, session_id):
 
                 if pd.notnull(r["Gene Names"]):
                     for g in r["Gene Names"].split(" "):
-                        if g in stored_df["gene_names_split"]:
+                        if g in stored_df["gene_names_split"].values:
                             stored_result = stored_df[stored_df["gene_names_split"] == g]
                             stored_result["source_pid"] = study_map[r["From"]]
                             fin_df.append(stored_result)
@@ -142,6 +142,7 @@ def compare_session(id_list, study_list, match_type, session_id):
                 fin_df = fin_df[0]
             else:
                 fin_df = pd.concat(fin_df, ignore_index=True)
+            print(fin_df)
             fin_df = fin_df[["primaryID", "uniprot", "foldChange", "significant", "source_pid"]]
             result[i] = fin_df.to_dict(orient="records")
     message_template["message"] = "Operation Completed"
