@@ -141,4 +141,10 @@ def compare_session(id_list, study_list, match_type, session_id):
                 fin_df = pd.concat(fin_df, ignore_index=True)
             fin_df = fin_df[["primaryID", "curtain_uniprot", "foldChange", "significant", "source_pid"]]
             result[i] = fin_df.to_dict(orient="records")
+    message_template["message"] = "Operation Completed"
+    message_template["data"] = result
+    async_to_sync(channel_layer.group_send)(session_id, {
+        'type': 'job_message',
+        'message': message_template
+    })
     return result
