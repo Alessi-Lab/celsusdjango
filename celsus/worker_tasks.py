@@ -112,18 +112,17 @@ def compare_session(id_list, study_list, match_type, session_id):
             uni_df = uni_df[0]
         else:
             uni_df = pd.concat(uni_df, ignore_index=True)
-        print(uni_df)
-        print(study_map)
         studied_uni_df = uni_df[uni_df["From"].isin(set(study_map.keys()))]
         # studied_uni_df["gene_names_split"] = studied_uni_df["Gene Names"].str.split(" ")
         # studied_uni_df = studied_uni_df.explode("gene_names_split")
-        print(studied_uni_df)
         for i in data_store_dict:
             stored_df = data_store_dict[i]
-
+            print(stored_df)
             stored_df = stored_df.merge(uni_df, left_on="curtain_uniprot", right_on="From", how="left")
+            print(stored_df)
             stored_df["gene_names_split"] = stored_df["Gene Names"].str.split(" ")
             stored_df = stored_df.explode("gene_names_split", ignore_index=True)
+            print(stored_df)
             fin_df = []
             message_template["message"] = "Matching Gene Names for " + i
             async_to_sync(channel_layer.group_send)(session_id, {
