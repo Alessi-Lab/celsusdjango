@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-
+from rq.job import Job
 #from google.auth.transport import requests
 #from google.oauth2 import id_token
 #from rest_framework.generics import GenericAPIView
@@ -531,15 +531,19 @@ class JobResultView(APIView):
     permission_classes = (AllowAny,)
     def get(self, request, job_id):
         connection = django_rq.get_connection()
-        if request:
-            task = connection.fetch(job_id)
-            if task:
-                if task.success:
-                    return Response(data=task.result)
-                elif task.stopped:
-                    return Response(data={"status": "stopped"})
-                else:
-                    return Response(data={"status": "progressing"})
+        task = Job.fetch(job_id, connection=connection)
+
+        if task:
+            job_status = task.get_status()
+            if job_status == 'finished':
+                return Response(data=task.result)
+            elif job_status == 'failed':
+                return Response(data={"status": "failed"})
+            elif job_status == 'started':
+                return Response(data={"status": "progressing"})
+            elif job_status == 'queued':
+                return Response(data={"status": "queued"})
             else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={"status": "unknown"})
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
