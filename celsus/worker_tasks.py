@@ -69,7 +69,7 @@ def compare_session(id_list, study_list, match_type, session_id):
                       inplace=True)
             result[i.link_id] = df.to_dict(orient="records")
         elif match_type == "primaryID-uniprot":
-            message_template["message"] = "Matching UniProt Primary ID for " + i
+            message_template["message"] = "Matching UniProt Primary ID for " + i.link_id
             async_to_sync(channel_layer.group_send)(session_id, {
                 'type': 'job_message',
                 'message': message_template
