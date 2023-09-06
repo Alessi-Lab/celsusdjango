@@ -30,7 +30,7 @@ def compare_session(id_list, study_list, match_type, session_id):
 
         uniprot_id_list.extend(study_map.keys())
     data_store_dict = {}
-
+    comparison_dict = {}
     for i in to_be_processed_list:
         message_template["message"] = "Processing " + i.link_id
         async_to_sync(channel_layer.group_send)(session_id, {
@@ -45,13 +45,18 @@ def compare_session(id_list, study_list, match_type, session_id):
         significant_col = differential_form["_significant"]
         string_data = io.StringIO(data["processed"])
         df = pd.read_csv(string_data, sep="\t")
+        comparison_col = differential_form["_comparison"]
+        comparisons = []
         if len(differential_form["_comparisonSelect"]) > 0:
             if differential_form["_comparison"] in df.columns:
                 df[differential_form["_comparison"]] = df[differential_form["_comparison"]].astype(str)
                 if type(differential_form["_comparisonSelect"]) == str:
-                    df = df[df[differential_form["_comparison"]] == differential_form["_comparisonSelect"]]
+                    df = df[df[comparison_col] == differential_form["_comparisonSelect"]]
+                    comparisons.append(differential_form["_comparisonSelect"])
                 else:
-                    df = df[df[differential_form["_comparison"]].isin(differential_form["_comparisonSelect"])]
+                    df = df[df[comparison_col].isin(differential_form["_comparisonSelect"])]
+                    comparisons.extend(differential_form["_comparisonSelect"])
+        comparison_dict[i.link_id] = comparisons
         if differential_form["_transformFC"]:
             df[fc_col].apply(lambda x: np.log2(x) if x >= 0 else -np.log2(-x))
         if differential_form["_transformSignificant"]:
@@ -63,10 +68,17 @@ def compare_session(id_list, study_list, match_type, session_id):
                 'message': message_template
             })
             df = df[df[pid_col].isin(study_list)]
-            df = df[[pid_col, fc_col, significant_col]]
+            cols = [pid_col, fc_col, significant_col]
+            if len(comparisons) > 0:
+                cols.append(comparison_col)
+            df = df[cols]
             df["source_pid"] = df[pid_col]
-            df.rename(columns={pid_col: "primaryID", fc_col: "foldChange", significant_col: "significant"},
-                      inplace=True)
+            if len(comparisons) > 0:
+                df.rename(columns={pid_col: "primaryID", fc_col: "foldChange", significant_col: "significant", comparison_col: "comparison"},
+                          inplace=True)
+            else:
+                df.rename(columns={pid_col: "primaryID", fc_col: "foldChange", significant_col: "significant"},
+                          inplace=True)
             result[i.link_id] = df.to_dict(orient="records")
         elif match_type == "primaryID-uniprot":
             message_template["message"] = "Matching UniProt Primary ID for " + i.link_id
@@ -78,16 +90,25 @@ def compare_session(id_list, study_list, match_type, session_id):
                 lambda x: UniprotSequence(x, parse_acc=True).accession if UniprotSequence(x,
                                                                                           parse_acc=True).accession else x)
             df = df[df["curtain_uniprot"].isin(uniprot_id_list)]
-            df = df[[pid_col, "curtain_uniprot", fc_col, significant_col]]
+            cols = [pid_col,  "curtain_uniprot", fc_col, significant_col]
+            if len(comparisons) > 0:
+                cols.append(comparison_col)
+            df = df[cols]
             df["source_pid"] = df["curtain_uniprot"].apply(lambda x: study_map[x] if x in study_map else None)
-            df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange",
-                               significant_col: "significant"}, inplace=True)
+            if len(comparisons) > 0:
+                df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange",
+                                   significant_col: "significant", comparison_col: "comparison"}, inplace=True)
+            else:
+                df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange",
+                                   significant_col: "significant"}, inplace=True)
             result[i.link_id] = df.to_dict(orient="records")
         elif match_type == "geneNames":
             df["curtain_uniprot"] = df[pid_col].apply(
                 lambda x: UniprotSequence(x, parse_acc=True).accession if UniprotSequence(x,parse_acc=True).accession else x)
-            df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange",
-                               significant_col: "significant"}, inplace=True)
+            if len(comparisons) > 0:
+                df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange", comparison_col: "comparison", significant_col: "significant"}, inplace=True)
+            else:
+                df.rename(columns={pid_col: "primaryID", "curtain_uniprot": "uniprot", fc_col: "foldChange", significant_col: "significant"}, inplace=True)
             data_store_dict[i.link_id] = df
             uniprot_id_list.extend(df["uniprot"].tolist())
 
@@ -119,10 +140,8 @@ def compare_session(id_list, study_list, match_type, session_id):
         for i in data_store_dict:
             stored_df = data_store_dict[i]
             stored_df = stored_df.merge(uni_df, left_on="uniprot", right_on="From", how="left")
-            print(stored_df)
             stored_df["gene_names_split"] = stored_df["Gene Names"].str.split(" ")
             stored_df = stored_df.explode("gene_names_split", ignore_index=True)
-            print(stored_df)
             fin_df = []
             message_template["message"] = "Matching Gene Names for " + i
             async_to_sync(channel_layer.group_send)(session_id, {
@@ -142,8 +161,11 @@ def compare_session(id_list, study_list, match_type, session_id):
                 fin_df = fin_df[0]
             else:
                 fin_df = pd.concat(fin_df, ignore_index=True)
-            print(fin_df)
-            fin_df = fin_df[["primaryID", "uniprot", "foldChange", "significant", "source_pid"]]
+            cols = ["primaryID", "uniprot", "foldChange", "significant", "source_pid"]
+            if i in comparison_dict:
+                if len(comparison_dict[i]) > 0:
+                    cols.append("comparison")
+            fin_df = fin_df[cols]
             result[i] = fin_df.to_dict(orient="records")
     message_template["message"] = "Operation Completed"
     message_template["data"] = result
