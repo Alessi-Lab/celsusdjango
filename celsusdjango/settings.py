@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'channels',
     #'django_sendfile',
     'rest_framework',
+    "rest_framework_api_key",
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
@@ -180,7 +181,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
+API_KEY_CUSTOM_HEADER = "HTTP_CURTAIN_API_KEY"
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
@@ -263,10 +264,9 @@ Q_CLUSTER = {
         'host': '127.0.0.1',
         'port': 6379,
         'db': 0,
+        'password': 'testrediscurrant'
     }
 }
-
-
 
 
 if os.environ.get("Q_CLUSTER_REDIS_HOST"):
@@ -277,14 +277,14 @@ if os.environ.get("Q_CLUSTER_REDIS_PASSWORD"):
     Q_CLUSTER['redis']['password'] = os.environ.get("Q_CLUSTER_REDIS_PASSWORD")
 
 RQ_QUEUES = {
-    'default': {
-        'HOST': Q_CLUSTER['redis']['host'],
-        'PORT': int(os.environ.get('REDIS_PORT', '6379')),
-        'DB': 0,
-        'DEFAULT_TIMEOUT': 1440,
-        'PASSWORD': Q_CLUSTER['redis']['password'],
+        'default': {
+            'HOST': Q_CLUSTER['redis']['host'],
+            'PORT': int(os.environ.get('REDIS_PORT', '6379')),
+            'DB': 0,
+            'DEFAULT_TIMEOUT': 1440,
+            'PASSWORD': Q_CLUSTER['redis']['password'],
+        }
     }
-}
 
 CURTAIN_ALLOW_NON_STAFF_DELETE = False
 if os.environ.get("CURTAIN_ALLOW_NON_STAFF_DELETE"):
@@ -368,4 +368,5 @@ if os.environ.get("WORKDB_PROFILE") == "production":
             },
         },
     }
+
 

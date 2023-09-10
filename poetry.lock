@@ -676,6 +676,17 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "djangorestframework-api-key"
+version = "2.3.0"
+description = "API key permissions for the Django REST Framework"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "djangorestframework-api-key-2.3.0.tar.gz", hash = "sha256:c2fa61280069acd8dc0e9dd1840e0e1934a2a85631069326f4d1e3a91ca9aa9a"},
+    {file = "djangorestframework_api_key-2.3.0-py3-none-any.whl", hash = "sha256:eed94f383e96ca8f9f9e4182406fe28b5585629d0039f65cbb7e6e254778f674"},
+]
+
+[[package]]
 name = "djangorestframework-simplejwt"
 version = "5.2.2"
 description = "A minimal JSON Web Token authentication plugin for Django REST Framework"
@@ -2121,4 +2132,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "2dd88287c5c0266c69858a46520dac188861a70ce3251b6330f92860e5a0d806"
+content-hash = "9de300bc2ad9b503122f1b69b947cd57217982f8e4ff6f128d97e3a5a145e600"
