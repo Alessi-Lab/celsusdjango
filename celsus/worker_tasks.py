@@ -140,6 +140,7 @@ def compare_session(id_list, study_list, match_type, session_id):
         for i in data_store_dict:
             stored_df = data_store_dict[i]
             stored_df = stored_df.merge(uni_df, left_on="uniprot", right_on="From", how="left")
+            stored_df["Gene Names"] = stored_df["Gene Names"].str.upper()
             stored_df["gene_names_split"] = stored_df["Gene Names"].str.split(" ")
             stored_df = stored_df.explode("gene_names_split", ignore_index=True)
             fin_df = []
