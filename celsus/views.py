@@ -1,5 +1,6 @@
 import io
 import json
+from datetime import datetime, timedelta
 
 import django_rq
 import pandas as pd
@@ -372,25 +373,27 @@ class DownloadStatsView(APIView):
 class StatsView(APIView):
     permission_classes = (AllowAny,)
 
-    def get(self, request):
+    def get(self, request, last_n_days, format=None):
         # get the number of downloads request per day
         # this is done by filtering the django_request table for requests that match the download url and truncate the time field to date
-        download_stats = django_request.objects.filter(path__regex="\/curtain\/[a-z0-9\-]+\/download\/\w*")
+
+        download_stats = django_request.objects.filter(path__regex="\/curtain\/[a-z0-9\-]+\/download\/\w*", time__gte=datetime.now()-timedelta(days=last_n_days))
         download_per_day = (download_stats.annotate(date=TruncDay('time')).values('date').annotate(downloads=Count("response")))
         result = []
         for i in download_per_day:
             result.append({"date": i["date"].strftime("%Y-%m-%d"), "downloads": i["downloads"]})
-        curtain_stats = (Curtain.objects.annotate(date=TruncDay('created')).values('date').annotate(count=Count("id")))
+        curtain_stats = Curtain.objects.filter(created__gte=datetime.now()-timedelta(days=last_n_days))
+        created_per_day = (curtain_stats.annotate(date=TruncDay('created')).values('date').annotate(count=Count("id")))
         result2 = []
-        for i in curtain_stats:
+        for i in created_per_day:
             result2.append({"date": i["date"].strftime("%Y-%m-%d"), "count": i["count"]})
         download_per_week = (download_stats.annotate(date=TruncWeek('time')).values('date').annotate(downloads=Count("response")))
         result3 = []
         for i in download_per_week:
             result3.append({"date": i["date"].strftime("%Y-%m-%d"), "downloads": i["downloads"]})
-        curtain_stats = (Curtain.objects.annotate(date=TruncWeek('created')).values('date').annotate(count=Count("id")))
+        created_per_week = (curtain_stats.annotate(date=TruncWeek('created')).values('date').annotate(count=Count("id")))
         result4 = []
-        for i in curtain_stats:
+        for i in created_per_week:
             result4.append({"date": i["date"].strftime("%Y-%m-%d"), "count": i["count"]})
 
         return Response(data={
