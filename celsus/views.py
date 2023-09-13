@@ -5,6 +5,8 @@ import django_rq
 import pandas as pd
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.db.models import Count
+from django.db.models.functions import TruncDate, TruncDay
 from request.models import Request as django_request
 #from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 #from django.contrib.auth import authenticate
@@ -365,6 +367,28 @@ class DownloadStatsView(APIView):
         return Response(data={
             "download": download_stats
         })
+
+
+class StatsView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        # get the number of downloads request per day
+        # this is done by filtering the django_request table for requests that match the download url and truncate the time field to date
+        download_stats = django_request.objects.filter(path__regex="\/curtain\/[a-z0-9\-]+\/download\/\w*")
+        download_per_day = (download_stats.annotate(date=TruncDay('time')).values('date').annotate(downloads=Count("response")))
+        result = []
+        for i in download_per_day:
+            result.append({"date": i["date"].strftime("%Y-%m-%d"), "downloads": i["downloads"]})
+        curtain_stats = (Curtain.objects.annotate(date=TruncDay('created')).values('date').annotate(count=Count("id")))
+        result2 = []
+        for i in curtain_stats:
+            result2.append({"date": i["date"].strftime("%Y-%m-%d"), "count": i["count"]})
+        return Response(data={
+            "session_download_per_day": result,
+            "session_created_per_day": result2
+        })
+
 
 class InteractomeAtlasProxyView(APIView):
     permission_classes = (AllowAny,)

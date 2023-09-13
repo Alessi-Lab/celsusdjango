@@ -31,7 +31,7 @@ from django.conf import settings
 from celsus.views import (CompareSessionView, LogoutView, CSRFTokenView, GetOverview, UniprotRefreshView, UserView,
                           NetPhosView,
                           ORCIDOAUTHView, SitePropertiesView, KinaseLibraryProxyView, DownloadStatsView, \
-                          InteractomeAtlasProxyView, PrimitiveStatsTestView, JobResultView)
+                          InteractomeAtlasProxyView, PrimitiveStatsTestView, JobResultView, StatsView)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -80,6 +80,7 @@ urlpatterns = [
     path('interactome-atlas-proxy/', InteractomeAtlasProxyView.as_view(), name='interactome_atlas_proxy'),
     path('primitive-stats-test/', PrimitiveStatsTestView.as_view(), name='primitive_stats_test'),
     path('compare-session/', CompareSessionView.as_view(), name='compare_session'),
+    path('stats/summary/', StatsView.as_view(), name="stats_summary"),
     path(r'job/<str:job_id>/', JobResultView.as_view(), name='job_result'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
