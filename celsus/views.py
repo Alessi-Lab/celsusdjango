@@ -6,7 +6,7 @@ import pandas as pd
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Count
-from django.db.models.functions import TruncDate, TruncDay
+from django.db.models.functions import TruncDate, TruncDay, TruncWeek
 from request.models import Request as django_request
 #from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 #from django.contrib.auth import authenticate
@@ -384,9 +384,20 @@ class StatsView(APIView):
         result2 = []
         for i in curtain_stats:
             result2.append({"date": i["date"].strftime("%Y-%m-%d"), "count": i["count"]})
+        download_per_week = (download_stats.annotate(date=TruncWeek('time')).values('date').annotate(downloads=Count("response")))
+        result3 = []
+        for i in download_per_week:
+            result3.append({"date": i["date"].strftime("%Y-%m-%d"), "downloads": i["downloads"]})
+        curtain_stats = (Curtain.objects.annotate(date=TruncWeek('created')).values('date').annotate(count=Count("id")))
+        result4 = []
+        for i in curtain_stats:
+            result4.append({"date": i["date"].strftime("%Y-%m-%d"), "count": i["count"]})
+
         return Response(data={
             "session_download_per_day": result,
-            "session_created_per_day": result2
+            "session_created_per_day": result2,
+            "session_download_per_week": result3,
+            "session_created_per_week": result4
         })
 
 
