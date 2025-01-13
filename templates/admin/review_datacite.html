@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'admin:curtain_datacite_changelist' %}">DataCite</a>
+  &rsaquo; Review DataCite
+</div>
+{% endblock %}
+
+{% block content %}
+  <h1>Review DataCite</h1>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+
+    <h3>Creators</h3>
+    {{ creators_formset.management_form }}
+    {% for form in creators_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Titles</h3>
+    {{ titles_formset.management_form }}
+    {% for form in titles_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Subjects</h3>
+    {{ subjects_formset.management_form }}
+    {% for form in subjects_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Contributors</h3>
+    {{ contributors_formset.management_form }}
+    {% for form in contributors_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Descriptions</h3>
+    {{ descriptions_formset.management_form }}
+    {% for form in descriptions_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Rights List</h3>
+    {{ rightsList_formset.management_form }}
+    {% for form in rightsList_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Alternate Identifiers</h3>
+    {{ alternateIdentifiers_formset.management_form }}
+    {% for form in alternateIdentifiers_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Related Identifiers</h3>
+    {{ relatedIdentifiers_formset.management_form }}
+    {% for form in relatedIdentifiers_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Funding References</h3>
+    {{ fundingReferences_formset.management_form }}
+    {% for form in fundingReferences_formset %}
+      {{ form.as_p }}
+    {% endfor %}
+
+    <button type="submit" class="button">Save</button>
+  </form>
+  <a href="{% url 'admin:curtain_datacite_changelist' %}">Back to list</a>
+{% endblock %}
